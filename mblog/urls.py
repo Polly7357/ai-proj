@@ -14,9 +14,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+#原始檔開始
+#from django.contrib import admin
+#from django.urls import path
+
+#urlpatterns = [
+#    path("admin/", admin.site.urls),
+#]
+#原始結束
+
 from django.contrib import admin
 from django.urls import path
+from mainsite.views import homepage     #從mainsite資料夾引入homepage
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
+urlpatterns = [                         #陣列型式,每筆資料中間要用','
+    path('admin/', admin.site.urls),    #(路徑, 顥示函數 def ...)
+    path('',homepage)                   #空字串, 方法為 homepage
 ]

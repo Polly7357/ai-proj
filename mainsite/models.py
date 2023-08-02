@@ -12,8 +12,8 @@ class Post(models.Model):
     body = models.TextField()
     pub_date = models.DateTimeField(default=timezone.now)
 
-    class Meta:  #以最新日期排序-負向排序
+    class Meta:  #針對表格做註記以最新日期排序-負向排序
         ordering = ('-pub_date',)
 
-    def __str__(self):  #查詢回應一條詢息
-        return self.title
+    def __str__(self):  #查詢回應一條詢息, 取代原本繼承的函
+        return self.title #等同於 Post.title
