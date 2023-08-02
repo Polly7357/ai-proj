@@ -25,9 +25,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from mainsite.views import homepage     #從mainsite資料夾引入homepage
+from mainsite.views import homepage, index     #從mainsite資料夾引入homepage
 
 urlpatterns = [                         #陣列型式,每筆資料中間要用','
     path('admin/', admin.site.urls),    #(路徑, 顥示函數 def ...)
-    path('',homepage)                   #空字串, 方法為 homepage
+    #path('',homepage)                   #空字串, 方法為 homepage
+    path("", index)                     # 因為建立 index了, 所以取代 homepage
 ]
