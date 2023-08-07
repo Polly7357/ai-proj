@@ -28,3 +28,16 @@ def index(request):     #建完index.html後手動新增
     now = datetime.now()
     number = 1
     return render(request, 'index.html', locals()) #django的函數, index.html為templates的檔名, 將所有變數打包成字點檔
+
+from django.shortcuts import redirect   #0807新增
+
+def showpost(request, slug):        #0807新增, slug來自於urls.py slug冒號後的參數
+    try:                            #會先試著執行, 有例外再跳到except
+        post = Post.objects.get(slug = slug)    #get(查詢的條件) (查詢的欄位=查詢的值)
+       
+        if post != None :           #若查詢回傳的不是空物件 None表示找不到
+            return render(request, 'post.html', locals())
+    except:
+        return redirect('/')        #回到127.0.0.1:8000
+
+    return True

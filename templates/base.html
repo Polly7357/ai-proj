@@ -1,0 +1,42 @@
+<!-- base.html -->
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    {% include 'header.html' %}
+</head>
+
+
+<body>
+    <div class="container-fluid">
+        <div class="well post_title" > <h3>well post title h3</h3>
+        </div>
+
+        <div class='row'>
+            {% include 'menu.html'%}
+            <div class='col-sm-8 col-md-8'>
+                <div class='panel panel-default'>
+                    <div class="panel-header">
+                        {% block headmessage %} base page 的headmessage{% endblock %}
+                    </div>
+                   
+                    <div class="panel-body">
+                        {% block content %} {% endblock %}
+                    </div>
+                
+                    <div class="panel-footer">
+                        {% include 'footer.html' %}
+                    </div>
+                </div>
+            
+            </div>
+    
+            
+        </div>
+    </div>
+
+</body>
+</html>
