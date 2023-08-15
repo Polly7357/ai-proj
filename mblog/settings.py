@@ -124,3 +124,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# 專案資料夾/mblog/settings.py
+
+
+# Security Settings
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None    #把此安全性請求policy關閉
