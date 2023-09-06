@@ -8,12 +8,24 @@
 {% endblock %}
 
 {% block content %}
+<div class="col-lg-9">
     {% for post in posts%}
-        <div class="post_title">
-            <a href='post/{{post.slug}}'>{{post.title}}</a>
+
+    <div class="card mb-4">
+        {% if post.img != None %}
+            <a href="#!"><img class="card-img-top" src="{{post.img}}" alt="..." /></a>
+        {% endif %}
+        <div class="card-body">
+            <div class="small text-muted">{{post.pub_date}}</div>
+            <h2 class="card-title">{{post.title}}</h2>
+            <p class="card-text">{{post.body}}</p>
+            <a class="btn btn-primary" href="post/{{post.slug}}">閱讀更多 →</a>
         </div>
-        <br>
+    </div>
+
     {% endfor %}
+</div>
 {% endblock %}
+
 
 {% block js_script %}{% endblock %}
