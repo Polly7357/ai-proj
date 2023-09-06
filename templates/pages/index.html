@@ -1,0 +1,19 @@
+{% extends 'bases/base.html' %}
+{% block title %}
+    PTT 看板轉錄
+{% endblock %}
+
+{% block headmessage %}
+    轉錄文章
+{% endblock %}
+
+{% block content %}
+    {% for post in posts%}
+        <div class="post_title">
+            <a href='post/{{post.slug}}'>{{post.title}}</a>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock %}
+
+{% block js_script %}{% endblock %}
