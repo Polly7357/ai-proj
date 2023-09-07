@@ -17,7 +17,7 @@ def homepage(request):
     for count, post in enumerate(posts):
         post_lists.append("No.{}:".format(str(count)) + str(post)+"<br>") # str(post) 相當於 str(post.title)
                                                                         # 因為在 models.py 有定義 self=self.title
-        post_lists.append("<small>"+str(post.body)+"</small><br><br>")  #p.26的更動, 顯示資料body
+        #post_lists.append("<small>"+str(post.body)+"</small><br><br>")  #p.26的更動, 顯示資料body
 
         #轉換成html
     return HttpResponse(post_lists) #把回傳的list變成加入 html代碼以網頁結構文法的一部份

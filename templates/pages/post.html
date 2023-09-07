@@ -1,4 +1,6 @@
 {% extends 'bases/base.html' %}
+{% load markdown_extras %}
+
 {% block title %}
     PTT 看板轉錄
 {% endblock %}
@@ -16,9 +18,15 @@
         <div class="card-body">
             <div class="small text-muted">{{post.pub_date}}</div>
             <h2 class="card-title">{{post.title}}</h2>
-            <p class="card-text">{{post.body | linebreaksbr }}</p>
+            <p class="card-text">{{post.body | markdown |safe | linebreaksbr }}</p>
             <a class="btn btn-secondary" href="/">← 回列表</a>
         </div>
+        
+        <div class="card-body">
+            {% include 'components/disqus.html' %}
+        </div>
+
+        
     </div>
 </div>
 {% endblock %}
