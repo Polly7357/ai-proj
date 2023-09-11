@@ -15,8 +15,15 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 
 # application = get_wsgi_application()
 
+# import os
+
+# from django.core.wsgi import get_wsgi_application
+
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mblog.settings")
+
+# application = get_wsgi_application()
+
 import os
-from django.core.wsgi import get_wsgi_application
 import sys      # 20230815
 
 # path = "/home/pollyhuang/mblog/"   # 20230815
@@ -32,7 +39,7 @@ if path not in sys.path:
     sys.path.insert(0, path)
 
 
+from django.core.wsgi import get_wsgi_application       #20230907移至下方
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mblog.settings")
-
 
 application = get_wsgi_application()
