@@ -34,3 +34,8 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('post/<slug:slug>', showpost)  #08/07新增 將<slug:slug>傳到 showpost這個view
 
 ]
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import mblog.settings
+if mblog.settings.DEBUG:    #當true會進到runserver模式
+    urlpatterns += staticfiles_urlpatterns()
