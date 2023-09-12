@@ -137,5 +137,12 @@ GitHub.sublime-settings
 .history
 
 # Static Files
+#static/admin/*
+#static/admin
+
 static/admin/*
 static/admin
+static/*
+!static/css
+!static/js
+!static/img
