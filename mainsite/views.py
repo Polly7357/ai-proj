@@ -5,7 +5,7 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Post
+from .models import *
 from datetime import datetime
 
 # Create your views here.
@@ -41,3 +41,6 @@ def showpost(request, slug):        #0807新增, slug來自於urls.py slug冒號
         return redirect('/')        #回到127.0.0.1:8000
 
     return True
+
+def apiTestView(request):
+    return render(request, 'pages/apiTest.html', locals())

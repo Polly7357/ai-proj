@@ -25,14 +25,16 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from mainsite.views import homepage, index, showpost     #從mainsite資料夾引入homepage
+from mainsite.views import homepage, index, showpost, apiTestView     #從mainsite資料夾引入homepage
+from api.views import *                    # 0913 
 
 urlpatterns = [                         #陣列型式,每筆資料中間要用','
     path('admin/', admin.site.urls),    #(路徑, 顥示函數 def ...)
     #path('',homepage),                   #空字串, 方法為 homepage
     path("",index),                     # 因為建立 index了, 所以取代 homepage
-    path('post/<slug:slug>', showpost)  #08/07新增 將<slug:slug>傳到 showpost這個view
-
+    path('post/<slug:slug>', showpost),  #08/07新增 將<slug:slug>傳到 showpost這個view
+    path("api/", test),                  #09/13 新增 api的app
+    path('api/doc/', apiTestView),
 ]
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
