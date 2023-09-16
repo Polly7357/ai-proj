@@ -35,6 +35,7 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('post/<slug:slug>', showpost),  #08/07新增 將<slug:slug>傳到 showpost這個view
     path("api/", test),                  #09/13 新增 api的app
     path('api/doc/', apiTestView),
+    path('api/power/', calculate_electricity_cost_view),
 ]
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

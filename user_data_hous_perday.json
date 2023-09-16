@@ -1,0 +1,216 @@
+{
+    "id": "MAC address",
+    "date": "2023-09-10",
+    "usage": [
+        {
+            "device_name": "冷氣機",
+            "start_hour": "10",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "印表機",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "吹風機",
+            "start_hour": "19",
+            "end_hour": "20"
+        },
+        {
+            "device_name": "微波爐",
+            "start_hour": "6",
+            "end_hour": "7"
+        },
+        {
+            "device_name": "微波爐",
+            "start_hour": "12",
+            "end_hour": "13"
+        },
+        {
+            "device_name": "微波爐",
+            "start_hour": "19",
+            "end_hour": "20"
+        },
+        {
+            "device_name": "手機充電器",
+            "start_hour": "19",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "抽油煙機",
+            "start_hour": "11",
+            "end_hour": "12"
+        },
+        {
+            "device_name": "抽油煙機",
+            "start_hour": "15",
+            "end_hour": "17"
+        },
+        {
+            "device_name": "抽風機",
+            "start_hour": "16",
+            "end_hour": "22"
+        },
+        {
+            "device_name": "日光燈(20W)",
+            "start_hour": "6",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "日光燈(20W)",
+            "start_hour": "16",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "日光燈(20W)",
+            "start_hour": "10",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "日光燈(20W)",
+            "start_hour": "10",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "果汁機",
+            "start_hour": "6",
+            "end_hour": "7"
+        },
+        {
+            "device_name": "機上盒",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "洗衣機",
+            "start_hour": "20",
+            "end_hour": "22"
+        },
+        {
+            "device_name": "烘碗機",
+            "start_hour": "20",
+            "end_hour": "21"
+        },
+        {
+            "device_name": "烤麵包機",
+            "start_hour": "6",
+            "end_hour": "7"
+        },
+        {
+            "device_name": "燈泡(60W)",
+            "start_hour": "18",
+            "end_hour": "22"
+        },
+        {
+            "device_name": "燈泡(60W)",
+            "start_hour": "18",
+            "end_hour": "22"
+        },
+        {
+            "device_name": "省電燈泡",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "省電燈泡",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "省電燈泡",
+            "start_hour": "17",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "省電燈泡",
+            "start_hour": "17",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "神龕燈",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "筆記型電腦MacBook Pro",
+            "start_hour": "6",
+            "end_hour": "8"
+        },
+        {
+            "device_name": "筆記型電腦MacBook Pro",
+            "start_hour": "18",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "開飲機",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "除濕機",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電冰箱",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電咖啡壺",
+            "start_hour": "6",
+            "end_hour": "7"
+        },
+        {
+            "device_name": "電扇",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電扇",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電扇",
+            "start_hour": "0",
+            "end_hour": "7"
+        },
+        {
+            "device_name": "電扇",
+            "start_hour": "16",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電熱水瓶",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電腦:主機+顯示器",
+            "start_hour": "0",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電視機",
+            "start_hour": "6",
+            "end_hour": "23"
+        },
+        {
+            "device_name": "電鍋",
+            "start_hour": "5",
+            "end_hour": "7"
+        },
+        {
+            "device_name": "電鍋",
+            "start_hour": "11",
+            "end_hour": "12"
+        },
+        {
+            "device_name": "電鍋",
+            "start_hour": "16",
+            "end_hour": "18"
+        }
+    ]
+}
