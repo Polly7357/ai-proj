@@ -1,5 +1,7 @@
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from mainsite.models import *
 import json, os
 import sqlite3
 
@@ -25,12 +27,9 @@ def calculate_electricity_cost_view(request):
     # try:
     #     # Read JSON data from the request (you may need to adjust this based on how you send JSON data to the view)
     #     #json_data = json.loads(request.body)
-    #     with open("user_data.json", "r") as json_file:
-    #         json_data = json.loads("user_data.json")
-    try:
-        # Check if "user_data.json" file exists
 
-        
+    try:
+        # Check if "user_data.json" file exists      
         json_file_path = "suggest_user_data.json"
         if not os.path.exists(json_file_path):
             return JsonResponse({"error": "File 'user_data.json' does not exist"}, status=400)
@@ -169,5 +168,14 @@ def monthly_usage(electricity, electricity_cost, wend_cost):
 #database_path = ''  # Database file path
 
 
+def showdevice(request):        #0807新增, slug來自於urls.py slug冒號後的參數
+    try:                            #會先試著執行, 有例外再跳到except
+        devices = ElecDeviceConsumption.objects.all()    #get(查詢的條件) (查詢的欄位=查詢的值)
+       
+        if devices != None :           #若查詢回傳的不是空物件 None表示找不到
+            return render(request, 'pages/elec_device.html', locals())
+    except:
+        return redirect('/')        #回到127.0.0.1:8000
 
+    return True
 
