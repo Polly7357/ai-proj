@@ -18,6 +18,7 @@ class Post(models.Model):
     def __str__(self):  #查詢回應一條詢息, 取代原本繼承的函
         return self.title #等同於 Post.title
 
+# 飲品
 class Beverage(models.Model):
     id = models.TextField(primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=False)
@@ -31,6 +32,7 @@ class Beverage(models.Model):
     def __str__(self):  
         return self.name 
 
+# 電價表
 class TimeElecRates(models.Model):
     desc = models.TextField(null=False)
     effect_date = models.IntegerField()
@@ -41,7 +43,7 @@ class TimeElecRates(models.Model):
         db_table = 'time_elec_rates'
         unique_together = [['desc', 'effect_date']]
         
-        
+# 二段式費率表        
 class C2Rates(models.Model):
     h_id = models.AutoField(primary_key=True, blank=True, null=False)
     #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
@@ -59,7 +61,7 @@ class C2Rates(models.Model):
         managed = False
         db_table = 'c2_rates'
 
-
+# 三段費率表
 class C3Rates(models.Model):
     h_id = models.AutoField(primary_key=True, blank=True, null=False)
     #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
@@ -79,7 +81,7 @@ class C3Rates(models.Model):
         managed = False
         db_table = 'c3_rates'
 
-
+# 交通工具碳當量
 class CdeTransport(models.Model):
     id = models.TextField(primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=False)
@@ -93,7 +95,7 @@ class CdeTransport(models.Model):
     def __str__(self):  
         return self.name
 
-
+# 碳當量總分類
 class CfpClass(models.Model):
     class_id = models.TextField(primary_key=True, blank=True, null=False)
     class_name = models.TextField(blank=True, null=False)
@@ -125,6 +127,8 @@ class CfpSubClass(models.Model):
         managed = False
         db_table = 'cfp_sub_class'
 
+
+# 蛋類及加工品碳當量
 class EggProds(models.Model):
     id = models.TextField(primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=False)
@@ -139,6 +143,7 @@ class EggProds(models.Model):
         return self.name
 
 
+# 電器功率表
 class ElecDeviceConsumption(models.Model):
     name = models.TextField(unique=True)
     watt = models.IntegerField(blank=True, null=False)
@@ -152,6 +157,7 @@ class ElecDeviceConsumption(models.Model):
         return self.name
 
 
+# 能資料碳當量
 class Energy(models.Model):
     id = models.TextField(primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=False)
@@ -166,6 +172,7 @@ class Energy(models.Model):
         return self.name
 
 
+# 乳製品碳當量
 class LactoseProds(models.Model):
     id = models.TextField(primary_key=True, blank=True, null=False)
     name = models.TextField(blank=True, null=False)
@@ -180,6 +187,7 @@ class LactoseProds(models.Model):
         return self.name
 
 
+# 二段式夏季費率表
 class SummerC2Rates(models.Model):
     h_id = models.AutoField(primary_key=True, blank=True, null=False)
     #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
@@ -200,6 +208,7 @@ class SummerC2Rates(models.Model):
         db_table = 'summer_c2_rates'
 
 
+# 三段式夏季費率表
 class SummerC3Rates(models.Model):
     h_id = models.AutoField(primary_key=True, blank=True, null=False)
     #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
@@ -222,6 +231,7 @@ class SummerC3Rates(models.Model):
 
 from django.db import models, IntegrityError, transaction
 
+# 智慧插頭資訊
 class SmartPlugRec(models.Model):
     id = models.AutoField(primary_key=True)
     timestmp = models.DateTimeField(unique=True)  # Make the timestamp column unique
