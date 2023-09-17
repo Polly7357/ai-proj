@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "mainsite",
     "api",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Security Settings
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None    #把此安全性請求policy關閉
+
+GRAPH_MODELS = {'all_applications':True, 'graph_models':True,}

@@ -25,7 +25,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from mainsite.views import homepage, index, showpost, apiTestView     #從mainsite資料夾引入homepage
+from mainsite.views import homepage, index, showpost, apiTestView, customSqlQueryView     #從mainsite資料夾引入homepage
 from api.views import *                    # 0913 
 
 urlpatterns = [                         #陣列型式,每筆資料中間要用','
@@ -37,6 +37,7 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('api/doc/', apiTestView),
     path('api/power/', calculate_electricity_cost_view),
     path('api/devices/', showdevice),
+    path('pages/query/', customSqlQueryView),
 ]
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

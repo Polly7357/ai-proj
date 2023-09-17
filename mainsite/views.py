@@ -7,6 +7,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
 from datetime import datetime
+from django.db import connection
+from django.db.utils import OperationalError
+from django.http import JsonResponse
+
 
 # Create your views here.
 def homepage(request):
@@ -44,3 +48,23 @@ def showpost(request, slug):        #0807新增, slug來自於urls.py slug冒號
 
 def apiTestView(request):
     return render(request, 'pages/apiTest.html', locals())
+
+
+def customSqlQueryView(request):
+    try:
+        sql_query = "SELECT timestmp, response FROM plug_info order by timestmp;"
+
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query)
+            result = cursor.fetchall()
+        
+        if not result:
+            return JsonResponse({"error": "Table is empty."})
+
+        # Process the result as needed and return a JSON response
+        data = [{'timestamp': row[0], 'info': row[1]} for row in result]
+        return JsonResponse({'data': data})
+    except OperationalError as e:
+        return JsonResponse({"error":f"DB error:{e}"})
+    except Exception as e:
+        return JsonResponse({"error":f"error occurred:{e}"})
