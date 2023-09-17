@@ -32,13 +32,14 @@ class Beverage(models.Model):
         return self.name 
 
 class TimeElecRates(models.Model):
-    desc = models.TextField(primary_key=True, blank=True, null=False)
-    effect_date = models.IntegerField(blank=True, null=False)
+    desc = models.TextField(null=False)
+    effect_date = models.IntegerField()
     rates = models.FloatField(blank=True, null=False)
 
     class Meta:
         managed = False
         db_table = 'time_elec_rates'
+        unique_together = [['desc', 'effect_date']]
         
         
 class C2Rates(models.Model):
@@ -218,5 +219,29 @@ class SummerC3Rates(models.Model):
         managed = False
         db_table = 'summer_c3_rates'
 
+
+from django.db import models, IntegrityError, transaction
+
+class SmartPlugRec(models.Model):
+    id = models.AutoField(primary_key=True)
+    timestmp = models.DateTimeField(unique=True)  # Make the timestamp column unique
+    response = models.JSONField()
+
+    class Meta:
+        db_table = 'plug_info'
+        ordering = ['-timestmp']
+
+    def __str__(self):
+        return str(self.id)
+
+    def save(self, *args, **kwargs):
+        # Ensure uniqueness by handling possible IntegrityError
+        with transaction.atomic():
+            try:
+                super().save(*args, **kwargs)
+            except IntegrityError:
+                # Handle the case where a duplicate timestamp is encountered
+                # You can log, raise an exception, or handle it as needed
+                pass
 
 
