@@ -101,6 +101,8 @@ def calculate_electricity_cost_view(request):
                     #print(f"Unable to calculate electricity cost for {table}.")
                     return JsonResponse({"error": str(e)}, status=400)
                 
+            #calculte cdf of monthly elec consumption    
+            elec_cdf = elec2cdf (monthly_consumption)    
             case_usage[case]=usage_data 
                 
 
@@ -114,6 +116,7 @@ def calculate_electricity_cost_view(request):
     "產生時間": cal_time,
     "單日估算電量(度)": electricity,
     "整月估計電量(度)": monthly_consumption,
+    "整月碳排(公斤)": elec_cdf,
     "case": case_usage,
     }
 
@@ -196,6 +199,22 @@ def monthly_usage(electricity, electricity_cost, wend_cost):
     monthly_elec = electricity * 30
     monthly_cost = (electricity_cost * 26) + (wend_cost * 4) + 75
     return monthly_elec, monthly_cost
+
+def elec2cdf(electricity):
+    try:
+    # Connect to the SQLite database
+        conn = sqlite3.connect('db.sqlite3')
+        cursor = conn.cursor()
+        cursor.execute("SELECT cde FROM energy WHERE id = 'c1s01i137'")
+        row = cursor.fetchone()
+        if row is not None:
+            Cde = row[0]
+            elec2cdf = electricity * Cde
+            return elec2cdf
+        
+    except sqlite3.Error as e:
+        print("SQLite error:", e)                                                                   
+        return None
 
 # Read JSON data from file "user_data.json"
 # with open("user_data.json", "r", encoding="utf-8") as json_file:
