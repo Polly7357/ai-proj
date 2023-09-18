@@ -28,7 +28,7 @@ def calculate_electricity_cost_view(request):
     # try:
     #     # Read JSON data from the request (you may need to adjust this based on how you send JSON data to the view)
     #     #json_data = json.loads(request.body)
-    cases = ['Reality','Smart']
+    cases = ['Reality','Smartly']
     case_usage={}
 
     for case in cases:
@@ -70,13 +70,13 @@ def calculate_electricity_cost_view(request):
                 
                 match table:
                     case 'c2_rates':
-                        pricing = '二段式'
+                        pricing = 'Two-Tier'
                     case 'c3_rates':
-                        pricing = '三段式'
+                        pricing = 'Three-Tier'
                     case 'summer_c2_rates':
-                        pricing = '二段式夏季'                    
+                        pricing = 'Two-Tier-Summer'                    
                     case 'summer_c3_rates':
-                        pricing = '三段式夏季'                    
+                        pricing = 'Three-Tier-Summer'                    
                     
                 if electricity_cost is not None:
                     #print(f"\nTable: {table}")
@@ -91,9 +91,9 @@ def calculate_electricity_cost_view(request):
                     monthly_costs =round(monthly_costs,2)
 
                     usage_data[pricing] = {
-                        "單日估算電費(元)": electricity_cost,
-                        "週末電費(元)": wend_cost,
-                        "整月估計電費(元)": monthly_costs,
+                        "Daily-Cost": electricity_cost,
+                        "Weekend-Cost": wend_cost,
+                        "Monthly-Cost": monthly_costs,
                     }
                     #usage_list.append(usage_data)
 
@@ -103,7 +103,10 @@ def calculate_electricity_cost_view(request):
                 
             #calculte cdf of monthly elec consumption    
             elec_cdf = elec2cdf (monthly_consumption)    
-            case_usage[case]=usage_data 
+            case_usage[case]={
+                "Monthly-Electricity":monthly_consumption,
+                "Monthly-Carbon-Emission": elec_cdf,
+                "Priciing":usage_data}
                 
 
 
@@ -112,11 +115,11 @@ def calculate_electricity_cost_view(request):
             return JsonResponse({"error orrurs": str(e)}, status=400)
         
     response_data ={
-    "來源": user_id,
-    "產生時間": cal_time,
-    "單日估算電量(度)": electricity,
-    "整月估計電量(度)": monthly_consumption,
-    "整月碳排(公斤)": elec_cdf,
+    "Source": user_id,
+    "Entry-time": cal_time,
+    "Daily-Electricity": electricity,
+    # "Monthly-Electricity": monthly_consumption,
+    # "Monthly-Carbon-Emission": elec_cdf,
     "case": case_usage,
     }
 
@@ -234,3 +237,129 @@ def showdevice(request):        #0807新增, slug來自於urls.py slug冒號後�
 
     return True
 
+
+# /api/power/accu_usage
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def calculate_accumulative_usage(total_expense):
+    # 定義非夏季、夏季費率表
+    rate_table_non_summer = [
+        (120, 1.63),   
+        (210, 2.10), 
+        (220, 2.89), 
+        (150, 3.94), 
+        (300, 4.74),     # Usage from 701 to 1000 degrees, price 4.80元 per degree (1000-701)
+        (3000, 6.03)     # Usage from 501 to 700 degrees, price 4.80元 per degree (?-1001)
+    ]
+
+    rate_table_summer = [
+        (120, 1.63),    # Usage up to 120 degrees, price 1.63元 per degree
+        (210, 2.38),    # Usage from 121 to 330 degrees, price 2.38元 per degree (331-120)
+        (220, 3.52),    # Usage from 331 to 500 degrees, price 3.52元 per degree (551-330)
+        (150, 4.80),     # Usage from 501 to 700 degrees, price 4.80元 per degree (701-550)
+        (300, 5.83),     # Usage from 701 to 1000 degrees, price 4.80元 per degree (1000-701)
+        (3000, 7.69)     # Usage from 501 to 700 degrees, price 4.80元 per degree (?-1001)
+    ]
+
+    # Total expense (you can get this from the request or a form submission)
+    #total_expense = 1400  # Total expense in dollars
+
+    # Function to calculate the degrees of electricity used for a given expense and rate table
+    def calculate_degrees(expense, rate_table):
+        degrees_used = 0
+        remaining_expense = expense/2   #帳單電費為2個月總計
+
+        for limit, rate in rate_table:
+            if remaining_expense <= 0:
+                break
+
+            if remaining_expense >= limit * rate:
+                degrees_used += limit
+                remaining_expense -= limit * rate
+            else:
+                degrees_used += remaining_expense / rate
+                remaining_expense = 0
+
+        return degrees_used
+
+    # Calculate degrees for non-summer season
+    degrees_non_summer = calculate_degrees(total_expense, rate_table_non_summer)
+
+    # Calculate degrees for summer season
+    degrees_summer = calculate_degrees(total_expense, rate_table_summer)
+
+    # Prepare the context to pass to the template
+    return {
+        'degrees_non_summer': round(degrees_non_summer,2),
+        'degrees_summer': round(degrees_summer,2),
+    }
+
+def calculate_accumulative_usage_view(request):
+    if 'total_expense' in request.GET:
+        total_expense = float(request.GET['total_expense'])
+        result = calculate_accumulative_usage(total_expense)
+        return JsonResponse(result)
+    else:
+        return JsonResponse({'error': 'total_expense parameter is missing in the request.'}, status=400)
+
+
+
+
+# 從使用度數推算累進費率
+def calculate_accumulative_cost(usage):
+
+    # 定義累進式非夏季、夏季費率表
+    rate_table_non_summer = [
+        (120, 1.63),
+        (210, 2.10),
+        (220, 2.89),
+        (150, 3.94),
+        (300, 4.74),
+        (3000, 6.03)
+    ]
+
+    rate_table_summer = [
+        (120, 1.63),
+        (210, 2.38),
+        (220, 3.52),
+        (150, 4.80),
+        (300, 5.83),
+        (3000, 7.69)
+    ]
+
+
+    def calculate_cost(usage, rate_table):
+        electricity_price = 0
+
+        for limit, price_per_degree in rate_table:
+            if usage <= limit:
+                electricity_price += usage * price_per_degree
+                break
+            else:
+                electricity_price += limit * price_per_degree
+                usage -= limit
+
+        return electricity_price
+    
+    electricity_cost_non_summer = calculate_cost(usage, rate_table_non_summer)
+    electricity_cost_summer = calculate_cost(usage, rate_table_summer)
+    
+    return {
+        'monthly_elec_cost_non_summer': electricity_cost_non_summer,
+        'monthly_elec_cost_summer': electricity_cost_summer
+    }
+
+# /api/power/accu_cost
+# 從使用度數推算累進費率 Http request view
+def calculate_accumulative_cost_view(request):
+    if 'usage' in request.GET:
+        usage = int(request.GET['usage'])
+        electricity_cost = calculate_accumulative_cost(usage)
+        return JsonResponse(electricity_cost)
+    else:
+        return JsonResponse({'error': 'usage parameter is missing in the request.'}, status=400)
+
+
+
+ 

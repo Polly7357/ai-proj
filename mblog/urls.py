@@ -38,6 +38,8 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('api/power/', calculate_electricity_cost_view),
     path('api/devices/', showdevice),
     path('pages/query/', customSqlQueryView),
+    path('api/power/accu_usage/',calculate_accumulative_usage_view),
+    path('api/power/accu_cost/',calculate_accumulative_cost_view)
 ]
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
