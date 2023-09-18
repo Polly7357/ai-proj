@@ -1,14 +1,23 @@
-<footer class="py-5 bg-dark">
+<footer class="py-5 bg-dark" style="position: fixed; bottom: 0; width: 100%;">
+    <!-- 页脚底部部分，背景为深色，固定在底部，宽度占据整个屏幕 -->
     <div class="container">
+        <!-- 容器包裹，用于布局 -->
         <p class="m-0 text-center text-white">
+            <!-- 文本段落，无外边距，居中对齐，文本颜色为白色 -->
             Copyright &copy; Your Website 2023
+            <!-- 版权信息，显示当前年份 -->
         </p>
     </div>
     <div class="container">
+        <!-- 另一个容器包裹 -->
         {% if now %}
+        <!-- 如果有当前时间信息 -->
         <p class="m-0 text-center text-white">現在時刻：{{ now }}</p>
+        <!-- 显示当前时间 -->
         {% else %}
+        <!-- 如果没有当前时间信息 -->
         <p class="m-0 text-center text-white">本文內容取自網路，如有侵權請來信通知下架...</p>
+        <!-- 显示侵权通知信息 -->
         {% endif %}
     </div>
 </footer>

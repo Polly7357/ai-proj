@@ -1,0 +1,140 @@
+<!-- base.html -->
+<!DOCTYPE>
+<html>
+<head>
+    {% load static %}
+    <meta charset='utf-8'>
+    
+    <title>
+       {% block title %} {% endblock %}
+    </title>
+    {% include 'components/header_lib.html' %}
+    {% include 'components/header_css.html' %}
+</head>
+<body>
+    {% include 'components/navbar.html' %}
+    <header>
+        <div
+          class="text-center bg-image"
+          style="
+            
+            height: 100px;
+          "
+        >
+            <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <div class="text-white">
+                        <h1 class="mb-3">{% block headmessage %}{% endblock %}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container" >
+        <div class="row">
+            {% include 'components/sidebar2.html' %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% include 'components/footer.html' %}
+    
+<!-- 新增按鈕 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addItemButton = document.getElementById('addItemButton');
+            const itemList = document.getElementById('itemList');
+    
+            addItemButton.addEventListener('click', function() {
+                const itemSelect = document.getElementById('itemSelect');
+                const unitInput = document.getElementById('unitInput');
+                
+                const selectedOption = itemSelect.options[itemSelect.selectedIndex].text;
+                const quantity = unitInput.value;
+    
+                const itemElement = document.createElement('div');
+                itemElement.textContent = `選擇品項: ${selectedOption}, 數量: ${quantity}`;
+                itemList.appendChild(itemElement);
+    
+                // 清除输入框内容
+                itemSelect.selectedIndex = 0;
+                unitInput.value = '';
+            });
+        });
+    </script>
+<!-- 偵測時間 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const recordDateInput = document.getElementById('recordDate');
+            const submitDateButton = document.getElementById('submitDate');
+            const errorMsg = document.getElementById('errorMsg');
+            const carbonFootprintDate = document.getElementById('carbonFootprintDate');
+    
+            submitDateButton.addEventListener('click', function() {
+                const inputDate = recordDateInput.value;
+                const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    
+                if (dateRegex.test(inputDate)) {
+                    errorMsg.textContent = ''; // 清除错误消息
+                    carbonFootprintDate.textContent = '日期：' + inputDate; // 显示日期
+                    // 在此添加处理日期的代码
+                } else {
+                    errorMsg.textContent = '日期格式错误，请使用YYYY-MM-DD格式。';
+                }
+            });
+        });
+    </script>
+
+
+<!-- index3 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addApplianceButton = document.getElementById('addApplianceButton');
+        const applianceList = document.getElementById('applianceList');
+
+        addApplianceButton.addEventListener('click', function() {
+            const applianceSelect = document.getElementById('applianceSelect');
+            const startTimeInput = document.getElementById('startTimeInput');
+            const endTimeInput = document.getElementById('endTimeInput');
+
+            const selectedOption = applianceSelect.options[applianceSelect.selectedIndex].text;
+            const startTime = startTimeInput.value;
+            const endTime = endTimeInput.value;
+
+            const applianceElement = document.createElement('div');
+            applianceElement.textContent = `選擇電器: ${selectedOption}, 開始時間: ${startTime}, 結束時間: ${endTime}`;
+            applianceList.appendChild(applianceElement);
+
+            // 清除输入框内容
+            applianceSelect.selectedIndex = 0;
+            startTimeInput.value = '';
+            endTimeInput.value = '';
+        });
+
+        // 创建并渲染长条图表
+        const ctx = document.getElementById('carbonBarChart').getContext('2d');
+        const data = {
+            labels: ['1', '2'], // 这里需要提供实际数据标签
+            datasets: [{
+                label: '碳排放量',
+                data: [20, 30], // 这里需要提供实际数据
+                backgroundColor: ['#FF5733', '#33FF57'], // 长条的颜色
+            }],
+        };
+
+        const carbonBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
+{% block js_script %}{% endblock %}

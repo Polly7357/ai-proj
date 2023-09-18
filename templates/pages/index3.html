@@ -1,0 +1,112 @@
+{% extends 'bases/base.html' %}
+
+{% block headmessage %}
+    <div style="text-align: left;">
+        生活碳足跡計算
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <p> 日期：<input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px"> </p>
+
+
+    </div>
+    
+    </div>
+    <!--<div class="col-md-3">
+        <button class="btn btn-primary">完成</button>
+    </div>-->
+</div>
+
+<div>
+    <p>生活碳足跡</p>
+    <p id="carbonFootprintDate"></p> <!-- 用于显示日期 -->
+    <!-- 在这里添加生活碳足迹计算的内容 -->
+</div>
+
+<hr>
+
+<div style="display: flex; justify-content: space-between;">
+    <!-- 左方区域 -->
+    <div style="flex: 1;">
+        <label for="applianceSelect">選擇電器:</label>
+        <select id="applianceSelect" name="applianceSelect">
+            <option value="1">電冰箱</option>
+            <option value="2">電鍋</option>
+            <option value="3">開飲機</option>
+            <option value="4">微波爐</option>
+            <option value="5">抽油煙機</option>
+            <option value="6">果汁機</option>
+            <option value="7">果榨汁機</option>
+            <option value="8">烘碗機</option>
+            <option value="9">電磁爐</option>
+            <option value="10">多功能火鍋</option>
+            <option value="11">烤麵包機</option>
+            <option value="12">電咖啡壺</option>
+            <option value="13">電烤箱</option>
+            <option value="14">洗衣機</option>
+            <option value="15">乾衣機</option>
+            <option value="16">電熨斗</option>
+            <option value="17">冷氣機</option>
+            <option value="18">吹風機</option>
+            <option value="19">電暖爐</option>
+            <option value="20">電扇</option>
+            <option value="21">吸塵器</option>
+            <option value="22">抽風機</option>
+            <option value="23">燈泡(60W)</option>
+            <option value="24">日光燈(20W)</option>
+            <option value="25">省電燈泡</option>
+            <option value="26">神龕燈</option>
+            <option value="27">電視機</option>
+            <option value="28">機上盒</option>
+            <option value="29">音響</option>
+            <option value="30">收音機</option>
+            <option value="31">電腦:主機+顯示器</option>
+            <option value="32">印表機</option>
+            <option value="33">手機充電器</option>
+            <option value="34">筆記型電腦MacBook Pro</option>
+            <option value="35">電熱水器</option>
+            <option value="36">電熱水瓶</option>
+            <option value="37">變頻冷氣</option>
+        </select>
+        <br>
+        <label for="startTimeInput">開始時間:</label>
+        <input type="text" id="startTimeInput" name="startTimeInput">
+        <br>
+        <label for="endTimeInput">結束時間:</label>
+        <input type="text" id="endTimeInput" name="endTimeInput">
+        <br>
+        <button id="addApplianceButton">新增電器</button>
+        <button id="resetButton">重設</button>
+        <div id="applianceList">
+            <!-- 这里将显示选项和时间 -->
+        </div>
+    </div>
+
+    <!-- 右方区域 -->
+    <div style="flex: 1;">
+        <p>今日用量</p>
+        <canvas id="carbonBarChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js_script %}
+<script>
+    axios.get('http://127.0.0.1:8000/api/power/')
+    .then((res)=>{
+        console.log(res.data)
+        $(`#startTimeInput`).val(res.data.xxx); // <Input>
+            <div> .text()
+                <p>.text()
+                    let s = `<div> <p> </div>`
+       $(`#ID`).append(``) 
+    })
+    .catch((error)=>{
+
+    })
+</script>
+{% endblock %}

@@ -2,8 +2,9 @@
 <!DOCTYPE>
 <html>
 <head>
-    {% load static %}   <!-- added 09/07 -->
+    {% load static %}
     <meta charset='utf-8'>
+    
     <title>
        {% block title %} {% endblock %}
     </title>
@@ -16,11 +17,11 @@
         <div
           class="text-center bg-image"
           style="
-            background-image: url('{% static 'banner1.png' %}');
-            height: 350px;
+            background-image: url('{% static 'banner1.jpg' %}');
+            height: 100px;
           "
         >
-            <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+            <div class="mask" style="background-color: #38B2Ac;">
                 <div class="d-flex justify-content-center align-items-center h-100">
                     <div class="text-white">
                         <h1 class="mb-3">{% block headmessage %}{% endblock %}</h1>
@@ -29,14 +30,212 @@
             </div>
         </div>
     </header>
-    
-    <div class="container">
+    <div class="container" style="background-color : #F5F5F5" >
         <div class="row">
             {% include 'components/sidebar.html' %}
             {% block content %}{% endblock %}
         </div>
     </div>
     {% include 'components/footer.html' %}
+<!-- 新增按鈕index2 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+// 獲取HTML元素的參考
+const itemSelect = document.getElementById("itemSelect");
+const unitInput = document.getElementById("unitInput");
+const addItemButton = document.getElementById("addItemButton");
+const resetButton = document.getElementById("resetButton");
+
+// 建立一個空的資料陣列，用於存儲項目和對應的值
+const data = {
+  labels: [],
+  datasets: [
+    {
+      label: '數值',
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1,
+      data: [],
+    },
+  ],
+};
+
+// 設定圖表的最大高度
+const maxChartHeight = 325; // 根據需要調整這個值
+
+// 初始化圖表
+const ctx = document.getElementById("carbonBarChart2").getContext("2d");
+const myBarChart = new Chart(ctx, {
+  type: 'bar',
+  data: data,
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true,
+      },
+    },
+  },
+});
+
+// 建立一個函數，用於更新長條圖
+function updateBarChart() {
+  // 設定圖表的高度，不超過最大高度
+  const chartHeight = Math.min(maxChartHeight, data.labels.length * 40 + 300);
+
+  // 更新圖表的高度
+  document.getElementById("carbonBarChart2").style.height = chartHeight + "px";
+
+  myBarChart.update(); // 更新圖表
+}
+
+// 當按下新增按鈕時，將項目和值添加到資料陣列，並更新長條圖
+addItemButton.addEventListener("click", () => {
+  const selectedItem = itemSelect.options[itemSelect.selectedIndex].text;
+  const inputValue = parseFloat(unitInput.value);
+
+  if (!isNaN(inputValue)) {
+    data.labels.push(selectedItem);
+    data.datasets[0].data.push(inputValue);
+    updateBarChart();
+  } else {
+    alert("請輸入有效的數字單位。");
+  }
+});
+
+// 當按下重設按鈕時，清空資料陣列並更新長條圖
+resetButton.addEventListener("click", () => {
+  data.labels = [];
+  data.datasets[0].data = [];
+  updateBarChart();
+});
+
+    </script>
+    
+
+    
+<!-- 偵測時間 -->
+    <!-- 引入Bootstrap和jQuery庫 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- 引入日期選擇器庫，如jQuery UI -->
+    <!-- 引入jQuery庫 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- 引入jQuery UI庫，包括日期選擇器模組 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- 在這裡添加日期選擇器的初始化代碼 -->
+    <script>
+        $(function() {
+            $("#datepicker").datepicker(); // 初始化日期選擇器      
+        
+        });
+        
+    </script>
+
+
+<!-- index3 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addApplianceButton = document.getElementById('addApplianceButton');
+        const resetButton = document.getElementById('resetButton');
+        const applianceList = document.getElementById('applianceList');
+        let deviceData = {}; // 用于跟踪设备值的对象，键是设备名，值是对应的值
+    
+        // 创建并渲染长条图表
+        const ctx = document.getElementById('carbonBarChart').getContext('2d');
+        const data = {
+            labels: [], // 电器名称将在后续添加
+            datasets: [{
+                label: '碳排放量',
+                data: [], // 实际数据将在后续添加
+                backgroundColor: [], // 长条的颜色
+            }],
+        };
+    
+        const carbonBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    
+        addApplianceButton.addEventListener('click', function () {
+            const applianceSelect = document.getElementById('applianceSelect');
+            const startTimeInput = document.getElementById('startTimeInput');
+            const endTimeInput = document.getElementById('endTimeInput');
+    
+            const selectedOption = applianceSelect.options[applianceSelect.selectedIndex].text;
+            const startTime = parseFloat(startTimeInput.value);
+            const endTime = parseFloat(endTimeInput.value);
+    
+            // 计算电器设备的值
+            const value = (endTime - startTime) * 5;
+    
+            // 根据选项更新设备值
+            if (!deviceData[selectedOption]) {
+                deviceData[selectedOption] = 0;
+            }
+            deviceData[selectedOption] += value;
+    
+            // 更新柱状图数据
+            carbonBarChart.data.labels = Object.keys(deviceData); // 设置标签为设备名称
+            carbonBarChart.data.datasets[0].data = Object.values(deviceData); // 设置数据为设备值
+            carbonBarChart.update();
+    
+            const applianceElement = document.createElement('div');
+            applianceElement.textContent = `選擇電器: ${selectedOption}, 開始時間: ${startTime}, 結束時間: ${endTime}, 值: ${value}`;
+            applianceList.appendChild(applianceElement);
+    
+            // 清除输入框内容
+            applianceSelect.selectedIndex = 0;
+            startTimeInput.value = '';
+            endTimeInput.value = '';
+        });
+    
+        resetButton.addEventListener('click', function () {
+            // 清除输入框内容
+            const applianceSelect = document.getElementById('applianceSelect');
+            const startTimeInput = document.getElementById('startTimeInput');
+            const endTimeInput = document.getElementById('endTimeInput');
+            applianceSelect.selectedIndex = 0;
+            startTimeInput.value = '';
+            endTimeInput.value = '';
+    
+            // 清空电器设备记录和deviceData对象
+            applianceList.innerHTML = '';
+            deviceData = {}; // 清空deviceData对象
+    
+            // 重置柱状图数据
+            carbonBarChart.data.labels = [];
+            carbonBarChart.data.datasets[0].data = [];
+            carbonBarChart.update();
+        });
+    });
+    
+</script>
+<script>
+axios.post('https://your-api-endpoint.com/your-resource', {
+    columnName1: 'value1',
+    columnName2: 'value2',
+    // 可根据数据库的实际列名添加更多属性
+})
+.then(function (response) {
+    console.log('響應數據:', response.data);
+})
+.catch(function (error) {
+    console.error('請求錯誤:', error);
+});
+</script>
 </body>
 </html>
 {% block js_script %}{% endblock %}

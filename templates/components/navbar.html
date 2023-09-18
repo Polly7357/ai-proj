@@ -1,14 +1,61 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- 导航栏容器，背景为深色 -->
     <div class="container">
-        <a class="navbar-brand" href="#!">You Only Live Once</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <!-- 容器包裹，用于布局 -->
+        <a class="navbar-brand" href="#">碳足跡</a>
+        <!-- 导航栏品牌标志，跳转到首页 -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- 导航栏切换按钮 -->
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- 导航栏内容，折叠在小屏幕上 -->
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#">首頁</a></li>
-                <li class="nav-item"><a class="nav-link" href="/admin">管理後臺</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">聯絡資訊</a></li>
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                <!-- 导航栏列表，位于右侧，垂直居中对齐 -->
+                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000">首頁</a></li>
+                <!-- 导航栏列表项，链接到首页 -->
+                <li class="nav-item"><a class="nav-link" href="/index4">帳號</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        登入
+                    </a>
+                </li>
+                <!-- 导航栏列表项，触发模态框弹出 -->
             </ul>
         </div>
     </div>
 </nav>
+
+<!-- 模态框 -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- 标题：登入/註冊 -->
+                <h5 class="modal-title" id="loginModalLabel">登入/註冊</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 输入框和标签：請輸入EMAIL -->
+                <div class="mb-3">
+                    <label for="emailInput" class="form-label">請輸入EMAIL</label>
+                    <input type="email" class="form-control" id="emailInput">
+                </div>
+                <!-- 输入框和标签：請輸入密碼 -->
+                <div class="mb-3">
+                    <label for="passwordInput" class="form-label">請輸入密碼</label>
+                    <input type="password" class="form-control" id="passwordInput">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- 登入按钮 -->
+                <button type="button" class="btn btn-primary">登入</button>
+                <!-- 註冊按钮 -->
+                <button type="button" class="btn btn-secondary">註冊</button>
+                <!-- 文字：忘記密碼? -->
+                <p class="text-muted">忘記密碼?</p>
+            </div>
+        </div>
+    </div>
+</div>
+

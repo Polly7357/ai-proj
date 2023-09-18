@@ -3,7 +3,7 @@
 # Create your views here.
 # 以下為更新內容
 
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 from django.http import HttpResponse
 from .models import *
 from datetime import datetime
@@ -27,10 +27,9 @@ def homepage(request):
     return HttpResponse(post_lists) #把回傳的list變成加入 html代碼以網頁結構文法的一部份
 
 
-def index(request):     #建完index.html後手動新增
+def index_post(request):
     posts = Post.objects.all()
-    now = datetime.now()
-    number = 1
+    #now = datetime.now()
     return render(request, 'pages/index.html', locals()) #django的函數, index.html為templates的檔名, 將所有變數打包成字點檔
 
 from django.shortcuts import redirect   #0807新增
@@ -68,3 +67,28 @@ def customSqlQueryView(request):
         return JsonResponse({"error":f"DB error:{e}"})
     except Exception as e:
         return JsonResponse({"error":f"error occurred:{e}"})
+    
+def index2_post(request):
+    #posts = Post.objects.all()
+    #now = datetime.now()
+    return render(request, 'pages/index2.html', locals())
+
+def index3_post(request):
+    #posts = Post.objects.all()
+    #now = datetime.now()
+    return render(request, 'pages/index3.html', locals())
+
+def index4_post(request):
+    #posts = Post.objects.all()
+    #now = datetime.now()
+    return render(request, 'pages/index4.html', locals())
+
+def index5_post(request):
+    #posts = Post.objects.all()
+    #now = datetime.now()
+    return render(request, 'pages/index5.html', locals())
+
+def index6_post(request):
+    #posts = Post.objects.all()
+    #now = datetime.now()
+    return render(request, 'pages/index6.html', locals())
