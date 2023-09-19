@@ -448,3 +448,19 @@ def calculate_cde_View(request):
 
     # Return the response as JSON
     return JsonResponse(response_data)
+
+from api.models import *
+
+def sensor_data(request):
+    mac_address = request.GET['m']
+    sensor_type = request.GET['t']
+    sensor_value = request.GET['v']
+
+
+    sensor = Sensor( source_mac = mac_address, sensor_type = sensor_type, sensor_value = sensor_value)
+    sensor.save();
+
+
+    data = { 'msg' : 'OK', 'id': sensor.id}
+    response = JsonResponse(data, status=200)
+    return response
