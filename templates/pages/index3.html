@@ -91,7 +91,20 @@
         <canvas id="carbonBarChart" width="400" height="200"></canvas>
     </div>
 </div>
+<div>
+    <label for="dailyEstimate">單日估算電量(度):</label>
+    <input type="text" id="dailyEstimate" readonly value="">
+</div>
 
+<div>
+    <label for="monthlyEstimate">整月估計電量(度):</label>
+    <input type="text" id="monthlyEstimate" readonly value="">
+</div>
+
+<div>
+    <label for="monthlyCarbon">整月碳排(公斤):</label>
+    <input type="text" id="monthlyCarbon" readonly value="">
+</div>
 {% endblock %}
 
 {% block js_script %}
@@ -99,11 +112,9 @@
     axios.get('http://127.0.0.1:8000/api/power/')
     .then((res)=>{
         console.log(res.data)
-        $(`#startTimeInput`).val(res.data.xxx); // <Input>
-            <div> .text()
-                <p>.text()
-                    let s = `<div> <p> </div>`
-       $(`#ID`).append(``) 
+        $(`#dailyEstimate`).val(res.data.Day); // <Input>
+        $(`#monthlyEstimate`).val(res.data.Month); // <Input>
+        $(`#monthlyCarbon`).val(res.data.kg); // <Input>            
     })
     .catch((error)=>{
 

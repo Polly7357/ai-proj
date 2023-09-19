@@ -91,9 +91,12 @@ def calculate_electricity_cost_view(request):
                     monthly_costs =round(monthly_costs,2)
 
                     usage_data[pricing] = {
-                        "單日估算電費(元)": electricity_cost,
-                        "週末電費(元)": wend_cost,
-                        "整月估計電費(元)": monthly_costs,
+                        #單日估算電費(元)
+                        "D1": electricity_cost,
+                        #週末電費(元)
+                        "D2": wend_cost,
+                        #整月估計電費(元)
+                        "D3": monthly_costs,
                     }
                     #usage_list.append(usage_data)
 
@@ -113,10 +116,14 @@ def calculate_electricity_cost_view(request):
         
     response_data ={
     "來源": user_id,
-    "產生時間": cal_time,
-    "單日估算電量(度)": electricity,
-    "整月估計電量(度)": monthly_consumption,
-    "整月碳排(公斤)": elec_cdf,
+    #時間
+    "time": cal_time,
+    #單日估算電量(度)
+    "Day": electricity,
+    #整月估計電量(度)
+    "Month": monthly_consumption,
+    #整月碳排(公斤)
+    "kg": elec_cdf,
     "case": case_usage,
     }
 
@@ -233,4 +240,5 @@ def showdevice(request):        #0807新增, slug來自於urls.py slug冒號後�
         return redirect('/')        #回到127.0.0.1:8000
 
     return True
+
 
