@@ -92,29 +92,48 @@
     </div>
 </div>
 <div>
-    <label for="dailyEstimate">單日估算電量(度):</label>
+    <label for="dailyEstimate">MonthlyCarbonEmission:</label>
     <input type="text" id="dailyEstimate" readonly value="">
 </div>
 
 <div>
-    <label for="monthlyEstimate">整月估計電量(度):</label>
+    <label for="monthlyEstimate">MonthlyElectricity:</label>
     <input type="text" id="monthlyEstimate" readonly value="">
 </div>
 
 <div>
-    <label for="monthlyCarbon">整月碳排(公斤):</label>
+    <label for="monthlyCarbon">DailyCost:</label>
     <input type="text" id="monthlyCarbon" readonly value="">
 </div>
 {% endblock %}
 
 {% block js_script %}
 <script>
+    $("#addApplianceButton").click(function(){
+        var deviceName = $("#applianceSelect").val();
+        var startTime = $("#startTimeInput").val();
+        var endTime = $("#endTimeInput").val();
+
+        // 检查是否填写了必要字段
+        if (deviceName && startTime && endTime) {
+            // 创建要发送的数据对象
+            var applianceData = {
+                "device_name": deviceName,
+                "start_hour": startTime,
+                "end_hour": endTime
+        axios.post("http://127.0.0.1:8000/api/power/",applianceData)    
+    }
+}
+    }
+    )
+</script>
+<script>
     axios.get('http://127.0.0.1:8000/api/power/')
     .then((res)=>{
         console.log(res.data)
-        $(`#dailyEstimate`).val(res.data.Day); // <Input>
-        $(`#monthlyEstimate`).val(res.data.Month); // <Input>
-        $(`#monthlyCarbon`).val(res.data.kg); // <Input>            
+        $(`#dailyEstimate`).val(res.data.case.Reality.MonthlyCarbonEmission); // <Input>
+        $(`#monthlyEstimate`).val(res.data.case.Reality.MonthlyElectricity ); // <Input>
+        $(`#monthlyCarbon`).val(res.data.case.Reality.Priciing.ThreeTier.DailyCost); // <Input>            
     })
     .catch((error)=>{
 

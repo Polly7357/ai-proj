@@ -28,7 +28,7 @@ def calculate_electricity_cost_view(request):
     # try:
     #     # Read JSON data from the request (you may need to adjust this based on how you send JSON data to the view)
     #     #json_data = json.loads(request.body)
-    cases = ['Reality','Smart']
+    cases = ['Reality','Smartly']
     case_usage={}
 
     for case in cases:
@@ -70,13 +70,13 @@ def calculate_electricity_cost_view(request):
                 
                 match table:
                     case 'c2_rates':
-                        pricing = '二段式'
+                        pricing = 'TwoTier'
                     case 'c3_rates':
-                        pricing = '三段式'
+                        pricing = 'ThreeTier'
                     case 'summer_c2_rates':
-                        pricing = '二段式夏季'                    
+                        pricing = 'TwoTierSummer'                    
                     case 'summer_c3_rates':
-                        pricing = '三段式夏季'                    
+                        pricing = 'ThreeTierSummer'                    
                     
                 if electricity_cost is not None:
                     #print(f"\nTable: {table}")
@@ -91,12 +91,9 @@ def calculate_electricity_cost_view(request):
                     monthly_costs =round(monthly_costs,2)
 
                     usage_data[pricing] = {
-                        #單日估算電費(元)
-                        "D1": electricity_cost,
-                        #週末電費(元)
-                        "D2": wend_cost,
-                        #整月估計電費(元)
-                        "D3": monthly_costs,
+                        "DailyCost": electricity_cost,
+                        "WeekendCost": wend_cost,
+                        "MonthlyCost": monthly_costs,
                     }
                     #usage_list.append(usage_data)
 
@@ -106,7 +103,10 @@ def calculate_electricity_cost_view(request):
                 
             #calculte cdf of monthly elec consumption    
             elec_cdf = elec2cdf (monthly_consumption)    
-            case_usage[case]=usage_data 
+            case_usage[case]={
+                "MonthlyElectricity":monthly_consumption,
+                "MonthlyCarbonEmission": elec_cdf,
+                "Priciing":usage_data}
                 
 
 
@@ -115,15 +115,11 @@ def calculate_electricity_cost_view(request):
             return JsonResponse({"error orrurs": str(e)}, status=400)
         
     response_data ={
-    "來源": user_id,
-    #時間
-    "time": cal_time,
-    #單日估算電量(度)
-    "Day": electricity,
-    #整月估計電量(度)
-    "Month": monthly_consumption,
-    #整月碳排(公斤)
-    "kg": elec_cdf,
+    "Source": user_id,
+    "Entrytime": cal_time,
+    "DailyElectricity": electricity,
+    # "Monthly-Electricity": monthly_consumption,
+    # "Monthly-Carbon-Emission": elec_cdf,
     "case": case_usage,
     }
 
@@ -241,4 +237,217 @@ def showdevice(request):        #0807新增, slug來自於urls.py slug冒號後�
 
     return True
 
+
+# /api/power/accu_usage
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def calculate_accumulative_usage(total_expense):
+    # 定義非夏季、夏季費率表
+    rate_table_non_summer = [
+        (120, 1.63),   
+        (210, 2.10), 
+        (220, 2.89), 
+        (150, 3.94), 
+        (300, 4.74),     # Usage from 701 to 1000 degrees, price 4.80元 per degree (1000-701)
+        (3000, 6.03)     # Usage from 501 to 700 degrees, price 4.80元 per degree (?-1001)
+    ]
+
+    rate_table_summer = [
+        (120, 1.63),    # Usage up to 120 degrees, price 1.63元 per degree
+        (210, 2.38),    # Usage from 121 to 330 degrees, price 2.38元 per degree (331-120)
+        (220, 3.52),    # Usage from 331 to 500 degrees, price 3.52元 per degree (551-330)
+        (150, 4.80),     # Usage from 501 to 700 degrees, price 4.80元 per degree (701-550)
+        (300, 5.83),     # Usage from 701 to 1000 degrees, price 4.80元 per degree (1000-701)
+        (3000, 7.69)     # Usage from 501 to 700 degrees, price 4.80元 per degree (?-1001)
+    ]
+
+    # Total expense (you can get this from the request or a form submission)
+    #total_expense = 1400  # Total expense in dollars
+
+    # Function to calculate the degrees of electricity used for a given expense and rate table
+    def calculate_degrees(expense, rate_table):
+        degrees_used = 0
+        remaining_expense = expense/2   #帳單電費為2個月總計
+
+        for limit, rate in rate_table:
+            if remaining_expense <= 0:
+                break
+
+            if remaining_expense >= limit * rate:
+                degrees_used += limit
+                remaining_expense -= limit * rate
+            else:
+                degrees_used += remaining_expense / rate
+                remaining_expense = 0
+
+        return degrees_used
+
+    # Calculate degrees for non-summer season
+    degrees_non_summer = calculate_degrees(total_expense, rate_table_non_summer)
+
+    # Calculate degrees for summer season
+    degrees_summer = calculate_degrees(total_expense, rate_table_summer)
+
+    # Prepare the context to pass to the template
+    return {
+        'degrees_non_summer': round(degrees_non_summer,2),
+        'degrees_summer': round(degrees_summer,2),
+    }
+
+def calculate_accumulative_usage_view(request):
+    if 'total_expense' in request.GET:
+        total_expense = float(request.GET['total_expense'])
+        result = calculate_accumulative_usage(total_expense)
+        return JsonResponse(result)
+    else:
+        return JsonResponse({'error': 'total_expense parameter is missing in the request.'}, status=400)
+
+
+
+
+# 從使用度數推算累進費率
+def calculate_accumulative_cost(usage):
+
+    # 定義累進式非夏季、夏季費率表
+    rate_table_non_summer = [
+        (120, 1.63),
+        (210, 2.10),
+        (220, 2.89),
+        (150, 3.94),
+        (300, 4.74),
+        (3000, 6.03)
+    ]
+
+    rate_table_summer = [
+        (120, 1.63),
+        (210, 2.38),
+        (220, 3.52),
+        (150, 4.80),
+        (300, 5.83),
+        (3000, 7.69)
+    ]
+
+
+    def calculate_cost(usage, rate_table):
+        electricity_price = 0
+
+        for limit, price_per_degree in rate_table:
+            if usage <= limit:
+                electricity_price += usage * price_per_degree
+                break
+            else:
+                electricity_price += limit * price_per_degree
+                usage -= limit
+
+        return electricity_price
+    
+    electricity_cost_non_summer = calculate_cost(usage, rate_table_non_summer)
+    electricity_cost_summer = calculate_cost(usage, rate_table_summer)
+    
+    return {
+        'monthly_elec_cost_non_summer': electricity_cost_non_summer,
+        'monthly_elec_cost_summer': electricity_cost_summer
+    }
+
+# /api/power/accu_cost
+# 從使用度數推算累進費率 Http request view
+def calculate_accumulative_cost_view(request):
+    if 'usage' in request.GET:
+        usage = int(request.GET['usage'])
+        electricity_cost = calculate_accumulative_cost(usage)
+        return JsonResponse(electricity_cost)
+    else:
+        return JsonResponse({'error': 'usage parameter is missing in the request.'}, status=400)
+
+import json
+from mainsite.models import Beverage, CdeTransport, LactoseProds, Energy
+
+
+# 計算消費品碳當量``
+def calculate_cde_View(request):
+
+    # Provided JSON data
+    data = '''
+    {
+        "beverage": {
+            "瓶裝水(600ml，PET包裝)": 2,
+            "可樂(寶特瓶裝，600ml)": 2,
+            "奶茶（300ml，鋁箔包裝）": 2,
+            "經典台灣啤酒，330 ml (6罐裝，收縮膜)": 1
+        },
+        "cde_transport": {
+            "機器腳踏車": 10
+        },
+        "lactose_prods": {
+            "焦糖烤布丁": 2
+        },
+        "energy": {
+            "電(2022）": 3000,
+            "臺灣自來水(2017)": 300
+        }
+    }
+    '''
+
+
+    parsed_data = json.loads(data)
+
+    total_cde_beverage = 0
+    total_cde_cde_transport = 0
+    total_cde_lactose_prods = 0
+    total_cde_energy = 0
+
+    # Calculate total cde for 'beverage' class
+    for item_name, quantity in parsed_data.get("beverage", {}).items():
+        beverage_obj = Beverage.objects.filter(name=item_name).first()
+        if beverage_obj:
+            print(f"Found matching item in 'cde_transport': {item_name}")
+            total_cde_beverage += beverage_obj.cde * quantity
+        else:
+            print(f"Item not found in 'beverage': {item_name}")
+
+    # Calculate total cde for 'cde_transport' class
+    for item_name, quantity in parsed_data.get("cde_transport", {}).items():
+        #移除隱形空白
+        item_name = item_name.strip()
+        #cde_transport_obj = CdeTransport.objects.filter(name=item_name).first()
+        cde_transport_obj = CdeTransport.objects.filter(name__iexact=item_name.replace(" ", "")).first()
+        if cde_transport_obj:
+            print(f"Found matching item in 'cde_transport': {item_name}")
+            total_cde_cde_transport += cde_transport_obj.cde * quantity
+        else:
+            print(f"Item not found in 'cde_transport': {item_name}")
+            all_cde_transport_names = CdeTransport.objects.values_list('name', flat=True)
+            print(f"All names in CdeTransport objects: {', '.join(all_cde_transport_names)}")
+
+    # Calculate total cde for 'lactose_prods' class
+    for item_name, quantity in parsed_data.get("lactose_prods", {}).items():
+        lactose_prods_obj = LactoseProds.objects.filter(name=item_name).first()
+        if lactose_prods_obj:
+            print(f"Found matching item in 'beverage': {item_name}")
+            total_cde_lactose_prods += lactose_prods_obj.cde * quantity
+        else:
+             print(f"Item not found in 'lactose_prods': {item_name}")
+
+    # Calculate total cde for 'energy' class
+    for item_name, quantity in parsed_data.get("energy", {}).items():
+        energy_obj = Energy.objects.filter(name=item_name).first()
+        if energy_obj:
+            print(f"Found matching item in 'beverage': {item_name}")
+            total_cde_energy += energy_obj.cde * quantity
+        else:
+            print(f"Item not found in 'energy': {item_name}")
+
+    # Prepare the response data as a dictionary
+    response_data = {
+        "total_cde_beverage": total_cde_beverage,
+        "total_cde_cde_transport": round(total_cde_cde_transport,3),
+        "total_cde_lactose_prods": total_cde_lactose_prods,
+        "total_cde_energy": total_cde_energy,
+    }
+
+    # Return the response as JSON
+    return JsonResponse(response_data)
+
+from api.models import *
 
