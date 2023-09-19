@@ -39,8 +39,10 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('api/devices/', showdevice),
     path('pages/query/', customSqlQueryView),
     path('api/power/accu_usage/',calculate_accumulative_usage_view),
-    path('api/power/accu_cost/',calculate_accumulative_cost_view)
+    path('api/power/accu_cost/',calculate_accumulative_cost_view),
+    path('api/cde/', calculate_cde_View),
 ]
+
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 import mblog.settings

@@ -360,6 +360,91 @@ def calculate_accumulative_cost_view(request):
     else:
         return JsonResponse({'error': 'usage parameter is missing in the request.'}, status=400)
 
+import json
+from mainsite.models import Beverage, CdeTransport, LactoseProds, Energy
 
 
- 
+# 計算消費品碳當量``
+def calculate_cde_View(request):
+
+    # Provided JSON data
+    data = '''
+    {
+        "beverage": {
+            "瓶裝水(600ml，PET包裝)": 2,
+            "可樂(寶特瓶裝，600ml)": 2,
+            "奶茶（300ml，鋁箔包裝）": 2,
+            "經典台灣啤酒，330 ml (6罐裝，收縮膜)": 1
+        },
+        "cde_transport": {
+            "機器腳踏車": 10
+        },
+        "lactose_prods": {
+            "焦糖烤布丁": 2
+        },
+        "energy": {
+            "電(2022）": 3000,
+            "臺灣自來水(2017)": 300
+        }
+    }
+    '''
+
+
+    parsed_data = json.loads(data)
+
+    total_cde_beverage = 0
+    total_cde_cde_transport = 0
+    total_cde_lactose_prods = 0
+    total_cde_energy = 0
+
+    # Calculate total cde for 'beverage' class
+    for item_name, quantity in parsed_data.get("beverage", {}).items():
+        beverage_obj = Beverage.objects.filter(name=item_name).first()
+        if beverage_obj:
+            print(f"Found matching item in 'cde_transport': {item_name}")
+            total_cde_beverage += beverage_obj.cde * quantity
+        else:
+            print(f"Item not found in 'beverage': {item_name}")
+
+    # Calculate total cde for 'cde_transport' class
+    for item_name, quantity in parsed_data.get("cde_transport", {}).items():
+        #移除隱形空白
+        item_name = item_name.strip()
+        #cde_transport_obj = CdeTransport.objects.filter(name=item_name).first()
+        cde_transport_obj = CdeTransport.objects.filter(name__iexact=item_name.replace(" ", "")).first()
+        if cde_transport_obj:
+            print(f"Found matching item in 'cde_transport': {item_name}")
+            total_cde_cde_transport += cde_transport_obj.cde * quantity
+        else:
+            print(f"Item not found in 'cde_transport': {item_name}")
+            all_cde_transport_names = CdeTransport.objects.values_list('name', flat=True)
+            print(f"All names in CdeTransport objects: {', '.join(all_cde_transport_names)}")
+
+    # Calculate total cde for 'lactose_prods' class
+    for item_name, quantity in parsed_data.get("lactose_prods", {}).items():
+        lactose_prods_obj = LactoseProds.objects.filter(name=item_name).first()
+        if lactose_prods_obj:
+            print(f"Found matching item in 'beverage': {item_name}")
+            total_cde_lactose_prods += lactose_prods_obj.cde * quantity
+        else:
+             print(f"Item not found in 'lactose_prods': {item_name}")
+
+    # Calculate total cde for 'energy' class
+    for item_name, quantity in parsed_data.get("energy", {}).items():
+        energy_obj = Energy.objects.filter(name=item_name).first()
+        if energy_obj:
+            print(f"Found matching item in 'beverage': {item_name}")
+            total_cde_energy += energy_obj.cde * quantity
+        else:
+            print(f"Item not found in 'energy': {item_name}")
+
+    # Prepare the response data as a dictionary
+    response_data = {
+        "total_cde_beverage": total_cde_beverage,
+        "total_cde_cde_transport": round(total_cde_cde_transport,3),
+        "total_cde_lactose_prods": total_cde_lactose_prods,
+        "total_cde_energy": total_cde_energy,
+    }
+
+    # Return the response as JSON
+    return JsonResponse(response_data)
