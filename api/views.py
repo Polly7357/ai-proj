@@ -31,11 +31,29 @@ def calculate_electricity_cost_view(request):
     cases = ['Reality','Smartly']
     case_usage={}
 
+    # Check if the request contains JSON data
+    if request.method == 'POST':
+        try:
+            json_data = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
+    else:
+        # If no POST data is sent, use the data from the file as before
+        json_file_path = "user_data_house_perday.json"
+        if not os.path.exists(json_file_path):
+            return JsonResponse({"error": "File does not exist"}, status=400)
+        elif os.path.getsize(json_file_path) == 0:
+            return JsonResponse({"error": "File is empty"}, status=400)
+        else:
+            with open(json_file_path, "r", encoding="utf-8") as json_file:
+                json_data = json.load(json_file)
+
+
     for case in cases:
         if case == 'Reality':
             json_file_path = "user_data_house_perday.json"
 
-        elif case == 'Smart':
+        elif case == 'Smartly':
             json_file_path = "suggest_user_data.json"
 
 
@@ -70,13 +88,13 @@ def calculate_electricity_cost_view(request):
                 
                 match table:
                     case 'c2_rates':
-                        pricing = 'Two-Tier'
+                        pricing = 'TwoTier'
                     case 'c3_rates':
-                        pricing = 'Three-Tier'
+                        pricing = 'ThreeTier'
                     case 'summer_c2_rates':
-                        pricing = 'Two-Tier-Summer'                    
+                        pricing = 'TwoTierSummer'                    
                     case 'summer_c3_rates':
-                        pricing = 'Three-Tier-Summer'                    
+                        pricing = 'ThreeTierSummer'                    
                     
                 if electricity_cost is not None:
                     #print(f"\nTable: {table}")
@@ -91,9 +109,9 @@ def calculate_electricity_cost_view(request):
                     monthly_costs =round(monthly_costs,2)
 
                     usage_data[pricing] = {
-                        "Daily-Cost": electricity_cost,
-                        "Weekend-Cost": wend_cost,
-                        "Monthly-Cost": monthly_costs,
+                        "DailyCost": electricity_cost,
+                        "WeekendCost": wend_cost,
+                        "MonthlyCost": monthly_costs,
                     }
                     #usage_list.append(usage_data)
 
@@ -104,8 +122,8 @@ def calculate_electricity_cost_view(request):
             #calculte cdf of monthly elec consumption    
             elec_cdf = elec2cdf (monthly_consumption)    
             case_usage[case]={
-                "Monthly-Electricity":monthly_consumption,
-                "Monthly-Carbon-Emission": elec_cdf,
+                "MonthlyElectricity":monthly_consumption,
+                "MonthlyCarbonEmission": elec_cdf,
                 "Priciing":usage_data}
                 
 
@@ -116,8 +134,8 @@ def calculate_electricity_cost_view(request):
         
     response_data ={
     "Source": user_id,
-    "Entry-time": cal_time,
-    "Daily-Electricity": electricity,
+    "EntryTime": cal_time,
+    "DailyElectricity": electricity,
     # "Monthly-Electricity": monthly_consumption,
     # "Monthly-Carbon-Emission": elec_cdf,
     "case": case_usage,
@@ -448,3 +466,19 @@ def calculate_cde_View(request):
 
     # Return the response as JSON
     return JsonResponse(response_data)
+
+from api.models import *
+
+def sensor_data(request):
+    mac_address = request.GET['m']
+    sensor_type = request.GET['t']
+    sensor_value = request.GET['v']
+
+
+    sensor = Sensor( source_mac = mac_address, sensor_type = sensor_type, sensor_value = sensor_value)
+    sensor.save();
+
+
+    data = { 'msg' : 'OK', 'id': sensor.id}
+    response = JsonResponse(data, status=200)
+    return response
