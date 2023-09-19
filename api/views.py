@@ -35,7 +35,7 @@ def calculate_electricity_cost_view(request):
         if case == 'Reality':
             json_file_path = "user_data_house_perday.json"
 
-        elif case == 'Smart':
+        elif case == 'Smartly':
             json_file_path = "suggest_user_data.json"
 
 
