@@ -31,6 +31,24 @@ def calculate_electricity_cost_view(request):
     cases = ['Reality','Smartly']
     case_usage={}
 
+    # Check if the request contains JSON data
+    if request.method == 'POST':
+        try:
+            json_data = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
+    else:
+        # If no POST data is sent, use the data from the file as before
+        json_file_path = "user_data_house_perday.json"
+        if not os.path.exists(json_file_path):
+            return JsonResponse({"error": "File does not exist"}, status=400)
+        elif os.path.getsize(json_file_path) == 0:
+            return JsonResponse({"error": "File is empty"}, status=400)
+        else:
+            with open(json_file_path, "r", encoding="utf-8") as json_file:
+                json_data = json.load(json_file)
+
+
     for case in cases:
         if case == 'Reality':
             json_file_path = "user_data_house_perday.json"
