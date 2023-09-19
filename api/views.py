@@ -70,13 +70,13 @@ def calculate_electricity_cost_view(request):
                 
                 match table:
                     case 'c2_rates':
-                        pricing = 'Two-Tier'
+                        pricing = 'TwoTier'
                     case 'c3_rates':
-                        pricing = 'Three-Tier'
+                        pricing = 'ThreeTier'
                     case 'summer_c2_rates':
-                        pricing = 'Two-Tier-Summer'                    
+                        pricing = 'TwoTierSummer'                    
                     case 'summer_c3_rates':
-                        pricing = 'Three-Tier-Summer'                    
+                        pricing = 'ThreeTierSummer'                    
                     
                 if electricity_cost is not None:
                     #print(f"\nTable: {table}")
@@ -91,9 +91,9 @@ def calculate_electricity_cost_view(request):
                     monthly_costs =round(monthly_costs,2)
 
                     usage_data[pricing] = {
-                        "Daily-Cost": electricity_cost,
-                        "Weekend-Cost": wend_cost,
-                        "Monthly-Cost": monthly_costs,
+                        "DailyCost": electricity_cost,
+                        "WeekendCost": wend_cost,
+                        "MonthlyCost": monthly_costs,
                     }
                     #usage_list.append(usage_data)
 
@@ -104,8 +104,8 @@ def calculate_electricity_cost_view(request):
             #calculte cdf of monthly elec consumption    
             elec_cdf = elec2cdf (monthly_consumption)    
             case_usage[case]={
-                "Monthly-Electricity":monthly_consumption,
-                "Monthly-Carbon-Emission": elec_cdf,
+                "MonthlyElectricity":monthly_consumption,
+                "MonthlyCarbonEmission": elec_cdf,
                 "Priciing":usage_data}
                 
 
@@ -116,8 +116,8 @@ def calculate_electricity_cost_view(request):
         
     response_data ={
     "Source": user_id,
-    "Entry-time": cal_time,
-    "Daily-Electricity": electricity,
+    "EntryTime": cal_time,
+    "DailyElectricity": electricity,
     # "Monthly-Electricity": monthly_consumption,
     # "Monthly-Carbon-Emission": elec_cdf,
     "case": case_usage,
