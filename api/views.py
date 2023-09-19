@@ -25,9 +25,6 @@ from django.http import JsonResponse
 @csrf_exempt
 def calculate_electricity_cost_view(request):
 
-    # try:
-    #     # Read JSON data from the request (you may need to adjust this based on how you send JSON data to the view)
-    #     #json_data = json.loads(request.body)
     cases = ['Reality','Smartly']
     case_usage={}
 
@@ -38,7 +35,7 @@ def calculate_electricity_cost_view(request):
         except json.JSONDecodeError as e:
             return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
     else:
-        # If no POST data is sent, use the data from the file as before
+        # 假如前端沒送正確Json就使用file
         json_file_path = "user_data_house_perday.json"
         if not os.path.exists(json_file_path):
             return JsonResponse({"error": "File does not exist"}, status=400)
@@ -174,12 +171,12 @@ def calculate_electricity_cost(json_data, database_path, table_name):
                 # check_point
                 #print(power_consumption, end=' ==> ')                
 
-                # Query the specified rates table to get the rates for the specified hours
+                # 自不同費率表讀取時段與費率
                 cursor.execute(f"SELECT wday_rate, wend_rate FROM {table_name} WHERE h_id BETWEEN ? AND ?",
                             (start_hour, end_hour))
                 results = cursor.fetchall()
 
-                # Calculate total electricity consumption (kWh) for this device
+                # 功率轉換成度
                 unit_power = power_consumption / 1000  # Convert watts to kilowatts
                 total_hours = end_hour - start_hour + 1
 
@@ -191,7 +188,7 @@ def calculate_electricity_cost(json_data, database_path, table_name):
                     wday_rate = row[0]  # Extract wday_rate
                     wend_rate = row[1]
                     if wday_rate is not None:
-                        # Query the time_elec_rates table to get the rate based on desc
+                        # 將取得的費率mapping到電價
                         cursor.execute("SELECT rates FROM time_elec_rates WHERE desc = ?", (wday_rate,))
                         rate = cursor.fetchone()
 
@@ -244,7 +241,8 @@ def elec2cdf(electricity):
 #database_path = ''  # Database file path
 
 
-def showdevice(request):        #0807新增, slug來自於urls.py slug冒號後的參數
+# /api/devices/
+def showdevice(request):        
     try:                            #會先試著執行, 有例外再跳到except
         devices = ElecDeviceConsumption.objects.all()    #get(查詢的條件) (查詢的欄位=查詢的值)
        
@@ -256,7 +254,7 @@ def showdevice(request):        #0807新增, slug來自於urls.py slug冒號後�
     return True
 
 
-# /api/power/accu_usage
+# api/power/accu_usage/
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -280,10 +278,8 @@ def calculate_accumulative_usage(total_expense):
         (3000, 7.69)     # Usage from 501 to 700 degrees, price 4.80元 per degree (?-1001)
     ]
 
-    # Total expense (you can get this from the request or a form submission)
-    #total_expense = 1400  # Total expense in dollars
 
-    # Function to calculate the degrees of electricity used for a given expense and rate table
+    # 依電費回推用電量
     def calculate_degrees(expense, rate_table):
         degrees_used = 0
         remaining_expense = expense/2   #帳單電費為2個月總計
@@ -313,6 +309,8 @@ def calculate_accumulative_usage(total_expense):
         'degrees_summer': round(degrees_summer,2),
     }
 
+
+# api/power/accu_usage/
 def calculate_accumulative_usage_view(request):
     if 'total_expense' in request.GET:
         total_expense = float(request.GET['total_expense'])
@@ -368,7 +366,7 @@ def calculate_accumulative_cost(usage):
         'monthly_elec_cost_summer': electricity_cost_summer
     }
 
-# /api/power/accu_cost
+# api/power/accu_cost
 # 從使用度數推算累進費率 Http request view
 def calculate_accumulative_cost_view(request):
     if 'usage' in request.GET:
@@ -382,7 +380,8 @@ import json
 from mainsite.models import Beverage, CdeTransport, LactoseProds, Energy
 
 
-# 計算消費品碳當量``
+# 計算消費品碳當量
+# api/cde/
 def calculate_cde_View(request):
 
     # Provided JSON data
@@ -426,8 +425,10 @@ def calculate_cde_View(request):
 
     # Calculate total cde for 'cde_transport' class
     for item_name, quantity in parsed_data.get("cde_transport", {}).items():
-        #移除隱形空白
+        #移除隱形資料可能的空白
         item_name = item_name.strip()
+
+        #移除db data可能的空白
         #cde_transport_obj = CdeTransport.objects.filter(name=item_name).first()
         cde_transport_obj = CdeTransport.objects.filter(name__iexact=item_name.replace(" ", "")).first()
         if cde_transport_obj:
