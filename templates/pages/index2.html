@@ -25,9 +25,9 @@
     <p id="carbonFootprintDate"></p> <!-- 用于显示日期 -->
     <!-- 在这里添加生活碳足迹计算的内容 -->
 </div>
-<div style="display: flex; justify-content: space-between;">
-    <hr> <!-- 新增一条线将内容分隔开 -->
-    <div style="flex: 1;">
+<hr>
+<div class="row">
+    <div class="col-md-6">
         <div>
 
             <label for="itemSelect">選擇品項:</label>
@@ -72,17 +72,109 @@
             <div id="itemList"></div>
         </div>
     </div>
-    <hr>
 
     
-        <div style="flex: 1;">
-            <p>今日碳排放量</p>
-            <br>
-            <br>
-            <div id="carbonBarChartContainer">
-                <canvas id="carbonBarChart2" width="400" height="200"></canvas>
-            </div>
-            <div id="legend"></div>
+    <div class="col-md-6">
+        <p>今日碳排放量</p>
+        <br>
+        <div id="carbonBarChartContainer">
+            <canvas id="carbonBarChart3" width="400" height="200"></canvas>
         </div>
+    </div>
+
+    <br>
+<div>
+    <label for="total_cde_beverage">total_cde_beverage:</label>
+    <input type="text" id="total_cde_beverage" readonly value="">
 </div>
+        
+<div>
+    <label for="total_cde_cde_transport">total_cde_cde_transport:</label>
+    <input type="text" id="total_cde_cde_transport" readonly value="">
+</div>
+        
+<div>
+    <label for="total_cde_energy">total_cde_energy:</label>
+    <input type="text" id="total_cde_energy" readonly value="">
+</div>
+
+<div>
+    <label for="total_cde_lactose_prods">otal_cde_lactose_prods:</label>
+    <input type="text" id="total_cde_lactose_prods" readonly value="">
+</div>
+
+
+
+{% endblock %}
+{% block js_script %}
+<script>
+    axios.get('http://127.0.0.1:8000/api/cde/')
+    .then((res)=>{
+        console.log(res.data)
+        $(`#total_cde_beverage`).val(res.data.total_cde_beverage);
+        $(`#total_cde_cde_transport`).val(res.data.total_cde_cde_transport);
+        $(`#total_cde_energy`).val(res.data.total_cde_energy);
+        $(`#total_cde_lactose_prods`).val(res.data.total_cde_lactose_prods);        
+    })
+    .catch((error)=>{
+
+    })
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 创建并渲染长条图表
+        const ctx = document.getElementById('carbonBarChart3').getContext('2d');
+        const data = {
+            labels: ['total_cde_beverage', 'total_cde_cde_transport', 'total_cde_energy','otal_cde_lactose_prods'], // 电器名称将在后续添加
+            datasets: [{
+                label: '碳排放量',
+                data: [], // 实际数据将在后续添加
+                backgroundColor: ['#FF5733', '#33FF57', '#5733FF','#5733FF'], // 长条的颜色
+            }],
+        };
+
+        const carbonBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 初始化柱状图数据
+        carbonBarChart.data.datasets[0].data = [0, 0, 0];
+        carbonBarChart.update();
+
+        // 获取数据并更新柱状图和标签
+        axios.get('http://127.0.0.1:8000/api/cde/')
+            .then((res) => {
+                const total_cde_beverage = res.data.total_cde_beverage;
+                const total_cde_cde_transport = res.data.total_cde_cde_transport;
+                const total_cde_energy = res.data.total_cde_energy/30;
+                const total_cde_lactose_prods = res.data.total_cde_lactose_prods
+
+                // 更新柱状图和标签
+                carbonBarChart.data.datasets[0].data = [total_cde_beverage, total_cde_cde_transport, total_cde_energy,total_cde_lactose_prods];
+                carbonBarChart.update();
+
+                // 更新标签对应的输入框
+                //document.getElementById('total_cde_beverage').value = total_cde_beverage;
+                //document.getElementById('total_cde_cde_transport').value = total_cde_cde_transport;
+                document.getElementById('total_cde_energy').value = total_cde_energy;
+                //document.getElementById('total_cde_lactose_prods').value = total_cde_lactose_prods;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+</script>
+
 {% endblock %}
