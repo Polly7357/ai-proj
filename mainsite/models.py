@@ -26,7 +26,7 @@ class Beverage(models.Model):
     unit = models.TextField(blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'beverage'
 
     def __str__(self):  
@@ -34,12 +34,12 @@ class Beverage(models.Model):
 
 # 電價表
 class TimeElecRates(models.Model):
-    desc = models.TextField(null=False)
+    desc = models.TextField(unique=True, null=False)
     effect_date = models.IntegerField()
     rates = models.FloatField(blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'time_elec_rates'
         unique_together = [['desc', 'effect_date']]
         
@@ -48,17 +48,23 @@ class C2Rates(models.Model):
     h_id = models.AutoField(primary_key=True, blank=True, null=False)
     #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
     #wend_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wend_rate', blank=True, null=False)
-    wday_rate = models.ForeignKey(TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='c2rates_wday'  # Custom related_name for wday_rate
+    wday_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wday_rate', related_name='C2Rates_wday', to_field='desc',   # Specify the column you want to reference
     )
-    wend_rate = models.ForeignKey(
-        TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='c2rates_wend'  # Custom related_name for wend_rate
+    wend_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wend_rate', related_name='C2Rates_wend', to_field='desc',  # Specify the column you want to reference
     )
+    # wday_rate = models.ForeignKey(TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='c2rates_wday'  # Custom related_name for wday_rate
+    # )
+    # wend_rate = models.ForeignKey(
+    #     TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='c2rates_wend'  # Custom related_name for wend_rate
+    # )
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'c2_rates'
 
 # 三段費率表
@@ -66,20 +72,83 @@ class C3Rates(models.Model):
     h_id = models.AutoField(primary_key=True, blank=True, null=False)
     #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
     #wend_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wend_rate', blank=True, null=False)
-    wday_rate = models.ForeignKey(
-        TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='c3rates_wday'
+    wday_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wday_rate', related_name='c3rates_wday', to_field='desc',  # Specify the column you want to reference
     )
-    wend_rate = models.ForeignKey(
-        TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='c3rates_wend'
+    wend_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wend_rate', related_name='c3rates_wend', to_field='desc',  # Specify the column you want to reference
     )
+    # wday_rate = models.ForeignKey(
+    #     TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='c3rates_wday'
+    # )
+    # wend_rate = models.ForeignKey(
+    #     TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='c3rates_wend'
+    # )
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'c3_rates'
+
+
+# 二段式夏季費率表
+class SummerC2Rates(models.Model):
+    h_id = models.AutoField(primary_key=True, blank=True, null=False)
+    #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
+    #wend_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wend_rate', blank=True, null=False)
+    wday_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wday_rate', related_name='summerc2rates_wday', to_field='desc',  # Specify the column you want to reference
+    )
+    wend_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wend_rate', related_name='summerc2rates_wend', to_field='desc',  # Specify the column you want to reference
+    )
+    # wday_rate = models.ForeignKey(
+    #     TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='summerc2rates_wday'
+    # )
+    # wend_rate = models.ForeignKey(
+    #     TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='summerc2rates_wend'
+    # )
+
+    class Meta:
+        #managed = False
+        db_table = 'summer_c2_rates'
+
+
+# 三段式夏季費率表
+class SummerC3Rates(models.Model):
+    h_id = models.AutoField(primary_key=True, blank=True, null=False)
+    #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
+    #wend_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wend_rate', blank=True, null=False)
+    wday_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wday_rate', related_name='summerc3rates_wday', to_field='desc',  # Specify the column you want to reference
+    )
+    wend_rate = models.ForeignKey('timeelecrates',  # Use the related model name as a string
+    on_delete=models.CASCADE, db_column='wend_rate', related_name='summerc3rates_wend', to_field='desc',  # Specify the column you want to reference
+    )
+    # wday_rate = models.ForeignKey(
+    #     TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='summerc3rates_wday'
+    # )
+    # wend_rate = models.ForeignKey(
+    #     TimeElecRates,
+    #     on_delete=models.CASCADE,
+    #     related_name='summerc3rates_wend'
+    # )
+
+    class Meta:
+        #managed = False
+        db_table = 'summer_c3_rates'
+
+
+
 
 # 交通工具碳當量
 class CdeTransport(models.Model):
@@ -89,7 +158,7 @@ class CdeTransport(models.Model):
     unit = models.TextField(blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'cde_transport'
 
     def __str__(self):  
@@ -101,7 +170,7 @@ class CfpClass(models.Model):
     class_name = models.TextField(blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'cfp_class'
 
     def __str__(self):  
@@ -114,7 +183,7 @@ class CfpSosClass(models.Model):
     cfp_sub_class = models.ForeignKey('CfpSubClass', models.DO_NOTHING, blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'cfp_sos_class'
 
 
@@ -124,7 +193,7 @@ class CfpSubClass(models.Model):
     class_id = models.ForeignKey(CfpClass, models.DO_NOTHING, db_column='class_id', blank=True, null=False)  # Field renamed because it was a Python reserved word.
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'cfp_sub_class'
 
 
@@ -136,7 +205,7 @@ class EggProds(models.Model):
     unit = models.TextField(blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'egg_prods'
 
     def __str__(self):  
@@ -150,7 +219,7 @@ class ElecDeviceConsumption(models.Model):
     date = models.DateTimeField(default=timezone.now)  
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'elec_device_consumption'
 
     def __str__(self):  
@@ -165,7 +234,7 @@ class Energy(models.Model):
     unit = models.TextField(blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'energy'
 
     def __str__(self):  
@@ -180,77 +249,10 @@ class LactoseProds(models.Model):
     unit = models.TextField(blank=True, null=False)
 
     class Meta:
-        managed = False
+        #managed = False
         db_table = 'lactose_prods'
 
     def __str__(self):  
         return self.name
-
-
-# 二段式夏季費率表
-class SummerC2Rates(models.Model):
-    h_id = models.AutoField(primary_key=True, blank=True, null=False)
-    #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
-    #wend_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wend_rate', blank=True, null=False)
-    wday_rate = models.ForeignKey(
-        TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='summerc2rates_wday'
-    )
-    wend_rate = models.ForeignKey(
-        TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='summerc2rates_wend'
-    )
-
-    class Meta:
-        managed = False
-        db_table = 'summer_c2_rates'
-
-
-# 三段式夏季費率表
-class SummerC3Rates(models.Model):
-    h_id = models.AutoField(primary_key=True, blank=True, null=False)
-    #wday_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wday_rate', blank=True, null=False)
-    #wend_rate = models.ForeignKey('TimeElecRates', models.DO_NOTHING, db_column='wend_rate', blank=True, null=False)
-    wday_rate = models.ForeignKey(
-        TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='summerc3rates_wday'
-    )
-    wend_rate = models.ForeignKey(
-        TimeElecRates,
-        on_delete=models.CASCADE,
-        related_name='summerc3rates_wend'
-    )
-
-    class Meta:
-        managed = False
-        db_table = 'summer_c3_rates'
-
-
-from django.db import models, IntegrityError, transaction
-
-# 智慧插頭資訊
-class SmartPlugRec(models.Model):
-    id = models.AutoField(primary_key=True)
-    timestmp = models.DateTimeField(unique=True)  # Make the timestamp column unique
-    response = models.JSONField()
-
-    class Meta:
-        db_table = 'plug_info'
-        ordering = ['-timestmp']
-
-    def __str__(self):
-        return str(self.id)
-
-    def save(self, *args, **kwargs):
-        # Ensure uniqueness by handling possible IntegrityError
-        with transaction.atomic():
-            try:
-                super().save(*args, **kwargs)
-            except IntegrityError:
-                # 假如有重複資料塞進 table
-                pass
 
 

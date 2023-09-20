@@ -49,9 +49,3 @@ class EggProdsProdsAdmin(admin.ModelAdmin):
     list_display = ('id','name', 'cde')
 
 admin.site.register(EggProds, EggProdsProdsAdmin)
-
-
-class SmartPlugRecAdmin(admin.ModelAdmin):
-    list_display = ('timestmp','response')
-
-admin.site.register(SmartPlugRec, SmartPlugRecAdmin)
