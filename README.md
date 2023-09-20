@@ -95,4 +95,9 @@ This section discusses the real-time collection of AIoT (Artificial Intelligence
 - [Explain where and how the collected data is stored for analysis.]
 
 
+### 5. Installation
+Content:
+To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:'pip install -r requirements.txt
+'
+
 
