@@ -15,8 +15,7 @@ By using this software, you agree to the following terms and conditions:
 
 **Contact Information**
 
-You can reach out to the project maintainer through GitHub:
-**Contribution Guidelines**
+You can reach out to the project maintainer through https://polly7357.github.io/
 
 We welcome contributions to this project. To contribute, follow these guidelines:
 
@@ -31,13 +30,12 @@ For more details, please refer to our [Contributing Guidelines](link-to-contribu
 
 **Version 0.2.0 (2023/09/21)**
 
-- Added feature A.
-- Fixed []
+- Added feature []
+- Fixed Database migration
 - Updated [].
 
 **Version 0.1.0 (2023/09/20)**
 
-- Sure, here's an outline for your initial function along with some example content:
 
 ### 1. Electricity Usage Estimation
 
@@ -89,15 +87,14 @@ This section discusses the real-time collection of AIoT (Artificial Intelligence
 - [Describe the sensors and devices used to collect electricity usage data in real-time.]
 
 #### 4.2. Data Collection Frequency
-- [hourly.]
+- information collects hourly
 
 #### 4.3. Data Storage
-- [Explain where and how the collected data is stored for analysis.]
+- []
 
 
 ### 5. Installation
 Content:
-To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:'pip install -r requirements.txt
-'
+To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:'pip install -r requirements.txt'
 
 
