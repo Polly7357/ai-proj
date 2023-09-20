@@ -250,8 +250,7 @@ class SmartPlugRec(models.Model):
             try:
                 super().save(*args, **kwargs)
             except IntegrityError:
-                # Handle the case where a duplicate timestamp is encountered
-                # You can log, raise an exception, or handle it as needed
+                # 假如有重複資料塞進 table
                 pass
 
 

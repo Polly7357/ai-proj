@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseNotFound
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from json.decoder import JSONDecodeError  # Import JSONDecodeError for handling JSON parsing errors
 from datetime import datetime
 from mainsite.models import *
 import json, os
@@ -19,9 +21,6 @@ def test(request):
     return response
 
 # electricity_calculator/views.py
-from django.http import JsonResponse
-
-
 @csrf_exempt
 def calculate_electricity_cost_view(request):
 
@@ -255,8 +254,6 @@ def showdevice(request):
 
 
 # api/power/accu_usage/
-from django.shortcuts import render
-from django.http import HttpResponse
 
 def calculate_accumulative_usage(total_expense):
     # 定義非夏季、夏季費率表
@@ -400,7 +397,7 @@ def calculate_cde_View(request):
             "焦糖烤布丁": 2
         },
         "energy": {
-            "電(2022）": 3000,
+            "電(2022）": 100,
             "臺灣自來水(2017)": 300
         }
     }
@@ -483,3 +480,98 @@ def sensor_data(request):
     data = { 'msg' : 'OK', 'id': sensor.id}
     response = JsonResponse(data, status=200)
     return response
+
+
+
+# api/smart_plug/ 
+# import sqlite3
+@csrf_exempt
+def showPlugInfoView(request):
+    database_path = 'db.sqlite3'
+    current_time = datetime.now()
+
+    custom_sql_query = """
+    SELECT timestmp, response
+    FROM plug_info
+    ORDER BY timestmp DESC
+    """
+
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect(database_path)
+        cursor = conn.cursor()
+
+        # Execute the custom SQL query
+        cursor.execute(custom_sql_query)
+
+        # Fetch the data from the cursor
+        data = cursor.fetchall()
+
+        if not data:
+            # Handle the case where there is no data
+            return HttpResponseNotFound("No data found in the database")        
+
+        processed_data = []  # To store processed data
+
+        for row in data:
+            timestamp = row[0]
+            response = row[1]
+
+            try:
+                response_data = json.loads(response)
+
+                # Process the data as needed
+                # processed_data.append({
+                #     'timestamp': timestamp,
+                #     'items': response  # Include the response data as it is
+                # })
+
+                # Process the additional item_data here
+                for item_data in response_data:
+                    name = item_data['itemData']['name']
+                    mac = item_data['itemData']['extra']['mac']
+                    online = item_data['itemData']['online']
+                    current = item_data['itemData']['params']['current']
+                    voltage = item_data['itemData']['params']['voltage']
+                    power = item_data['itemData']['params']['power']
+                    monthKwh = item_data['itemData']['params'].get('monthKwh', None)
+                    dayKwh = item_data['itemData']['params'].get('dayKwh', None)
+
+                    # Now you can use the time_difference and other data as needed
+                    processed_data.append({
+                        'timestamp': timestamp,
+                        'items': response,  # Include the response data as it is
+                        # 'time_difference': time_difference.total_seconds(),  # Time difference in seconds
+                        'name': name,
+                        'mac': mac,
+                        'online': online,
+                        'current': current,
+                        'voltage': voltage,
+                        'power': power,
+                        'monthKwh': monthKwh,
+                        'dayKwh': dayKwh
+                    })
+            except JSONDecodeError:
+                # Handle JSON parsing errors
+                return HttpResponseServerError("Error parsing JSON data")
+
+        # You can choose to return a POST request response or render a template
+        if request.method == 'POST':
+            # If it's a POST request, return a JSON response
+            return JsonResponse(processed_data, safe=False)
+        else:
+            # If it's not a POST request, render a template
+            return render(request, 'pages/pluginfo.html', {'processed_data': processed_data})
+
+    except Exception as e:
+        # Handle other exceptions
+        return HttpResponseServerError("An error occurred: {}".format(str(e)))
+
+    finally:
+        # Close the database connection
+        cursor.close()
+        conn.close()
+
+
+
+

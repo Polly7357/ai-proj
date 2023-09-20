@@ -42,6 +42,7 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('api/power/accu_cost/',calculate_accumulative_cost_view),
     path('api/cde/', calculate_cde_View),
     path('sensor/save', sensor_data),
+    path('api/smart_plug/', showPlugInfoView)
 ]
 
 
