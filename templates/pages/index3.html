@@ -92,19 +92,79 @@
     </div>
 </div>
 <div>
-    <label for="dailyEstimate">MonthlyCarbonEmission:</label>
-    <input type="text" id="dailyEstimate" readonly value="">
+    <label for="DailyElectricity">DailyElectricity:</label>
+    <input type="text" id="DailyElectricity" readonly value="">
 </div>
 
 <div>
-    <label for="monthlyEstimate">MonthlyElectricity:</label>
-    <input type="text" id="monthlyEstimate" readonly value="">
+    <label for="Reality">MonthlyCarbonEmission:</label>
+    <input type="text" id="MonthlyCarbonEmission" readonly value="">
 </div>
 
 <div>
-    <label for="monthlyCarbon">DailyCost:</label>
-    <input type="text" id="monthlyCarbon" readonly value="">
+    <label for="Reality">MonthlyElectricity:</label>
+    <input type="text" id="MonthlyElectricity" readonly value="">
 </div>
+
+<div>
+    <label for="ThreeTier">DailyCost:</label>
+    <input type="text" id="ThreeTierDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTier">MonthlyCost:</label>
+    <input type="text" id="ThreeTierMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTier">WeekendCost:</label>
+    <input type="text" id="ThreeTierWeekendCost" readonly value="">
+</div>
+<div>
+    <label for="ThreeTierSummer">DailyCost:</label>
+    <input type="text" id="ThreeTierSummerDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTierSummer">MonthlyCost:</label>
+    <input type="text" id="ThreeTierSummerMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTierSummer">WeekendCost:</label>
+    <input type="text" id="ThreeTierSummerWeekendCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTier">DailyCost:</label>
+    <input type="text" id="TwoTierDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTier">MonthlyCost:</label>
+    <input type="text" id="TwoTierMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTier">WeekendCost:</label>
+    <input type="text" id="TwoTierWeekendCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTierSummer">DailyCost:</label>
+    <input type="text" id="TwoTierSummerDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTierSummer">MonthlyCost:</label>
+    <input type="text" id="TwoTierSummerMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTierSummer">WeekendCost:</label>
+    <input type="text" id="TwoTierSummerWeekendCost" readonly value="">
+</div>
+
 {% endblock %}
 
 {% block js_script %}
@@ -131,9 +191,21 @@
     axios.get('http://127.0.0.1:8000/api/power/')
     .then((res)=>{
         console.log(res.data)
-        $(`#dailyEstimate`).val(res.data.case.Reality.MonthlyCarbonEmission); // <Input>
-        $(`#monthlyEstimate`).val(res.data.case.Reality.MonthlyElectricity ); // <Input>
-        $(`#monthlyCarbon`).val(res.data.case.Reality.Priciing.ThreeTier.DailyCost); // <Input>            
+        $(`#DailyElectricity`).val(res.data.DailyElectricity); 
+        $(`#MonthlyCarbonEmission`).val(res.data.case.Reality.MonthlyCarbonEmission); 
+        $(`#MonthlyElectricity`).val(res.data.case.Reality.MonthlyElectricity);
+        $(`#ThreeTierDailyCost`).val(res.data.case.Reality.Priciing.ThreeTier.DailyCost); 
+        $(`#ThreeTierMonthlyCost`).val(res.data.case.Reality.Priciing.ThreeTier.MonthlyCost); 
+        $(`#ThreeTierWeekendCost`).val(res.data.case.Reality.Priciing.ThreeTier.WeekendCost); 
+        $(`#ThreeTierSummerDailyCost`).val(res.data.case.Reality.Priciing.ThreeTierSummer.DailyCost); 
+        $(`#ThreeTierSummerMonthlyCost`).val(res.data.case.Reality.Priciing.ThreeTierSummer.MonthlyCost); 
+        $(`#ThreeTierSummerWeekendCost`).val(res.data.case.Reality.Priciing.ThreeTierSummer.WeekendCost); 
+        $(`#TwoTierDailyCost`).val(res.data.case.Reality.Priciing.TwoTier.DailyCost); 
+        $(`#TwoTierMonthlyCost`).val(res.data.case.Reality.Priciing.TwoTier.MonthlyCost); 
+        $(`#TwoTierWeekendCost`).val(res.data.case.Reality.Priciing.TwoTier.WeekendCost); 
+        $(`#TwoTierSummerDailyCost`).val(res.data.case.Reality.Priciing.TwoTierSummer.DailyCost); 
+        $(`#TwoTierSummerMonthlyCost`).val(res.data.case.Reality.Priciing.TwoTierSummer.MonthlyCost); 
+        $(`#TwoTierSummerWeekendCost`).val(res.data.case.Reality.Priciing.TwoTierSummer.WeekendCost);            
     })
     .catch((error)=>{
 
