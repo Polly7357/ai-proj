@@ -89,6 +89,11 @@
     <div style="flex: 1;">
         <p>今日用量</p>
         <canvas id="carbonBarChart" width="400" height="200"></canvas>
+        <br>
+        <button id="showChartButton">顯示長條圖</button>
+        <button id="showChartButton2">DailyCost</button>
+        <button id="showChartButton3">MonthlyCost</button>
+        <button id="showChartButton4">WeekendCost</button>
     </div>
 </div>
 <div>
@@ -105,7 +110,7 @@
     <label for="Reality">MonthlyElectricity:</label>
     <input type="text" id="MonthlyElectricity" readonly value="">
 </div>
-
+<br>ThreeTier
 <div>
     <label for="ThreeTier">DailyCost:</label>
     <input type="text" id="ThreeTierDailyCost" readonly value="">
@@ -120,6 +125,7 @@
     <label for="ThreeTier">WeekendCost:</label>
     <input type="text" id="ThreeTierWeekendCost" readonly value="">
 </div>
+<br>ThreeTierSummer
 <div>
     <label for="ThreeTierSummer">DailyCost:</label>
     <input type="text" id="ThreeTierSummerDailyCost" readonly value="">
@@ -134,7 +140,7 @@
     <label for="ThreeTierSummer">WeekendCost:</label>
     <input type="text" id="ThreeTierSummerWeekendCost" readonly value="">
 </div>
-
+<br>TwoTier
 <div>
     <label for="TwoTier">DailyCost:</label>
     <input type="text" id="TwoTierDailyCost" readonly value="">
@@ -149,7 +155,7 @@
     <label for="TwoTier">WeekendCost:</label>
     <input type="text" id="TwoTierWeekendCost" readonly value="">
 </div>
-
+<br>TwoTierSummer
 <div>
     <label for="TwoTierSummer">DailyCost:</label>
     <input type="text" id="TwoTierSummerDailyCost" readonly value="">
@@ -211,4 +217,131 @@
 
     })
 </script>
+
+<!-- index3 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 创建并渲染长条图表
+        const ctx = document.getElementById('carbonBarChart').getContext('2d');
+        const data = {
+            labels: ['DailyElectricity', 'MonthlyCarbonEmission', 'MonthlyElectricity'], // 电器名称将在后续添加
+            datasets: [{
+                label: '碳排放量',
+                data: [], // 实际数据将在后续添加
+                backgroundColor: ['#FF5733', '#33FF57', '#5733FF',"#8008"], // 长条的颜色
+            }],
+        };
+
+        const carbonBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 初始化柱状图数据
+        carbonBarChart.data.datasets[0].data = [0, 0, 0];
+        carbonBarChart.update();
+
+        // 存储文本输入框的初始值
+        let initialValues = {
+            DailyElectricity: document.getElementById('DailyElectricity').value,
+            MonthlyCarbonEmission: document.getElementById('MonthlyCarbonEmission').value,
+            MonthlyElectricity: document.getElementById('MonthlyElectricity').value,
+        };
+
+        // 获取数据并更新柱状图和标签
+        function updateChart(type) {
+            axios.get('http://127.0.0.1:8000/api/power/')
+                .then((res) => {
+                    let values = [];
+                    let labels = [];
+
+                    switch (type) {
+                        case 'show1':
+                            values = [
+                                res.data.DailyElectricity,
+                                res.data.case.Reality.MonthlyCarbonEmission,
+                                res.data.case.Reality.MonthlyElectricity,
+                            ];
+                            labels = ['DailyElectricity', 'MonthlyCarbonEmission', 'MonthlyElectricity'];
+                            break;
+                        case 'show2':
+                            values = [
+                                res.data.case.Reality.Priciing.ThreeTier.DailyCost,
+                                res.data.case.Reality.Priciing.ThreeTierSummer.DailyCost,
+                                res.data.case.Reality.Priciing.TwoTier.DailyCost,
+                                res.data.case.Reality.Priciing.TwoTierSummer.DailyCost,
+                            ];
+                            labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                            break;
+                        case 'show3':
+                            values = [
+                                res.data.case.Reality.Priciing.ThreeTier.MonthlyCost,
+                                res.data.case.Reality.Priciing.ThreeTierSummer.MonthlyCost,
+                                res.data.case.Reality.Priciing.TwoTier.MonthlyCost,
+                                res.data.case.Reality.Priciing.TwoTierSummer.MonthlyCost,
+                            ];
+                            labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                            break;
+                        case 'show4':
+                            values = [
+                                res.data.case.Reality.Priciing.ThreeTier.WeekendCost,
+                                res.data.case.Reality.Priciing.ThreeTierSummer.WeekendCost,
+                                res.data.case.Reality.Priciing.TwoTier.WeekendCost,
+                                res.data.case.Reality.Priciing.TwoTierSummer.WeekendCost,
+                            ];
+                            labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // 更新柱状图和标签
+                    carbonBarChart.data.datasets[0].data = values;
+                    carbonBarChart.data.labels = labels;
+                    carbonBarChart.update();
+
+                    // 恢复文本输入框的初始值
+                   
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // 添加点击事件监听器，点击按钮后显示不同的数据和标签
+        const showChartButton = document.getElementById('showChartButton');
+        const showChartButton2 = document.getElementById('showChartButton2');
+        const showChartButton3 = document.getElementById('showChartButton3');
+        const showChartButton4 = document.getElementById('showChartButton4');
+
+        showChartButton.addEventListener('click', function () {
+            updateChart('show1');
+        });
+        showChartButton2.addEventListener('click', function () {
+            updateChart('show2');
+        });
+        showChartButton3.addEventListener('click', function () {
+            updateChart('show3');
+        });
+        showChartButton4.addEventListener('click', function () {
+            updateChart('show4');
+        });
+
+
+        // 在页面加载时，首先显示默认数据
+        updateChart('initial');
+    });
+</script>
+
+
 {% endblock %}
