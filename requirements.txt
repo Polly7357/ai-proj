@@ -17,3 +17,5 @@ seaborn==0.12.2
 six==1.16.0
 sqlparse==0.4.4
 tzdata==2023.3
+line-bot-sdk==3.5.0
+django-extensions==3.2.3
