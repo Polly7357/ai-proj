@@ -1,17 +1,9 @@
+![pic](./home_page.jpg)
 # ai-proj
 
 **License: MIT**
 
-This project is licensed under the terms of the MIT License
-
-**Terms and Conditions**
-
-By using this software, you agree to the following terms and conditions:
-
-1. You may use the software for any lawful purpose.
-2. You are responsible for your use of the software.
-3. The software is provided "as is," without warranty of any kind.
-
+This project is licensed under the terms of the [MIT](https://github.com/Polly7357/ai-proj/blob/master/LICENSE) LICENSE
 
 **Contact Information**
 
@@ -53,8 +45,23 @@ The function calculates the daily and monthly electricity consumption based on t
 - **Three-Tier Summer Pricing**: Calculate estimated electricity costs based on a three-tier pricing structure for the summer season.
 
 #### 1.4. Progressive Pricing Estimates
-- **Input Bill Amount**: Users can input their electricity bill amount to estimate their electricity usage.
-- **Input Electricity Usage**: Users can input their electricity usage to estimate their electricity costs.
+- **Input Bill Expense**: Users can input their electricity bill amount to understand their monthly electricity consumption.
+ ```http
+ /api/power/accu_usage/?total_expense=
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `total_expense`      | `string` | **Required**. total_expense of electricity bill |
+
+- **Input desired electricity usage**: Users can input their electricity usage to estimate their electricity costs.
+```http
+ /api/power/accu_cost/?usage=xxx
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `usage`      | `string` | **Required**. Desired electricity consumption |
 
 #### 1.5. Energy Saving Recommendations
 Provide energy-saving recommendations based on the user's electricity usage and pricing options. These recommendations can help users evaluate the best pricing structure for their needs.
@@ -93,12 +100,13 @@ This section discusses the real-time collection of AIoT (Artificial Intelligence
 
 ### 5. Installation
 **Content:**
->1. Download the entire package by executing the command 'git clone git@github.com:Polly7357/ai-proj.git'
+>1. Download the entire package by executing the command `git clone git@github.com:Polly7357/ai-proj.git`
 
 >2. Make sure Django virtual environment is activated.
 
->3. To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:'pip install -r requirements.txt'
+>3. To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:`pip install -r requirements.txt`
 
->4. Under /ai-proj directory, verify by checking if there's manage.py file in the same directory. If yes, you may start the server by executing the command 'python manager.py runserver'.
+>4. Under /ai-proj directory, verify by checking if there's manage.py file in the same directory. If yes, you may start the server by executing the command
+> `python manage.py runserver`
 
 
