@@ -514,10 +514,13 @@ def showPlugInfoView(request):
         processed_data = []  # To store processed data
 
         print('筆數:',len(data))
+        count=0
         for row in data:
             timestamp = row[0]
             response = row[1]
 
+            print(count,': ',timestamp,' ',response[:10])
+            count +=1
             try:
                 response_data = json.loads(response)
 

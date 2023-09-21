@@ -22,7 +22,7 @@ from django.db import IntegrityError, transaction
 # 智慧插頭資訊
 class SmartPlugRec(models.Model):
     id = models.AutoField(primary_key=True)
-    timestmp = models.DateTimeField(unique=True)  # Make the timestamp column unique
+    timestmp = models.CharField(max_length=50)  # Make the timestamp column unique
     response = models.JSONField()
 
     class Meta:
