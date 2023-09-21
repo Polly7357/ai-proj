@@ -24,16 +24,22 @@ from django.http import JsonResponse
 
 @csrf_exempt
 def calculate_electricity_cost_view(request):
+    #start = request.POST['start'] 
+    #end = request.POST['end']
 
+    #response_data = {"param1": int(start)+100, "param2": int(end)+2}
+    #return JsonResponse(response_data, status=200)
     cases = ['Reality','Smartly']
     case_usage={}
 
     # Check if the request contains JSON data
     if request.method == 'POST':
-        try:
-            json_data = json.loads(request.body)
-        except json.JSONDecodeError as e:
-            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
+        #start = request.POST['start']
+        #end = request.POST['end']
+         try:
+             json_data = json.loads(request.body)
+         except json.JSONDecodeError as e:
+             return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
     else:
         # 假如前端沒送正確Json就使用file
         json_file_path = "user_data_house_perday.json"
@@ -399,7 +405,7 @@ def calculate_cde_View(request):
         "lactose_prods": {
             "焦糖烤布丁": 2
         },
-        "energy": {
+        "energy": {-
             "電(2022）": 300,
             "臺灣自來水(2017)": 300
         }

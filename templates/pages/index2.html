@@ -168,6 +168,8 @@
 
 {% endblock %}
 {% block js_script %}
+<!-- JavaScript 代码 -->
+<!-- JavaScript 代码 -->
 <script>
     // 当页面加载完毕时执行这个函数
     document.addEventListener("DOMContentLoaded", function() {
@@ -221,11 +223,26 @@
 
         // 添加点击事件监听器到打包按钮
         packageButton.addEventListener("click", function() {
-            // 打印数据对象，格式为 {"瓶裝水(600ml，PET包裝)": 20}
-            console.log(JSON.stringify(data, null, 4));
+            // 将数据按类别分组
+            var groupedData = {};
+
+            for (var key in data) {
+                var category = itemSelect.options[itemSelect.selectedIndex].value;
+
+                if (!groupedData[category]) {
+                    groupedData[category] = {};
+                }
+
+                groupedData[category][key] = data[key];
+            }
+
+            // 打印分组后的数据对象
+            console.log(JSON.stringify(groupedData, null, 4));
         });
     });
 </script>
+
+
 <script>
     axios.get('http://127.0.0.1:8000/api/cde/')
     .then((res)=>{
