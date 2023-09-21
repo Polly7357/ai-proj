@@ -99,6 +99,7 @@ This section discusses the real-time collection of AIoT (Artificial Intelligence
 
 >3. To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:'pip install -r requirements.txt'
 
->4. Under /ai-proj directory, verify by checking if there's manage.py file in the same directory. If yes, you may start the server by executing the command 'python manager.py runserver'.
+>4. Under /ai-proj directory, verify by checking if there's manage.py file in the same directory. If yes, you may start the server by executing the command
+> `python manage.py runserver`
 
 
