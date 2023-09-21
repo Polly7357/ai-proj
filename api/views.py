@@ -397,7 +397,7 @@ def calculate_cde_View(request):
             "焦糖烤布丁": 2
         },
         "energy": {
-            "電(2022）": 100,
+            "電(2022）": 800,
             "臺灣自來水(2017)": 300
         }
     }
@@ -513,6 +513,7 @@ def showPlugInfoView(request):
 
         processed_data = []  # To store processed data
 
+        print('筆數:',len(data))
         for row in data:
             timestamp = row[0]
             response = row[1]
