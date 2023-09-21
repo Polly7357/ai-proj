@@ -61,7 +61,7 @@ The function calculates the daily and monthly electricity consumption based on t
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `usage`      | `string` | **Required**. Electricity Usage of consumption |
+| `usage`      | `string` | **Required**. Desired electricity consumption |
 
 #### 1.5. Energy Saving Recommendations
 Provide energy-saving recommendations based on the user's electricity usage and pricing options. These recommendations can help users evaluate the best pricing structure for their needs.
