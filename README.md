@@ -93,7 +93,7 @@ This section discusses the real-time collection of AIoT (Artificial Intelligence
 
 ### 5. Installation
 **Content:**
->1. Download the entire package by executing the command 'git clone git@github.com:polly7357/ai-proj.git'
+>1. Download the entire package by executing the command 'git clone git@github.com:Polly7357/ai-proj.git'
 
 >2. Make sure Django virtual environment is activated.
 
