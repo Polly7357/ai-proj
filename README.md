@@ -30,9 +30,7 @@ For more details, please refer to our [Contributing Guidelines](link-to-contribu
 
 **Version 0.2.0 (2023/09/21)**
 
-- Added feature []
 - Fixed Database migration
-- Updated [].
 
 **Version 0.1.0 (2023/09/20)**
 
@@ -83,18 +81,24 @@ This section helps Admins to manage electricity tariff tables and time-of-use ra
 **Content:**
 This section discusses the real-time collection of AIoT (Artificial Intelligence of Things) data related to electricity usage.
 
-#### 4.1. AIoT Sensors
+>#### 4.1. AIoT Sensors
 - [Describe the sensors and devices used to collect electricity usage data in real-time.]
 
-#### 4.2. Data Collection Frequency
+>#### 4.2. Data Collection Frequency
 - information collects hourly
 
-#### 4.3. Data Storage
-- []
+>#### 4.3. Data Storage
+- cloud sorage
 
 
 ### 5. Installation
-Content:
-To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:'pip install -r requirements.txt'
+**Content:**
+>1. Download the entire package by executing the command 'git clone git@github.com:Polly7357/ai-proj.git'
+
+>2. Make sure Django virtual environment is activated.
+
+>3. To set up and run this project, you'll need to install the required Python packages and libraries listed in the "requirements.txt" file. You can do this using pip by running the following command:'pip install -r requirements.txt'
+
+>4. Under /ai-proj directory, verify by checking if there's manage.py file in the same directory. If yes, you may start the server by executing the command 'python manager.py runserver'.
 
 
