@@ -1,3 +1,4 @@
+![pic](./home_page.jpg)
 # ai-proj
 
 **License: MIT**
