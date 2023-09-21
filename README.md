@@ -1,4 +1,5 @@
-![pic](./home_page.jpg)
+<div style="text-align:center"><img src="./home_page.jpg" alt="pic" width="500"/>
+</div>
 # ai-proj
 
 **License: MIT**
