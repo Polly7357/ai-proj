@@ -3,16 +3,7 @@
 
 **License: MIT**
 
-This project is licensed under the terms of the MIT License
-
-**Terms and Conditions**
-
-By using this software, you agree to the following terms and conditions:
-
-1. You may use the software for any lawful purpose.
-2. You are responsible for your use of the software.
-3. The software is provided "as is," without warranty of any kind.
-
+This project is licensed under the terms of the [MIT](https://github.com/Polly7357/ai-proj/blob/master/LICENSE) LICENSE
 
 **Contact Information**
 
