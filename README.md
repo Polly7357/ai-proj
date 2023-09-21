@@ -45,8 +45,23 @@ The function calculates the daily and monthly electricity consumption based on t
 - **Three-Tier Summer Pricing**: Calculate estimated electricity costs based on a three-tier pricing structure for the summer season.
 
 #### 1.4. Progressive Pricing Estimates
-- **Input Bill Amount**: Users can input their electricity bill amount to estimate their electricity usage.
-- **Input Electricity Usage**: Users can input their electricity usage to estimate their electricity costs.
+- **Input Bill Expense**: Users can input their electricity bill amount to understand their monthly electricity consumption.
+ ```http
+ /api/power/accu_usage/?total_expense=
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `total_expense`      | `string` | **Required**. total_expense of electricity bill |
+
+- **Input desired electricity usage**: Users can input their electricity usage to estimate their electricity costs.
+```http
+ /api/power/accu_cost/?usage=xxx
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `usage`      | `string` | **Required**. Electricity Usage of consumption |
 
 #### 1.5. Energy Saving Recommendations
 Provide energy-saving recommendations based on the user's electricity usage and pricing options. These recommendations can help users evaluate the best pricing structure for their needs.
