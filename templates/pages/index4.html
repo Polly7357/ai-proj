@@ -7,53 +7,58 @@
 {% endblock %}
 
 {% block content %}
-<hr>
-<br>device01:
-<div>
-    <label for="name">設備名稱:</label>
-    <input type="text" id="name" readonly value="">
-</div>
+<div style="display: flex;">
+    <div style="flex: 1;">
+        <hr>
+        <br>device01:
+        <div>
+            <label for="name">設備名稱:</label>
+            <input type="text" id="name" readonly value="">
+        </div>
 
-<div>
-    <label for="MAC">設備地址:</label>
-    <input type="text" id="MAC" readonly value="">
-</div>
-<br>
-<div>
-    <label for="power_usage01">實時用電資訊:</label>
-    <input type="text" id="power_usage01" readonly value="">
-</div>
+        <div>
+            <label for="MAC">設備地址:</label>
+            <input type="text" id="MAC" readonly value="">
+        </div>
+        
+        <div>
+            <label for="power_usage01">實時用電資訊:</label>
+            <input type="text" id="power_usage01" readonly value="">
+        </div>
 
-<div>
-    <label for="avg_usage01">平均用電資訊:</label>
-    <input type="text" id="avg_usage01" readonly value="">
-</div>
+        <div>
+            <label for="avg_usage01">平均用電資訊:</label>
+            <input type="text" id="avg_usage01" readonly value="">
+        </div>
 
-<br>  device02:
+        <br>  device02:
 
-<div>
-    <label for="ThreeTierSummer">設備名稱:</label>
-    <input type="text" id="name2" readonly value="">
-</div>
+        <div>
+            <label for="ThreeTierSummer">設備名稱:</label>
+            <input type="text" id="name2" readonly value="">
+        </div>
 
-<div>
-    <label for="ThreeTierSummer">設備地址:</label>
-    <input type="text" id="MAC2" readonly value="">
-</div>
+        <div>
+            <label for="ThreeTierSummer">設備地址:</label>
+            <input type="text" id="MAC2" readonly value="">
+        </div>
 
-<div>
-    <label for="ThreeTierSummer">實時用電資訊:</label>
-    <input type="text" id="power_usage02" readonly value="">
-</div>
-<br>
-<div>
-    <label for="TwoTier">平均用電資訊:</label>
-    <input type="text" id="avg_usage02" readonly value="">
-</div>
+        <div>
+            <label for="ThreeTierSummer">實時用電資訊:</label>
+            <input type="text" id="power_usage02" readonly value="">
+        </div>
+        
+        <div>
+            <label for="TwoTier">平均用電資訊:</label>
+            <input type="text" id="avg_usage02" readonly value="">
+        </div>
+    </div>
 
-<canvas id="powerChart" width="400" height="200"></canvas>
-<button id="powerUsage01Button">Power Usage 01</button>
-<button id="powerUsage02Button">Power Usage 02</button>
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+        <canvas id="powerChart" width="400" height="200"></canvas>
+        <button id="powerUsage01Button">Power Usage 01</button>
+        <button id="powerUsage02Button">Power Usage 02</button>
+    </div
 {% endblock %}
 
 {% block js_script %}
@@ -62,26 +67,29 @@
     // 获取Canvas元素
     const ctx = document.getElementById('powerChart').getContext('2d');
 
-    // 创建初始折线图（使用power_usage02的数据作为初始数据）
-    const initialData = [
-        489, 489, 489, 489, 994, 501, 501, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
-        504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
-        504, 504, 504, 504, 504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 537, 537, 537, 537,
-        537, 537, 537, 537, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333,
-        1333, 1333, 1333, 1333, 1333, 1333, 1333
-    ];
-
+    // 创建初始折线图（为空）
+    const initialData = [];
+    const initialData2 = [];
     const powerChart = new Chart(ctx, {
-        type: 'line',
+        type: 'line', // 使用折线图
         data: {
-            labels: Array.from({ length: initialData.length }, (_, i) => i + 1),
-            datasets: [{
-                label: 'Power Usage 02',
-                data: initialData,
-                borderColor: 'blue',
-                borderWidth: 1,
-                fill: false
-            }]
+            labels: [],
+            datasets: [
+                {
+                    label: '',
+                    data: initialData,
+                    borderColor: 'blue',
+                    borderWidth: 1,
+                    fill: false
+                },
+                {
+                    label: '',
+                    data: initialData2, // 这里使用相同的数据集，您可以替换为不同的数据集
+                    borderColor: '#FF0000',
+                    borderWidth: 1,
+                    fill: false
+                }
+            ]
         },
         options: {
             animation: {
@@ -95,32 +103,112 @@
                 y: {
                     beginAtZero: true
                 }
+            },
+            plugins: {
+                annotation: {
+                    annotations: {
+                        powerUsage01Avg: {
+                            type: 'line',
+                            mode: 'horizontal',
+                            scaleID: 'y',
+                            value: 4.301411764705883, // 平均值
+                            borderColor: '#FF0000', // 平均线的颜色（红色）
+                            borderWidth: 1,
+                            label: {
+                                content: 'Power Usage 01 Avg',
+                                enabled: true
+                            }
+                        },
+                        powerUsage02Avg: {
+                            type: 'line',
+                            mode: 'horizontal',
+                            scaleID: 'y',
+                            value: 750.6857142857143, // 平均值
+                            borderColor: '#FF0000', // 平均线的颜色（红色）
+                            borderWidth: 1,
+                            label: {
+                                content: 'Power Usage 02 Avg',
+                                enabled: true
+                            }
+                        }
+                    }
+                }
             }
         }
     });
 
-    // 更新折线图数据函数
-    function updateChart(data, label) {
-        powerChart.data.datasets[0].data = data;
-        powerChart.data.datasets[0].label = label;
-        powerChart.update();
-    }
+    // 用于追踪当前要添加的数据索引
+    let currentIndex = 0;
 
-    // 按钮点击事件处理函数
+    // 数据点 - Power Usage 01
+    const powerUsage01Data = [4.37,4.37,0,4.43,4.43,4.43,4.43,4.43,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.22,4.22,4.22,4.22,4.22,4.22,4.22,4.22,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.13,4.13,4.13,4.13,4.13,4.13,4.13,4.59];
+    
+    // 数据点 - Power Usage 02
+    const powerUsage02Data = [489, 489, 489, 489, 994, 501, 501, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 537, 537, 537, 537, 537, 537, 537, 537, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333];
+
+    // 按钮点击事件处理函数 - Power Usage 01
     document.getElementById('powerUsage01Button').addEventListener('click', function() {
-        const powerUsage01Data = [4.37, 4.37, 0, 4.43, 4.43, 4.43, 4.43, 4.43, 4.43, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35];
-        updateChart(powerUsage01Data, 'Power Usage 01');
+        // 清空当前折线图数据
+        powerChart.data.labels = [];
+        powerChart.data.datasets[0].data = [];
+        powerChart.data.datasets[1].data = [];
+        powerChart.update();
+
+        // 每秒添加一个Power Usage 01 数据点，直到添加完所有数据点
+        const intervalId = setInterval(function() {
+            if (currentIndex < powerUsage01Data.length) {
+                const powerUsage01Value = powerUsage01Data[currentIndex];
+
+                // 添加数据点并更新图表
+                powerChart.data.labels.push(currentIndex + 1);
+                powerChart.data.datasets[0].data.push(powerUsage01Value);
+
+                // 添加平均线数据点并更新图表
+                powerChart.data.datasets[1].data.push(4.301411764705883);
+
+                powerChart.update();
+
+                // 如果已添加所有数据点，停止定时器
+                if (currentIndex === powerUsage01Data.length - 1) {
+                    clearInterval(intervalId);
+                }
+
+                currentIndex++;
+            }
+        }, 400);
     });
 
+    // 按钮点击事件处理函数 - Power Usage 02
     document.getElementById('powerUsage02Button').addEventListener('click', function() {
-        const powerUsage02Data = [
-            489, 489, 489, 489, 994, 501, 501, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
-            504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
-            504, 504, 504, 504, 504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 537, 537, 537, 537,
-            537, 537, 537, 537, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333,
-            1333, 1333, 1333, 1333, 1333, 1333, 1333
-        ];
-        updateChart(powerUsage02Data, 'Power Usage 02');
+        // 清空当前折线图数据
+        powerChart.data.labels = [];
+        powerChart.data.datasets[0].data = [];
+        powerChart.data.datasets[1].data = [];
+        powerChart.update();
+
+        
+        // 每秒添加一个Power Usage 02 数据点，直到添加完所有数据点
+        const intervalId = setInterval(function() {
+            if (currentIndex < powerUsage02Data.length) {
+                const powerUsage02Value = powerUsage02Data[currentIndex];
+
+                // 添加数据点并更新图表
+                powerChart.data.labels.push(currentIndex + 1);
+                powerChart.data.datasets[1].data.push(powerUsage02Value);
+
+                // 添加平均线数据点并更新图表
+                powerChart.data.datasets[0].data.push(750.6857142857143);
+
+                powerChart.update();
+
+                // 如果已添加所有数据点，停止定时器
+                if (currentIndex === powerUsage02Data.length - 1) {
+                    clearInterval(intervalId);
+                }
+
+                currentIndex++;
+            }
+        }, 400);
     });
 </script>
 <script>
