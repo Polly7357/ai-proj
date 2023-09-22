@@ -27,7 +27,7 @@ def homepage(request):
     return HttpResponse(post_lists) #把回傳的list變成加入 html代碼以網頁結構文法的一部份
 
 
-def index_post(request):
+def index(request):
     posts = Post.objects.all()
     #now = datetime.now()
     return render(request, 'pages/index.html', locals()) #django的函數, index.html為templates的檔名, 將所有變數打包成字點檔

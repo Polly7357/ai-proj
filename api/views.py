@@ -105,8 +105,8 @@ def calculate_electricity_cost_view(request):
             # Check if "user_data.json" file is empty
             if os.path.getsize(json_file_path) == 0:
                 return JsonResponse({"error": "File is empty"}, status=400)
-            else:
-                print(json_file_path,'file is not empty.')
+            # else:
+            #     print(json_file_path,'file is not empty.')
 
             # Read JSON data from the "user_data.json" file
             with open(json_file_path, "r", encoding="utf-8") as json_file:
@@ -455,7 +455,7 @@ def calculate_cde_View(request):
     for item_name, quantity in parsed_data.get("beverage", {}).items():
         beverage_obj = Beverage.objects.filter(name=item_name).first()
         if beverage_obj:
-            print(f"Found matching item in 'cde_transport': {item_name}")
+            #print(f"Found matching item in 'cde_transport': {item_name}")
             total_cde_beverage += beverage_obj.cde * quantity
         else:
             print(f"Item not found in 'beverage': {item_name}")
@@ -469,11 +469,11 @@ def calculate_cde_View(request):
         #cde_transport_obj = CdeTransport.objects.filter(name=item_name).first()
         cde_transport_obj = CdeTransport.objects.filter(name__iexact=item_name.replace(" ", "")).first()
         if cde_transport_obj:
-            print(f"Found matching item in 'cde_transport': {item_name}")
+            #print(f"Found matching item in 'cde_transport': {item_name}")
             total_cde_cde_transport += cde_transport_obj.cde * quantity
         else:
             print(f"Item not found in 'cde_transport': {item_name}")
-            all_cde_transport_names = CdeTransport.objects.values_list('name', flat=True)
+            #all_cde_transport_names = CdeTransport.objects.values_list('name', flat=True)
             print(f"All names in CdeTransport objects: {', '.join(all_cde_transport_names)}")
 
     # Calculate total cde for 'lactose_prods' class
@@ -589,8 +589,7 @@ def showPlugInfoView(request):
                         power_usage02.append(float(power))
                 else:
                     print('exception occurs in processing response loop')
-        print('len01:',len(power_usage01))
-        print('len02:',len(power_usage02))
+
         res_data = {
             "device01":{
                 "name":"S31TPB(US)",

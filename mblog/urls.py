@@ -25,7 +25,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from mainsite.views import homepage, index, showpost, apiTestView, customSqlQueryView     #從mainsite資料夾引入homepage
+from mainsite.views import *     #從mainsite資料夾引入homepage
 from api.views import *                    # 0913 
 
 urlpatterns = [                         #陣列型式,每筆資料中間要用','
@@ -42,7 +42,7 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('api/power/accu_cost/',calculate_accumulative_cost_view),
     path('api/cde/', calculate_cde_View),
     path('sensor/save', sensor_data),
-    path('api/smart_plug/', showPlugInfoView)
+    path('api/smart_plug/', showPlugInfoView),
     path('index2/', index2_post),
     path('index3/', index3_post),
     path('index4/', index4_post),
