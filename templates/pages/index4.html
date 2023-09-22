@@ -2,6 +2,142 @@
 
 {% block headmessage %}
     <div style="text-align: left;">
-        Dashboard
+        智慧電表
     </div>
+{% endblock %}
+
+{% block content %}
+<hr>
+<br>device01:
+<div>
+    <label for="name">設備名稱:</label>
+    <input type="text" id="name" readonly value="">
+</div>
+
+<div>
+    <label for="MAC">設備地址:</label>
+    <input type="text" id="MAC" readonly value="">
+</div>
+<br>
+<div>
+    <label for="power_usage01">實時用電資訊:</label>
+    <input type="text" id="power_usage01" readonly value="">
+</div>
+
+<div>
+    <label for="avg_usage01">平均用電資訊:</label>
+    <input type="text" id="avg_usage01" readonly value="">
+</div>
+
+<br>  device02:
+
+<div>
+    <label for="ThreeTierSummer">設備名稱:</label>
+    <input type="text" id="name2" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTierSummer">設備地址:</label>
+    <input type="text" id="MAC2" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTierSummer">實時用電資訊:</label>
+    <input type="text" id="power_usage02" readonly value="">
+</div>
+<br>
+<div>
+    <label for="TwoTier">平均用電資訊:</label>
+    <input type="text" id="avg_usage02" readonly value="">
+</div>
+
+<canvas id="powerChart" width="400" height="200"></canvas>
+<button id="powerUsage01Button">Power Usage 01</button>
+<button id="powerUsage02Button">Power Usage 02</button>
+{% endblock %}
+
+{% block js_script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // 获取Canvas元素
+    const ctx = document.getElementById('powerChart').getContext('2d');
+
+    // 创建初始折线图（使用power_usage02的数据作为初始数据）
+    const initialData = [
+        489, 489, 489, 489, 994, 501, 501, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
+        504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
+        504, 504, 504, 504, 504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 537, 537, 537, 537,
+        537, 537, 537, 537, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333,
+        1333, 1333, 1333, 1333, 1333, 1333, 1333
+    ];
+
+    const powerChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array.from({ length: initialData.length }, (_, i) => i + 1),
+            datasets: [{
+                label: 'Power Usage 02',
+                data: initialData,
+                borderColor: 'blue',
+                borderWidth: 1,
+                fill: false
+            }]
+        },
+        options: {
+            animation: {
+                duration: 0
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom'
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // 更新折线图数据函数
+    function updateChart(data, label) {
+        powerChart.data.datasets[0].data = data;
+        powerChart.data.datasets[0].label = label;
+        powerChart.update();
+    }
+
+    // 按钮点击事件处理函数
+    document.getElementById('powerUsage01Button').addEventListener('click', function() {
+        const powerUsage01Data = [4.37, 4.37, 0, 4.43, 4.43, 4.43, 4.43, 4.43, 4.43, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.3, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.21, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35, 4.35];
+        updateChart(powerUsage01Data, 'Power Usage 01');
+    });
+
+    document.getElementById('powerUsage02Button').addEventListener('click', function() {
+        const powerUsage02Data = [
+            489, 489, 489, 489, 994, 501, 501, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
+            504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504,
+            504, 504, 504, 504, 504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 537, 537, 537, 537,
+            537, 537, 537, 537, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333,
+            1333, 1333, 1333, 1333, 1333, 1333, 1333
+        ];
+        updateChart(powerUsage02Data, 'Power Usage 02');
+    });
+</script>
+<script>
+    axios.get('http://127.0.0.1:8000/api/smart_plug/')
+    .then((res)=>{
+        console.log(res.data)
+        $(`#name`).val(res.data.device01.name);
+        $(`#MAC`).val(res.data.device01.MAC);
+        $(`#power_usage01`).val(res.data.device01.power_usage01);
+        $(`#avg_usage01`).val(res.data.device01.avg_usage01);
+        $(`#name2`).val(res.data.device02.name);
+        $(`#MAC2`).val(res.data.device02.MAC);
+        $(`#power_usage02`).val(res.data.device02.power_usage02);
+        $(`#avg_usage02`).val(res.data.device02.avg_usage02);         
+    })
+    .catch((error)=>{
+
+    })
+</script>
 {% endblock %}

@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseNotFound
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from json.decoder import JSONDecodeError  # Import JSONDecodeError for handling JSON parsing errors
 from datetime import datetime
-from mainsite.models import *
+import pytz
 import json, os
 import sqlite3
+
+from mainsite.models import *
 
 #create view here
 
@@ -19,27 +23,18 @@ def test(request):
     return response
 
 # electricity_calculator/views.py
-from django.http import JsonResponse
-
-
 @csrf_exempt
 def calculate_electricity_cost_view(request):
-    #start = request.POST['start'] 
-    #end = request.POST['end']
 
-    #response_data = {"param1": int(start)+100, "param2": int(end)+2}
-    #return JsonResponse(response_data, status=200)
     cases = ['Reality','Smartly']
     case_usage={}
 
     # Check if the request contains JSON data
     if request.method == 'POST':
-        #start = request.POST['start']
-        #end = request.POST['end']
-         try:
-             json_data = json.loads(request.body)
-         except json.JSONDecodeError as e:
-             return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
+        try:
+            json_data = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
     else:
         # 假如前端沒送正確Json就使用file
         json_file_path = "user_data_house_perday.json"
@@ -51,14 +46,12 @@ def calculate_electricity_cost_view(request):
             with open(json_file_path, "r", encoding="utf-8") as json_file:
                 json_data = json.load(json_file)
 
-
     for case in cases:
         if case == 'Reality':
             json_file_path = "user_data_house_perday.json"
 
         elif case == 'Smartly':
             json_file_path = "suggest_user_data.json"
-
 
         try:
             # Check if "user_data.json" file exists      
@@ -77,7 +70,6 @@ def calculate_electricity_cost_view(request):
             with open(json_file_path, "r", encoding="utf-8") as json_file:
                 json_data = json.load(json_file)
             #    print(json_data)
-
 
             tables = ["c2_rates", "c3_rates", "summer_c2_rates", "summer_c3_rates"]
             usage_data={}
@@ -130,7 +122,6 @@ def calculate_electricity_cost_view(request):
                 "Priciing":usage_data}
                 
 
-
         except Exception as e:
             print("An error occurred:", str(e))
             return JsonResponse({"error orrurs": str(e)}, status=400)
@@ -145,7 +136,6 @@ def calculate_electricity_cost_view(request):
     }
 
     return JsonResponse(response_data, status=200)
-
 
 
 
@@ -246,7 +236,6 @@ def elec2cdf(electricity):
 
 #database_path = ''  # Database file path
 
-
 # /api/devices/
 def showdevice(request):        
     try:                            #會先試著執行, 有例外再跳到except
@@ -259,10 +248,7 @@ def showdevice(request):
 
     return True
 
-
 # api/power/accu_usage/
-from django.shortcuts import render
-from django.http import HttpResponse
 
 def calculate_accumulative_usage(total_expense):
     # 定義非夏季、夏季費率表
@@ -283,7 +269,6 @@ def calculate_accumulative_usage(total_expense):
         (300, 5.83),     # Usage from 701 to 1000 degrees, price 4.80元 per degree (1000-701)
         (3000, 7.69)     # Usage from 501 to 700 degrees, price 4.80元 per degree (?-1001)
     ]
-
 
     # 依電費回推用電量
     def calculate_degrees(expense, rate_table):
@@ -315,7 +300,6 @@ def calculate_accumulative_usage(total_expense):
         'degrees_summer': round(degrees_summer,2),
     }
 
-
 # api/power/accu_usage/
 def calculate_accumulative_usage_view(request):
     if 'total_expense' in request.GET:
@@ -324,7 +308,6 @@ def calculate_accumulative_usage_view(request):
         return JsonResponse(result)
     else:
         return JsonResponse({'error': 'total_expense parameter is missing in the request.'}, status=400)
-
 
 
 
@@ -349,7 +332,6 @@ def calculate_accumulative_cost(usage):
         (300, 5.83),
         (3000, 7.69)
     ]
-
 
     def calculate_cost(usage, rate_table):
         electricity_price = 0
@@ -385,7 +367,6 @@ def calculate_accumulative_cost_view(request):
 import json
 from mainsite.models import Beverage, CdeTransport, LactoseProds, Energy
 
-
 # 計算消費品碳當量
 # api/cde/
 def calculate_cde_View(request):
@@ -405,13 +386,12 @@ def calculate_cde_View(request):
         "lactose_prods": {
             "焦糖烤布丁": 2
         },
-        "energy": {-
-            "電(2022）": 300,
+        "energy": {
+            "電(2022）": 800,
             "臺灣自來水(2017)": 300
         }
     }
     '''
-
 
     parsed_data = json.loads(data)
 
@@ -473,6 +453,21 @@ def calculate_cde_View(request):
 
     # Return the response as JSON
     return JsonResponse(response_data)
+
+from api.models import *
+
+def sensor_data(request):
+    mac_address = request.GET['m']
+    sensor_type = request.GET['t']
+    sensor_value = request.GET['v']
+
+    sensor = Sensor( source_mac = mac_address, sensor_type = sensor_type, sensor_value = sensor_value)
+    sensor.save();
+
+    data = { 'msg' : 'OK', 'id': sensor.id}
+    response = JsonResponse(data, status=200)
+    return response
+
 
 # api/smart_plug/ 
 # import sqlite3

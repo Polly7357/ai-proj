@@ -231,27 +231,5 @@ class SummerC3Rates(models.Model):
 
 from django.db import models, IntegrityError, transaction
 
-# 智慧插頭資訊
-class SmartPlugRec(models.Model):
-    id = models.AutoField(primary_key=True)
-    timestmp = models.DateTimeField(unique=True)  # Make the timestamp column unique
-    response = models.JSONField()
-
-    class Meta:
-        db_table = 'plug_info'
-        ordering = ['-timestmp']
-
-    def __str__(self):
-        return str(self.id)
-
-    def save(self, *args, **kwargs):
-        # Ensure uniqueness by handling possible IntegrityError
-        with transaction.atomic():
-            try:
-                super().save(*args, **kwargs)
-            except IntegrityError:
-                # Handle the case where a duplicate timestamp is encountered
-                # You can log, raise an exception, or handle it as needed
-                pass
 
 
