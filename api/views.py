@@ -474,7 +474,7 @@ def calculate_cde_View(request):
         else:
             print(f"Item not found in 'cde_transport': {item_name}")
             #all_cde_transport_names = CdeTransport.objects.values_list('name', flat=True)
-            print(f"All names in CdeTransport objects: {', '.join(all_cde_transport_names)}")
+            #print(f"All names in CdeTransport objects: {', '.join(all_cde_transport_names)}")
 
     # Calculate total cde for 'lactose_prods' class
     for item_name, quantity in parsed_data.get("lactose_prods", {}).items():
