@@ -32,88 +32,13 @@
     </header>
     <div class="container" style="background-color : #F5F5F5" >
         <div class="row">
-            {% include 'components/sidebar.html' %}
+            {% include 'components/sidebar2.html' %}
             {% block content %}{% endblock %}
         </div>
     </div>
   
-<!-- 新增按鈕index2
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script>
-// 獲取HTML元素的參考
-const itemSelect = document.getElementById("itemSelect");
-const unitInput = document.getElementById("unitInput");
-const addItemButton = document.getElementById("addItemButton");
-const resetButton = document.getElementById("resetButton");
 
-// 建立一個空的資料陣列，用於存儲項目和對應的值
-const data = {
-  labels: [],
-  datasets: [
-    {
-      label: '數值',
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1,
-      data: [],
-    },
-  ],
-};
-
-// 設定圖表的最大高度
-const maxChartHeight = 325; // 根據需要調整這個值
-
-// 初始化圖表
-const ctx = document.getElementById("carbonBarChart2").getContext("2d");
-const myBarChart = new Chart(ctx, {
-  type: 'bar',
-  data: data,
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  },
-});
-
-// 建立一個函數，用於更新長條圖
-function updateBarChart() {
-  // 設定圖表的高度，不超過最大高度
-  const chartHeight = Math.min(maxChartHeight, data.labels.length * 40 + 300);
-
-  // 更新圖表的高度
-  document.getElementById("carbonBarChart2").style.height = chartHeight + "px";
-
-  myBarChart.update(); // 更新圖表
-}
-
-// 當按下新增按鈕時，將項目和值添加到資料陣列，並更新長條圖
-addItemButton.addEventListener("click", () => {
-  const selectedItem = itemSelect.options[itemSelect.selectedIndex].text;
-  const inputValue = parseFloat(unitInput.value);
-
-  if (!isNaN(inputValue)) {
-    data.labels.push(selectedItem);
-    data.datasets[0].data.push(inputValue);
-    updateBarChart();
-  } else {
-    alert("請輸入有效的數字單位。");
-  }
-});
-
-// 當按下重設按鈕時，清空資料陣列並更新長條圖
-resetButton.addEventListener("click", () => {
-  data.labels = [];
-  data.datasets[0].data = [];
-  updateBarChart();
-});
-
-    </script>-->
-    
-
-    
 <!-- 偵測時間 -->
     <!-- 引入Bootstrap和jQuery庫 -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -1,0 +1,94 @@
+{% extends 'bases/base2.html' %}
+{% block headmessage %}
+    <div style="text-align: left;">
+        本月累積碳排量總覽
+    </div>
+{% endblock %}
+{% load static %}
+{% block content %}
+<h1>請輸入近兩個月總計使用的數度:</h1>
+    <label for="usage"></label>
+    <input type="number" id="usage">
+    <button onclick="calculateCost()">點擊計算</button>
+    <div id="result"></div>
+
+    
+{% endblock %}
+
+{% block js_script %}
+
+
+<script>
+    function calculateCost() {
+        const usageInput = document.getElementById("usage");
+        const usage = parseFloat(usageInput.value);
+
+        if (!isNaN(usage)) {
+            const result = calculateElectricityCost(usage);
+            const resultElement = document.getElementById("result");
+
+            if (!isNaN(result.cost_non_summer) && !isNaN(result.cost_summer)) {
+                resultElement.innerHTML = `
+                    <p>非夏季電費:約 ${result.cost_non_summer.toFixed(2)} 元</p>
+                    <p>夏季電費:約 ${result.cost_summer.toFixed(2)} 元</p>
+                `;
+            } else {
+                alert("Error: Invalid calculation result.");
+            }
+        } else {
+            alert("Please enter a valid number for Total Electricity Usage.");
+        }
+    }
+
+    function calculateElectricityCost(usage) {
+        // Define non-summer and summer rate tables (same as before)
+        const rateTableNonSummer = [
+            [120, 1.63],
+            [210, 2.10],
+            [220, 2.89],
+            [150, 3.94],
+            [300, 4.74],
+            [3000, 6.03]
+        ];
+
+        const rateTableSummer = [
+            [120, 1.63],
+            [210, 2.38],
+            [220, 3.52],
+            [150, 4.80],
+            [300, 5.83],
+            [3000, 7.69]
+        ];
+
+        // Calculate cost based on the provided usage
+        const costNonSummer = calculateCostForUsage(usage, rateTableNonSummer);
+        const costSummer = calculateCostForUsage(usage, rateTableSummer);
+
+        return {
+            cost_non_summer: costNonSummer,
+            cost_summer: costSummer
+        };
+    }
+
+    function calculateCostForUsage(usage, rateTable) {
+        let remainingUsage = usage;
+        let cost = 0;
+
+        for (const [limit, rate] of rateTable) {
+            if (remainingUsage <= 0) {
+                break;
+            }
+
+            if (remainingUsage >= limit) {
+                cost += limit * rate;
+                remainingUsage -= limit;
+            } else {
+                cost += remainingUsage * rate;
+                remainingUsage = 0;
+            }
+        }
+
+        return cost;
+    }
+</script>
+{% endblock %}

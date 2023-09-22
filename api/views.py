@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseNotFound
 from django.shortcuts import render
+from django.http import JsonResponse, HttpResponse, HttpResponseServerError, HttpResponseNotFound
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from json.decoder import JSONDecodeError  # Import JSONDecodeError for handling JSON parsing errors
+from json.decoder import JSONDecodeError  # Import JSONDecodeError for handling JSON parsing errors
 from datetime import datetime
+import pytz
 import pytz
 import json, os
 import sqlite3
@@ -28,6 +32,7 @@ def test(request):
 def calculate_electricity_cost_view(request):
 
     cases = ['Reality','Smartly']
+    cases = ['Reality','Smartly']
     case_usage={}
 
     # Check if the request contains JSON data
@@ -48,13 +53,47 @@ def calculate_electricity_cost_view(request):
                 json_data = json.load(json_file)
 
 
+    # Check if the request contains JSON data
+    if request.method == 'POST':
+        try:
+            json_data = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
+    else:
+        # 假如前端沒送正確Json就使用file
+        json_file_path = "user_data_house_perday.json"
+        if not os.path.exists(json_file_path):
+            return JsonResponse({"error": "File does not exist"}, status=400)
+        elif os.path.getsize(json_file_path) == 0:
+            return JsonResponse({"error": "File is empty"}, status=400)
+        else:
+            with open(json_file_path, "r", encoding="utf-8") as json_file:
+                json_data = json.load(json_file)
+
+
+    # Check if the request contains JSON data
+    if request.method == 'POST':
+        try:
+            json_data = json.loads(request.body)
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
+    else:
+        # 假如前端沒送正確Json就使用file
+        json_file_path = "user_data_house_perday.json"
+        if not os.path.exists(json_file_path):
+            return JsonResponse({"error": "File does not exist"}, status=400)
+        elif os.path.getsize(json_file_path) == 0:
+            return JsonResponse({"error": "File is empty"}, status=400)
+        else:
+            with open(json_file_path, "r", encoding="utf-8") as json_file:
+                json_data = json.load(json_file)
+
     for case in cases:
         if case == 'Reality':
             json_file_path = "user_data_house_perday.json"
 
-        elif case == 'Smartly':
+        elif case == 'Smartlyly':
             json_file_path = "suggest_user_data.json"
-
 
         try:
             # Check if "user_data.json" file exists      
@@ -73,7 +112,6 @@ def calculate_electricity_cost_view(request):
             with open(json_file_path, "r", encoding="utf-8") as json_file:
                 json_data = json.load(json_file)
             #    print(json_data)
-
 
             tables = ["c2_rates", "c3_rates", "summer_c2_rates", "summer_c3_rates"]
             usage_data={}
@@ -141,7 +179,6 @@ def calculate_electricity_cost_view(request):
     }
 
     return JsonResponse(response_data, status=200)
-
 
 
 

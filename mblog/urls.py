@@ -43,8 +43,14 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('api/cde/', calculate_cde_View),
     path('sensor/save', sensor_data),
     path('api/smart_plug/', showPlugInfoView)
+    path('index2/', index2_post),
+    path('index3/', index3_post),
+    path('index4/', index4_post),
+    path('index5/', index5_post),
+    path('index6/', index6_post),
+    path('post/<str:slug>', showpost),
+    path('api/smart_plug/', showPlugInfoView),
 ]
-
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 import mblog.settings

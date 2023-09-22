@@ -1,0 +1,446 @@
+{% extends 'bases/base.html' %}
+
+{% block headmessage %}
+    <div style="text-align: left;">
+        生活碳足跡計算
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <p> 日期：<input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px"> </p>
+
+
+    </div>
+    
+    </div>
+    <!--<div class="col-md-3">
+        <button class="btn btn-primary">完成</button>
+    </div>-->
+</div>
+
+<div>
+    <p>生活碳足跡</p>
+    <p id="carbonFootprintDate"></p> <!-- 用于显示日期 -->
+    <!-- 在这里添加生活碳足迹计算的内容 -->
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-6">
+        <div>
+            <label for="itemSelect">選擇品項:</label>
+            <select id="itemSelect" name="itemSelect">
+                <option value="lactose_prods">優格</option>
+                <option value="lactose_prods">優酪乳</option>
+                <option value="lactose_prods">凝乳塊(未發酵)</option>
+                <option value="lactose_prods">焦糖烤布丁</option>
+                <option value="lactose_prods">鮮乳</option>
+                <option value="lactose_prods">麥芽調味乳</option>
+                <option value="beverage">經典台灣啤酒，330 ml (6罐裝，收縮膜)</option>
+                <option value="beverage">金牌台灣啤酒，330 ml (6罐裝，收縮膜)</option>
+                <option value="beverage">58度特級高粱酒，600ml</option>
+                <option value="beverage">包裝飲用水(1460ml，PET包裝)</option>
+                <option value="beverage">包裝飲用水(600ml，PET包裝)</option>
+                <option value="beverage">可樂(寶特瓶裝，2L)</option>
+                <option value="beverage">可樂(寶特瓶裝，600ml)</option>
+                <option value="beverage">柳橙汁(450ml)</option>
+                <option value="beverage">瓶裝水(1500ml，PET包裝)</option>
+                <option value="beverage">瓶裝水(330ml，PET包裝) </option>
+                <option value="beverage">瓶裝水(600ml，PET包裝)</option>
+                <option value="beverage">瓶裝水（2000ml，PET包裝）</option>
+                <option value="beverage">經典台灣啤酒，600 ml (玻璃瓶裝)</option>
+                <option value="beverage">金牌台灣啤酒，600 ml (12瓶裝，紙箱)</option>
+                <option value="beverage">高粱酒（50%，600ml）</option>
+                <option value="beverage">奶茶（250ml，鋁箔包裝）</option>
+                <option value="beverage">奶茶（300ml，鋁箔包裝）</option>
+                <option value="beverage">奶茶（375ml，鋁箔包裝）</option>
+                <option value="beverage">擂茶</option>
+                <option value="beverage">精力湯</option>
+                <option value="beverage">紅茶（250ml，鋁箔包裝）</option>
+                <option value="beverage">紅茶（300ml，鋁箔包裝）</option>
+                <option value="beverage">紅茶（375ml，鋁箔包裝）</option>
+                <option value="beverage">綠茶（250ml，鋁箔包裝）</option>
+                <option value="beverage">綠茶（300ml，鋁箔包裝）</option>
+                <option value="beverage">高山烏龍茶(有烘培-部分發酵)</option>
+                <option value="29">紅殼雞蛋</option>
+                <option value="29">茶葉蛋</option>
+                <option value="29">雞蛋</option>
+                <option value="29">鮮蛋</option>
+                <option value="cde_transport">自用大客車(柴油)</option>
+                <option value="cde_transport">自用大貨車(柴油) </option>
+                <option value="cde_transport">自用小客車(汽油) </option>
+                <option value="cde_transport">自用小貨車(汽油) </option>
+                <option value="cde_transport">自用小貨車(柴油) </option>
+                <option value="cde_transport">國內海運-貨運，柴油動力</option>
+                <option value="cde_transport">國內海運-貨運，燃料油動力</option>
+                <option value="cde_transport">國際海運-貨運，燃料油動力</option>
+                <option value="cde_transport">機器腳踏車(汽油) </option>
+                <option value="cde_transport">營業大客車(市區公車及公路客運-柴油) </option>
+                <option value="cde_transport">營業大貨車(柴油)</option>
+                <option value="cde_transport">營業小貨車(汽油)</option>
+                <option value="cde_transport">營業小貨車(柴油)</option>
+                <option value="cde_transport">營業遊覽車(柴油) </option>
+                <option value="energy">台灣自來水 (2011)</option>
+                <option value="energy">天然氣(未燃燒，2018)</option>
+                <option value="energy">柴油(於公路運輸移動源使用，2016)</option>
+                <option value="energy">柴油（未燃燒，泰國，2005）</option>
+                <option value="energy">汽油（未燃燒，泰國，2005）</option>
+                <option value="energy">液化石油氣(於固定源使用，2012)</option>
+                <option value="energy">潤滑油（未燃燒，2017）</option>
+                <option value="energy">煤油(未燃燒，2018)</option>
+                <option value="energy">煤油使用(2014)</option>
+                <option value="energy">燃料油使用(蒸餘油/重油使用，2012)</option>
+                <option value="energy">燃料油（未燃燒，泰國，2005）</option>
+                <option value="energy">燃料油使用(蒸餘油/重油使用，2013)</option>
+                <option value="energy">生質燃料油使用(含10%低硫燃料油，2015)</option>
+                <option value="energy">臺北自來水 (2013)</option>
+                <option value="energy">臺灣自來水(2017)</option>
+                <option value="energy">車用汽油(於固定源使用，2012)</option>
+                <option value="energy">重質燃料油（未燃燒，韓國，1998）</option>
+                <option value="energy">電(2020）)</option>
+
+            </select>
+            <br>
+            <label for="unitInput">輸入單位:</label>
+            <input type="text" id="unitInput" name="unitInput">
+            <br>
+            <button id="addItemButton">新增項目</button>
+            <button id="resetButton">重設</button>
+            <button id="packageButton">打包</button>
+            <div id="itemList"></div>
+        </div>
+    </div>
+
+    
+    <div class="col-md-6">
+        <p>今日碳排放量</p>
+        <br>
+        <div id="carbonBarChartContainer">
+            <canvas id="carbonBarChart3" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <br>
+<div>
+    <label for="total_cde_beverage">total_cde_beverage:</label>
+    <input type="text" id="total_cde_beverage" readonly value="">
+</div>
+        
+<div>
+    <label for="total_cde_cde_transport">total_cde_cde_transport:</label>
+    <input type="text" id="total_cde_cde_transport" readonly value="">
+</div>
+        
+<div>
+    <label for="total_cde_energy">total_cde_energy:</label>
+    <input type="text" id="total_cde_energy" readonly value="">
+</div>
+
+<div>
+    <label for="total_cde_lactose_prods">otal_cde_lactose_prods:</label>
+    <input type="text" id="total_cde_lactose_prods" readonly value="">
+</div>
+
+
+
+<style>
+    .chartContainer {
+        margin: auto;
+        width: 40%;
+        min-width: 10px;
+        /* height: 600px; */
+        margin: auto;
+    }
+    
+    polyline{
+        opacity: .3;
+        stroke: black;
+        stroke-width: 2px;
+        fill: none;
+    }
+    </style>
+<h4 class="text-center mt-5">圓餅圖</h4>
+<div class="chartContainer"></div>
+<div>
+  <button type="button" class="btn btn-primary Draw">畫圖</button>
+</div>
+
+{% endblock %}
+{% block js_script %}
+<!-- JavaScript 代码 -->
+<!-- JavaScript 代码 -->
+<script>
+    // 当页面加载完毕时执行这个函数
+    document.addEventListener("DOMContentLoaded", function() {
+        // 获取新增项按钮和品项选择框、单位输入框的引用
+        var addItemButton = document.getElementById("addItemButton");
+        var resetButton = document.getElementById("resetButton");
+        var packageButton = document.getElementById("packageButton");
+        var itemSelect = document.getElementById("itemSelect");
+        var unitInput = document.getElementById("unitInput");
+        var itemList = document.getElementById("itemList");
+        var data = {}; // 存储数据的对象
+
+        // 添加点击事件监听器到新增项按钮
+        addItemButton.addEventListener("click", function() {
+            // 获取选中的品项和输入的单位
+            var selectedItem = itemSelect.options[itemSelect.selectedIndex].text;
+            var inputUnit = unitInput.value;
+
+            // 创建新的项元素并设置其文本内容，无论单位等于1还是不等于1
+            var newItemText = selectedItem + ": " + inputUnit;
+
+            // 创建新的项元素并设置其文本内容
+            var newItem = document.createElement("div");
+            newItem.textContent = newItemText;
+
+            // 将新项添加到项列表中
+            itemList.appendChild(newItem);
+
+            // 清空单位输入框
+            unitInput.value = "";
+
+            // 将数据存储到data对象中
+            if (!data[selectedItem]) {
+                data[selectedItem] = 0;
+            }
+
+            // 更新数量，如果单位不等于1，将单位转换为整数
+            if (inputUnit !== "1") {
+                data[selectedItem] += parseInt(inputUnit);
+            } else {
+                data[selectedItem] += 1;
+            }
+        });
+
+        // 添加点击事件监听器到重置按钮
+        resetButton.addEventListener("click", function() {
+            // 清空项列表和数据
+            itemList.innerHTML = "";
+            data = {};
+        });
+
+        // 添加点击事件监听器到打包按钮
+        packageButton.addEventListener("click", function() {
+            // 将数据按类别分组
+            var groupedData = {};
+
+            for (var key in data) {
+                var category = itemSelect.options[itemSelect.selectedIndex].value;
+
+                if (!groupedData[category]) {
+                    groupedData[category] = {};
+                }
+
+                groupedData[category][key] = data[key];
+            }
+
+            // 打印分组后的数据对象
+            console.log(JSON.stringify(groupedData, null, 4));
+        });
+    });
+</script>
+
+
+<script>
+    axios.get('http://127.0.0.1:8000/api/cde/')
+    .then((res)=>{
+        console.log(res.data)
+        $(`#total_cde_beverage`).val(res.data.total_cde_beverage);
+        $(`#total_cde_cde_transport`).val(res.data.total_cde_cde_transport);
+        $(`#total_cde_energy`).val(res.data.total_cde_energy);
+        $(`#total_cde_lactose_prods`).val(res.data.total_cde_lactose_prods);        
+    })
+    .catch((error)=>{
+
+    })
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 创建并渲染长条图表
+        const ctx = document.getElementById('carbonBarChart3').getContext('2d');
+        const data = {
+            labels: ['total_cde_beverage', 'total_cde_cde_transport', 'total_cde_energy','otal_cde_lactose_prods'], // 电器名称将在后续添加
+            datasets: [{
+                label: '碳排放量',
+                data: [], // 实际数据将在后续添加
+                backgroundColor: ['#FF5733', '#33FF57', '#5733FF','#5733FF'], // 长条的颜色
+            }],
+        };
+
+        const carbonBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 初始化柱状图数据
+        carbonBarChart.data.datasets[0].data = [0, 0, 0];
+        carbonBarChart.update();
+
+        // 获取数据并更新柱状图和标签
+        axios.get('http://127.0.0.1:8000/api/cde/')
+            .then((res) => {
+                const total_cde_beverage = res.data.total_cde_beverage;
+                const total_cde_cde_transport = res.data.total_cde_cde_transport;
+                const total_cde_energy = res.data.total_cde_energy/30;
+                const total_cde_lactose_prods = res.data.total_cde_lactose_prods
+
+                // 更新柱状图和标签
+                carbonBarChart.data.datasets[0].data = [total_cde_beverage, total_cde_cde_transport, total_cde_energy,total_cde_lactose_prods];
+                carbonBarChart.update();
+ 
+                // 更新标签对应的输入框
+                //document.getElementById('total_cde_beverage').value = total_cde_beverage;
+                //document.getElementById('total_cde_cde_transport').value = total_cde_cde_transport;
+                document.getElementById('total_cde_energy').value = total_cde_energy;
+                //document.getElementById('total_cde_lactose_prods').value = total_cde_lactose_prods;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    });
+</script>
+
+
+
+    <!-- axios.get('http://127.0.0.1:8000/api/cde/')
+  .then(response => {
+    const data_pie = response.data; // 從 API 響應中獲取資料;
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  }); -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    axios.get('http://127.0.0.1:8000/api/cde/')
+      .then((res) => {
+        const total_cde_beverage = res.data.total_cde_beverage;
+        const total_cde_cde_transport = res.data.total_cde_cde_transport;
+        const total_cde_energy = res.data.total_cde_energy /30;
+        const total_cde_lactose_prods = res.data.total_cde_lactose_prods;
+
+        // 創建一個新的資料結構，基於更新後的值
+        const data_pie = {
+          "飲料": total_cde_beverage,
+          "CDE運輸": total_cde_cde_transport,
+          "能源（調整後）": total_cde_energy,
+          "乳糖產品": total_cde_lactose_prods
+        };
+
+        drawPie(data_pie); // 使用更新後的資料調用drawPie函數
+      })
+      .catch((error) => {
+        console.error('獲取數據時出錯：', error);
+      });
+
+    const drawPie = (data) => {
+      // 資料的鍵（key）將用作圓餅圖的項目名稱，值（value）用作數據
+      const pieData = Object.entries(data).map(([key, value]) => ({
+        item: key,
+        data: value,
+      }));
+
+      // svg圖形區大小、邊界
+      const svgWidth = parseInt(d3.select(".chartContainer").style("width")),
+        svgHeight = svgWidth * 0.8,
+        margin = 40;
+
+      // 先設定 svg 大小
+      const svg = d3.select(".chartContainer")
+        .append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+      // 圖表與線條、標籤
+      svg.append("g")
+        .attr("class", "slices")
+        .attr('transform', `translate(${svgWidth / 2}, ${svgHeight / 2})`);
+      svg.append("g")
+        .attr("class", "labels");
+      svg.append("g")
+        .attr("class", "lines");
+
+      // 設定顏色
+      const color = d3.scaleOrdinal()
+        .range(["#4BEFCF", "#0bbc17", "#F96262", '#ffbe32', '#e271fc']);
+
+      // radius 用來設定半徑，圓餅圖的圓弧大小是區域的一半
+      const radius = Math.min(svgWidth, svgHeight) / 2 - margin;
+
+      // 設定每個資料在圓餅圖上:
+      const piechart = d3.pie()
+        .value(d => d.data);
+
+      // innerRadius 跟 outerRadius 決定圓餅內圈外圈的大小 radius
+      const arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius)
+        .padAngle(.02),
+        data_ready = piechart(pieData);
+
+      // 計算每塊資料的占比%
+      // 先用 d3.sum 加總全部資料，再將資料一一除上總數
+      const total = d3.sum(pieData, d => d.data);
+      pieData.forEach(d => {
+        d.percentage = Math.round((d.data / total) * 100);
+      });
+
+      // 建立 pie
+      const cutePie = svg.select('.slices')
+        .selectAll('g')
+        .data(data_ready)
+        .enter()
+        .append('g')
+        .attr('class', 'arc');
+
+      cutePie.append('path')
+        .attr('d', arc)
+        .attr('fill', (d, i) => color(i)); // 使用顏色函數設置填充顏色
+
+      // 加上每個區塊的標示
+      // 控制文字的位置
+      const arcText = d3.arc()
+        .innerRadius(radius)
+        .outerRadius(radius - 10);
+
+      const itemText = cutePie.append('text')
+        .attr('transform', d => `translate(${arcText.centroid(d)})`)
+        .text(d => d.data.item + ' ' + d.data.percentage + '%')
+        .style('text-anchor', 'middle')
+        .style('font-size', 16)
+        .style('fill', 'black');
+
+      // 滑鼠互動 mouseover、mouseleave
+      d3.selectAll('.arc path')
+        .style('cursor', 'pointer')
+        .on('mouseover', function () {
+          d3.select(this)
+            .transition()
+            .duration(500)
+            .style("filter", "drop-shadow(2px 4px 6px black)")
+            .style('transform', 'scale(1.1)')
+        })
+        .on('mouseleave', function () {
+          d3.select(this)
+            .transition()
+            .duration(500)
+            .style("filter", "drop-shadow(0 0 0 black)")
+            .style('transform', 'scale(1)')
+        });
+    };
+  </script>
+{% endblock %}

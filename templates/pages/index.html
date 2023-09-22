@@ -1,31 +1,71 @@
 {% extends 'bases/base.html' %}
+
 {% block title %}
-    PTT 看板轉錄
+ 碳足跡
 {% endblock %}
 
 {% block headmessage %}
-    轉錄文章
+    <div style="text-align: left;">
+        一碳究竟
+    </div>
 {% endblock %}
-
+{% load static %}
 {% block content %}
-<div class="col-lg-9">
-    {% for post in posts%}
+    <!-- 在主要內容區塊中使用Flexbox布局 -->
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <!-- 這個div用於水平居中按鈕 -->
+        <div style="text-align: center;">
+            <!-- 樣式化按鈕，可調整的參數 -->
+            <a href="index2/">
+                <button 
+                style="
+                width: 400px;   /* 設置按鈕的寬度 */
+                height: 400px;  /* 設置按鈕的高度 */
+                font-size: 30px; /* 設置按鈕文字的字體大小 */
+                background-color: #FFFFFF;  /*設置按鈕的背景顏色 */
+                color: #007bff;    /* 設置按鈕文字的顏色 */
+                border: none;   /* 去除按鈕的邊框 */
+                cursor: pointer; /* 鼠標懸停時顯示手型游標 */
+                margin: 10px;   /* 設置按鈕的外邊距 */
+                border-radius: 10px; /* 設置按鈕的圓角半徑 */
+                background-size: cover; /* 設置背景圖片大小，cover 表示填滿整個按鈕 */
+                background-position: center; /* 設置背景圖片位置為中央 */
+            "
 
-    <div class="card mb-4">
-        {% if post.img != None %}
-            <a href="#!"><img class="card-img-top" src="{{post.img}}" alt="..." /></a>
-        {% endif %}
-        <div class="card-body">
-            <div class="small text-muted">{{post.pub_date}}</div>
-            <h2 class="card-title">{{post.title}}</h2>
-            <p class="card-text">{{post.body| truncatechars:100 }}</p>
-            <a class="btn btn-primary" href="post/{{post.slug}}">閱讀更多 →</a>
+                >
+                <img src="{% static '002.svg' %}" width="200" height="150">
+
+                <br>  
+                生活碳足跡計算
+                
+                </button>
+            </a>
+            
+            <!-- 另一個樣式化按鈕，可調整的參數 -->
+            <a href="index3/">
+                <button 
+                    style="
+                        width: 400px;   /* 設置按鈕的寬度 */
+                        height: 400px;  /* 設置按鈕的高度 */
+                        font-size: 30px; /* 設置按鈕文字的字體大小 */
+                        background-color: #FFFFFF;  /*設置按鈕的背景顏色 */
+                        color: #ff5733;    /* 設置按鈕文字的顏色 */
+                        border: none;   /* 去除按鈕的邊框 */
+                        cursor: pointer; /* 鼠標懸停時顯示手型游標 */
+                        margin: 10px;   /* 設置按鈕的外邊距 */
+                        border-radius: 20px; /* 設置按鈕的圓角半徑 */
+                        
+                    "
+                >
+                <img src="{% static '001.svg' %}" width="200" height="150">
+                <br>
+                    生活電價計算123
+                </button>
+            </a>
         </div>
     </div>
-
-    {% endfor %}
-</div>
 {% endblock %}
 
-
-{% block js_script %}{% endblock %}
+{% block js_script %}
+    <!-- 這個區塊預留用於放置JavaScript腳本，例如事件處理或其他客戶端邏輯 -->
+{% endblock %}

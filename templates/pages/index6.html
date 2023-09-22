@@ -1,0 +1,92 @@
+{% extends 'bases/base2.html' %}
+{% block headmessage %}
+    <div style="text-align: left;">
+        本月累積碳排量總覽
+    </div>
+{% endblock %}
+
+{% block content %}
+<h1>請輸入近兩個月的電價:</h1>
+<label for="totalExpense"></label>
+<input type="number" id="totalExpense">
+<button onclick="calculateUsage()">點擊計算</button>
+<div id="result"></div>
+
+    
+{% endblock %}
+
+{% block js_script %}
+    <script>
+        function calculateUsage() {
+            const totalExpenseInput = document.getElementById("totalExpense");
+            const totalExpense = parseFloat(totalExpenseInput.value);
+
+            if (!isNaN(totalExpense)) {
+                const result = calculateAccumulativeUsage(totalExpense);
+                const resultElement = document.getElementById("result");
+                resultElement.innerHTML = `
+                    <p>非夏季使用度數:約 ${result.degrees_non_summer.toFixed(2)} 度</p>
+                    <p>夏季使用度數:約 ${result.degrees_summer.toFixed(2)} 度</p>
+                `;
+            } else {
+                alert("Please enter a valid number for Total Electricity Expense.");
+            }
+        }
+
+        function calculateAccumulativeUsage(totalExpense) {
+            // Define non-summer and summer rate tables
+            const rateTableNonSummer = [
+                [120, 1.63],
+                [210, 2.10],
+                [220, 2.89],
+                [150, 3.94],
+                [300, 4.74],
+                [3000, 6.03]
+            ];
+
+            const rateTableSummer = [
+                [120, 1.63],
+                [210, 2.38],
+                [220, 3.52],
+                [150, 4.80],
+                [300, 5.83],
+                [3000, 7.69]
+            ];
+
+            // Calculate degrees for non-summer season
+            let degreesNonSummer = calculateDegrees(totalExpense, rateTableNonSummer);
+
+            // Calculate degrees for summer season
+            let degreesSummer = calculateDegrees(totalExpense, rateTableSummer);
+
+            // Prepare the result as an object
+            return {
+                degrees_non_summer: degreesNonSummer,
+                degrees_summer: degreesSummer
+            };
+        }
+
+        function calculateDegrees(expense, rateTable) {
+            let degreesUsed = 0;
+            let remainingExpense = expense / 2;
+
+            for (const [limit, rate] of rateTable) {
+                if (remainingExpense <= 0) {
+                    break;
+                }
+
+                if (remainingExpense >= limit * rate) {
+                    degreesUsed += limit;
+                    remainingExpense -= limit * rate;
+                } else {
+                    degreesUsed += remainingExpense / rate;
+                    remainingExpense = 0;
+                }
+            }
+
+            return degreesUsed;
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

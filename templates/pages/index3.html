@@ -1,0 +1,432 @@
+{% extends 'bases/base.html' %}
+
+{% block headmessage %}
+    <div style="text-align: left;">
+        生活碳足跡計算
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <p> 日期：<input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px"> </p>
+
+
+    </div>
+    
+    </div>
+    <!--<div class="col-md-3">
+        <button class="btn btn-primary">完成</button>
+    </div>-->
+</div>
+
+<div>
+    <p>生活碳足跡</p>
+    <p id="carbonFootprintDate"></p> <!-- 用于显示日期 -->
+    <!-- 在这里添加生活碳足迹计算的内容 -->
+</div>
+
+<hr>
+
+<div style="display: flex; justify-content: space-between;">
+    <!-- 左方区域 -->
+    <div style="flex: 1;">
+        <label for="applianceSelect">選擇電器:</label>
+        <select id="applianceSelect" name="applianceSelect">
+            <option value="1">電冰箱</option>
+            <option value="2">電鍋</option>
+            <option value="3">開飲機</option>
+            <option value="4">微波爐</option>
+            <option value="5">抽油煙機</option>
+            <option value="6">果汁機</option>
+            <option value="7">果榨汁機</option>
+            <option value="8">烘碗機</option>
+            <option value="9">電磁爐</option>
+            <option value="10">多功能火鍋</option>
+            <option value="11">烤麵包機</option>
+            <option value="12">電咖啡壺</option>
+            <option value="13">電烤箱</option>
+            <option value="14">洗衣機</option>
+            <option value="15">乾衣機</option>
+            <option value="16">電熨斗</option>
+            <option value="17">冷氣機</option>
+            <option value="18">吹風機</option>
+            <option value="19">電暖爐</option>
+            <option value="20">電扇</option>
+            <option value="21">吸塵器</option>
+            <option value="22">抽風機</option>
+            <option value="23">燈泡(60W)</option>
+            <option value="24">日光燈(20W)</option>
+            <option value="25">省電燈泡</option>
+            <option value="26">神龕燈</option>
+            <option value="27">電視機</option>
+            <option value="28">機上盒</option>
+            <option value="29">音響</option>
+            <option value="30">收音機</option>
+            <option value="31">電腦:主機+顯示器</option>
+            <option value="32">印表機</option>
+            <option value="33">手機充電器</option>
+            <option value="34">筆記型電腦MacBook Pro</option>
+            <option value="35">電熱水器</option>
+            <option value="36">電熱水瓶</option>
+            <option value="37">變頻冷氣</option>
+        </select>
+        <br>
+        <label for="startTimeInput">開始時間:</label>
+        <input type="text" id="startTimeInput" name="startTimeInput">
+        <br>
+        <label for="endTimeInput">結束時間:</label>
+        <input type="text" id="endTimeInput" name="endTimeInput">
+        <br>
+        <button id="addApplianceButton2">新增電器</button>
+        <button id="resetButton2">重設</button>
+        <button id="packageButton2">打包</button>
+        <div id="itemList2"></div>
+
+    </div>
+
+    <!-- 右方区域 -->
+    <div style="flex: 1;">
+        <p>今日用量</p>
+        <canvas id="carbonBarChart" width="400" height="200"></canvas>
+        <br>
+        <button id="showChartButton">顯示長條圖</button>
+        <button id="showChartButton2">DailyCost</button>
+        <button id="showChartButton3">MonthlyCost</button>
+        <button id="showChartButton4">WeekendCost</button>
+    </div>
+</div>
+
+
+
+
+
+<div>
+    <label for="DailyElectricity">DailyElectricity:</label>
+    <input type="text" id="DailyElectricity" readonly value="">
+</div>
+
+<div>
+    <label for="Reality">MonthlyCarbonEmission:</label>
+    <input type="text" id="MonthlyCarbonEmission" readonly value="">
+</div>
+
+<div>
+    <label for="Reality">MonthlyElectricity:</label>
+    <input type="text" id="MonthlyElectricity" readonly value="">
+</div>
+<br>ThreeTier
+<div>
+    <label for="ThreeTier">DailyCost:</label>
+    <input type="text" id="ThreeTierDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTier">MonthlyCost:</label>
+    <input type="text" id="ThreeTierMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTier">WeekendCost:</label>
+    <input type="text" id="ThreeTierWeekendCost" readonly value="">
+</div>
+<br>ThreeTierSummer
+<div>
+    <label for="ThreeTierSummer">DailyCost:</label>
+    <input type="text" id="ThreeTierSummerDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTierSummer">MonthlyCost:</label>
+    <input type="text" id="ThreeTierSummerMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="ThreeTierSummer">WeekendCost:</label>
+    <input type="text" id="ThreeTierSummerWeekendCost" readonly value="">
+</div>
+<br>TwoTier
+<div>
+    <label for="TwoTier">DailyCost:</label>
+    <input type="text" id="TwoTierDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTier">MonthlyCost:</label>
+    <input type="text" id="TwoTierMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTier">WeekendCost:</label>
+    <input type="text" id="TwoTierWeekendCost" readonly value="">
+</div>
+<br>TwoTierSummer
+<div>
+    <label for="TwoTierSummer">DailyCost:</label>
+    <input type="text" id="TwoTierSummerDailyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTierSummer">MonthlyCost:</label>
+    <input type="text" id="TwoTierSummerMonthlyCost" readonly value="">
+</div>
+
+<div>
+    <label for="TwoTierSummer">WeekendCost:</label>
+    <input type="text" id="TwoTierSummerWeekendCost" readonly value="">
+</div>
+
+{% endblock %}
+
+{% block js_script %}
+<script>
+    // 当页面加载完毕时执行这个函数
+    document.addEventListener("DOMContentLoaded", function() {
+        // 获取新增电器按钮和电器选择框、开始时间输入框、结束时间输入框、电器列表的引用
+        var addApplianceButton2 = document.getElementById("addApplianceButton2");
+        var resetButton2 = document.getElementById("resetButton2");
+        var packageButton2 = document.getElementById("packageButton2");
+        var applianceSelect = document.getElementById("applianceSelect");
+        var startTimeInput = document.getElementById("startTimeInput");
+        var endTimeInput = document.getElementById("endTimeInput");
+        var itemList2 = document.getElementById("itemList2");
+        var outputData = []; // 存储输出数据的数组
+
+        // 添加点击事件监听器到新增电器按钮
+        addApplianceButton2.addEventListener("click", function() {
+            // 获取选中的电器、开始时间和结束时间
+            var selectedAppliance = applianceSelect.options[applianceSelect.selectedIndex].text;
+            var startTime = startTimeInput.value;
+            var endTime = endTimeInput.value;
+
+            // 创建新的电器项对象
+            var newApplianceItem = {
+                "device_name": selectedAppliance,
+                "start_hour": startTime,
+                "end_hour": endTime
+            };
+
+            // 将新电器项对象添加到输出数据数组
+            outputData.push(newApplianceItem);
+
+            // 创建新的电器项元素并设置其文本内容
+            var newApplianceText = selectedAppliance + ": " + startTime + " - " + endTime;
+
+            // 创建新的电器项元素并设置其文本内容
+            var newAppliance = document.createElement("div");
+            newAppliance.textContent = newApplianceText;
+
+            // 将新电器项添加到电器列表中
+            itemList2.appendChild(newAppliance);
+
+            // 清空开始时间和结束时间输入框
+            startTimeInput.value = "";
+            endTimeInput.value = "";
+        });
+
+        // 添加点击事件监听器到重置按钮
+        resetButton2.addEventListener("click", function() {
+            // 清空电器列表和输出数据数组
+            itemList2.innerHTML = "";
+            outputData = [];
+        });
+
+        // 添加点击事件监听器到打包按钮
+        packageButton2.addEventListener("click", function() {
+            // 生成输出数据对象
+            var outputObject = {
+                "id": "MAC address",
+                "date": "2023-09-10",
+                "usage": outputData
+            };
+
+            // 打印输出数据对象，格式为所需格式
+            console.log(JSON.stringify(outputObject, null, 4));
+        });
+    });
+</script>
+
+
+<script>
+    axios.get('http://127.0.0.1:8000/api/power/')
+    .then((res)=>{
+        console.log(res.data)
+        $(`#DailyElectricity`).val(res.data.DailyElectricity); 
+        $(`#MonthlyCarbonEmission`).val(res.data.case.Reality.MonthlyCarbonEmission); 
+        $(`#MonthlyElectricity`).val(res.data.case.Reality.MonthlyElectricity);
+        $(`#ThreeTierDailyCost`).val(res.data.case.Reality.Priciing.ThreeTier.DailyCost); 
+        $(`#ThreeTierMonthlyCost`).val(res.data.case.Reality.Priciing.ThreeTier.MonthlyCost); 
+        $(`#ThreeTierWeekendCost`).val(res.data.case.Reality.Priciing.ThreeTier.WeekendCost); 
+        $(`#ThreeTierSummerDailyCost`).val(res.data.case.Reality.Priciing.ThreeTierSummer.DailyCost); 
+        $(`#ThreeTierSummerMonthlyCost`).val(res.data.case.Reality.Priciing.ThreeTierSummer.MonthlyCost); 
+        $(`#ThreeTierSummerWeekendCost`).val(res.data.case.Reality.Priciing.ThreeTierSummer.WeekendCost); 
+        $(`#TwoTierDailyCost`).val(res.data.case.Reality.Priciing.TwoTier.DailyCost); 
+        $(`#TwoTierMonthlyCost`).val(res.data.case.Reality.Priciing.TwoTier.MonthlyCost); 
+        $(`#TwoTierWeekendCost`).val(res.data.case.Reality.Priciing.TwoTier.WeekendCost); 
+        $(`#TwoTierSummerDailyCost`).val(res.data.case.Reality.Priciing.TwoTierSummer.DailyCost); 
+        $(`#TwoTierSummerMonthlyCost`).val(res.data.case.Reality.Priciing.TwoTierSummer.MonthlyCost); 
+        $(`#TwoTierSummerWeekendCost`).val(res.data.case.Reality.Priciing.TwoTierSummer.WeekendCost);            
+    })
+    .catch((error)=>{
+
+    })
+</script>
+
+<!-- index3 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 创建并渲染长条图表
+        const ctx = document.getElementById('carbonBarChart').getContext('2d');
+        const data = {
+            labels: ['DailyElectricity', 'MonthlyCarbonEmission', 'MonthlyElectricity'], // 电器名称将在后续添加
+            datasets: [{
+                label: '碳排放量',
+                data: [], // 实际数据将在后续添加
+                backgroundColor: ['#FF5733', '#33FF57', '#5733FF',"#8008"], // 长条的颜色
+            }],
+        };
+
+        const carbonBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // 初始化柱状图数据
+        carbonBarChart.data.datasets[0].data = [0, 0, 0];
+        carbonBarChart.update();
+
+        // 存储文本输入框的初始值
+        let initialValues = {
+            DailyElectricity: document.getElementById('DailyElectricity').value,
+            MonthlyCarbonEmission: document.getElementById('MonthlyCarbonEmission').value,
+            MonthlyElectricity: document.getElementById('MonthlyElectricity').value,
+        };
+
+        // 获取数据并更新柱状图和标签
+        function updateChart(type) {
+            axios.get('http://127.0.0.1:8000/api/power/')
+                .then((res) => {
+                    let values = [];
+                    let labels = [];
+
+                    switch (type) {
+                        case 'show1':
+                            values = [
+                                res.data.DailyElectricity,
+                                res.data.case.Reality.MonthlyCarbonEmission,
+                                res.data.case.Reality.MonthlyElectricity,
+                            ];
+                            labels = ['DailyElectricity', 'MonthlyCarbonEmission', 'MonthlyElectricity'];
+                            break;
+                        case 'show2':
+                            values = [
+                                res.data.case.Reality.Priciing.ThreeTier.DailyCost,
+                                res.data.case.Reality.Priciing.ThreeTierSummer.DailyCost,
+                                res.data.case.Reality.Priciing.TwoTier.DailyCost,
+                                res.data.case.Reality.Priciing.TwoTierSummer.DailyCost,
+                            ];
+                            labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                            break;
+                        case 'show3':
+                            values = [
+                                res.data.case.Reality.Priciing.ThreeTier.MonthlyCost,
+                                res.data.case.Reality.Priciing.ThreeTierSummer.MonthlyCost,
+                                res.data.case.Reality.Priciing.TwoTier.MonthlyCost,
+                                res.data.case.Reality.Priciing.TwoTierSummer.MonthlyCost,
+                            ];
+                            labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                            break;
+                        case 'show4':
+                            values = [
+                                res.data.case.Reality.Priciing.ThreeTier.WeekendCost,
+                                res.data.case.Reality.Priciing.ThreeTierSummer.WeekendCost,
+                                res.data.case.Reality.Priciing.TwoTier.WeekendCost,
+                                res.data.case.Reality.Priciing.TwoTierSummer.WeekendCost,
+                            ];
+                            labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                            break;
+                        default:
+                            break;
+                    }
+
+                    // 更新柱状图和标签
+                    carbonBarChart.data.datasets[0].data = values;
+                    carbonBarChart.data.labels = labels;
+                    carbonBarChart.update();
+
+                    // 恢复文本输入框的初始值
+                   
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
+
+        // 添加点击事件监听器，点击按钮后显示不同的数据和标签
+        const showChartButton = document.getElementById('showChartButton');
+        const showChartButton2 = document.getElementById('showChartButton2');
+        const showChartButton3 = document.getElementById('showChartButton3');
+        const showChartButton4 = document.getElementById('showChartButton4');
+
+        showChartButton.addEventListener('click', function () {
+            updateChart('show1');
+        });
+        showChartButton2.addEventListener('click', function () {
+            updateChart('show2');
+        });
+        showChartButton3.addEventListener('click', function () {
+            updateChart('show3');
+        });
+        showChartButton4.addEventListener('click', function () {
+            updateChart('show4');
+        });
+
+
+        // 在页面加载时，首先显示默认数据
+        updateChart('initial');
+
+
+        //$(`#packageButton2`).click(function (e){
+            //e.preventDefault();
+
+            // 讀值
+            //let starttime = $(`#startTimeInput`).val();
+            //let endtime = $(`#endTimeInput`).val();
+
+            //console.log("讀取:");
+            //console.log(starttime, endtime);
+
+            // 定義傳輸地址跟資料
+            //let url = "http://127.0.0.1:8000/api/power/";
+            //const params = new URLSearchParams();
+            //params.append('start', starttime);
+            //params.append('end', endtime);
+
+           // axios.post(url, params)
+                //.then(function(res){
+                    // DOM 操作
+                    //$(`#startTimeInput`).val(res.data.param2);
+                    //$(`#endTimeInput`).val(res.data.param1);
+
+                //})
+                //.catch(function(e){
+                    //console.log(e);
+                //})
+
+
+        //});
+    });
+</script>
+
+
+{% endblock %}
