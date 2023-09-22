@@ -474,4 +474,88 @@ def calculate_cde_View(request):
     # Return the response as JSON
     return JsonResponse(response_data)
 
-from api.models import *
+# api/smart_plug/ 
+# import sqlite3
+@csrf_exempt
+def showPlugInfoView(request):
+    from datetime import datetime
+
+    # Query the database to get the data
+    data = SmartPlugRec.objects.values('timestmp', 'response')
+    print('type of data:',type(data), 'length:', len(data))
+
+    processed_info ={}
+    device01_info = [] 
+    device02_info = []
+    power_nono_usage01=[]
+    power_nono_usage02=[]
+    power_usage01 =[]
+    power_usage02 =[]
+
+    # Iterate through the data
+    count =0 
+    for item in data:
+        count +=1
+        timestamp = item['timestmp']
+        response = item['response']
+
+        if timestamp is not None:  # Check if timestamp is not None
+            my_timezone = pytz.timezone('asia/taipei')
+            my_dt = datetime.fromtimestamp(int(timestamp)).astimezone(my_timezone)
+
+            for i in range(len(response)):
+
+                name = response[i]['itemData']['name']
+                mac = response[i]['itemData']['extra']['mac']
+                status = response[i]['itemData']['online']
+                current = response[i]['itemData']['params']['current']
+                voltage = response[i]['itemData']['params']['voltage']
+                power = response[i]['itemData']['params']['power']
+                monthKwh = response[i]['itemData']['params'].get('monthKwh', None)
+                dayKwh = response[i]['itemData']['params'].get('dayKwh', None)
+
+                processed_info= {
+                    'timestamp': my_dt,
+                    #'items': response,  # Include the response data as it is
+                    #'time_difference': time_difference.total_seconds(),  # Time difference in seconds
+                    'name': name,
+                    'mac': mac,
+                    'online': status,
+                    'current': current,
+                    'voltage': voltage,
+                    'power': power,
+                    'monthKwh': monthKwh,
+                    'dayKwh': dayKwh
+                }
+                if i ==0:
+                    device01_info.append(processed_info)
+                    power_nono_usage01.append(float(power))
+                    if float(power) > 0:
+                        power_usage01.append(float(power))
+                elif i ==1:
+                    device02_info.append(processed_info)
+                    power_nono_usage02.append(float(power))
+                    if float(power) > 0:
+                        power_usage02.append(float(power))
+                else:
+                    print('exception occurs in processing response loop')
+        print('len01:',len(power_usage01))
+        print('len02:',len(power_usage02))
+        res_data = {
+            "device01":{
+                "name":"S31TPB(US)",
+                "MAC":"d0:27:03:20:96:aa",
+                "device01_info":device01_info,
+                "power_usage01":power_nono_usage01,
+                "avg_usage01": sum(power_usage01)/ len(power_usage01),},
+            "device02":{
+                "name":"POWR320D",
+                "MAC":"d0:27:03:2f:81:f6",
+                "device02_info":device02_info,
+                "power_usage02":power_nono_usage02,
+                "avg_usage02": sum(power_usage02)/ len(power_usage02),},
+        }
+
+    # If it's a POST request, return a JSON response
+    if request.method == 'GET':
+        return JsonResponse(res_data, safe=False)  # Set safe=False for non-dict data
