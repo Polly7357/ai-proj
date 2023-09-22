@@ -4,9 +4,12 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from json.decoder import JSONDecodeError  # Import JSONDecodeError for handling JSON parsing errors
 from datetime import datetime
-from mainsite.models import *
+import pytz
 import json, os
 import sqlite3
+
+from mainsite.models import *
+
 
 #create view here
 
@@ -487,94 +490,89 @@ def sensor_data(request):
 # import sqlite3
 @csrf_exempt
 def showPlugInfoView(request):
-    database_path = 'db.sqlite3'
-    current_time = datetime.now()
+    from datetime import datetime
 
-    custom_sql_query = """
-    SELECT timestmp, response
-    FROM plug_info
-    ORDER BY timestmp DESC
-    """
+    # Query the database to get the data
+    data = SmartPlugRec.objects.values('timestmp', 'response')
+    print('type of data:',type(data), 'length:', len(data))
 
-    try:
-        # Connect to the SQLite database
-        conn = sqlite3.connect(database_path)
-        cursor = conn.cursor()
+    processed_info ={}
+    device01_info = [] 
+    device02_info = []
+    power_nono_usage01=[]
+    power_nono_usage02=[]
+    power_usage01 =[]
+    power_usage02 =[]
 
-        # Execute the custom SQL query
-        cursor.execute(custom_sql_query)
+    # Iterate through the data
+    count =0 
+    for item in data:
+        count +=1
+        timestamp = item['timestmp']
+        response = item['response']
 
-        # Fetch the data from the cursor
-        data = cursor.fetchall()
+        if timestamp is not None:  # Check if timestamp is not None
+            my_timezone = pytz.timezone('asia/taipei')
+            my_dt = datetime.fromtimestamp(int(timestamp)).astimezone(my_timezone)
 
-        if not data:
-            # Handle the case where there is no data
-            return HttpResponseNotFound("No data found in the database")        
+            for i in range(len(response)):
 
-        processed_data = []  # To store processed data
+                name = response[i]['itemData']['name']
+                mac = response[i]['itemData']['extra']['mac']
+                status = response[i]['itemData']['online']
+                current = response[i]['itemData']['params']['current']
+                voltage = response[i]['itemData']['params']['voltage']
+                power = response[i]['itemData']['params']['power']
+                monthKwh = response[i]['itemData']['params'].get('monthKwh', None)
+                dayKwh = response[i]['itemData']['params'].get('dayKwh', None)
 
-        print('筆數:',len(data))
-        count=0
-        for row in data:
-            timestamp = row[0]
-            response = row[1]
 
-            print(count,': ',timestamp,' ',response[:10])
-            count +=1
-            try:
-                response_data = json.loads(response)
+                processed_info= {
+                    'timestamp': my_dt,
+                    #'items': response,  # Include the response data as it is
+                    #'time_difference': time_difference.total_seconds(),  # Time difference in seconds
+                    'name': name,
+                    'mac': mac,
+                    'online': status,
+                    'current': current,
+                    'voltage': voltage,
+                    'power': power,
+                    'monthKwh': monthKwh,
+                    'dayKwh': dayKwh
+                }
+                if i ==0:
+                    device01_info.append(processed_info)
+                    power_nono_usage01.append(float(power))
+                    if float(power) > 0:
+                        power_usage01.append(float(power))
+                elif i ==1:
+                    device02_info.append(processed_info)
+                    power_nono_usage02.append(float(power))
+                    if float(power) > 0:
+                        power_usage02.append(float(power))
+                else:
+                    print('exception occurs in processing response loop')
+        print('len01:',len(power_usage01))
+        print('len02:',len(power_usage02))
+        res_data = {
+            "device01":{
+                "name":"S31TPB(US)",
+                "MAC":"d0:27:03:20:96:aa",
+                "device01_info":device01_info,
+                "power_usage01":power_nono_usage01,
+                "avg_usage01": sum(power_usage01)/ len(power_usage01),},
+            "device02":{
+                "name":"POWR320D",
+                "MAC":"d0:27:03:2f:81:f6",
+                "device02_info":device02_info,
+                "power_usage02":power_nono_usage02,
+                "avg_usage02": sum(power_usage02)/ len(power_usage02),},
+        }
 
-                # Process the data as needed
-                # processed_data.append({
-                #     'timestamp': timestamp,
-                #     'items': response  # Include the response data as it is
-                # })
 
-                # Process the additional item_data here
-                for item_data in response_data:
-                    name = item_data['itemData']['name']
-                    mac = item_data['itemData']['extra']['mac']
-                    online = item_data['itemData']['online']
-                    current = item_data['itemData']['params']['current']
-                    voltage = item_data['itemData']['params']['voltage']
-                    power = item_data['itemData']['params']['power']
-                    monthKwh = item_data['itemData']['params'].get('monthKwh', None)
-                    dayKwh = item_data['itemData']['params'].get('dayKwh', None)
-
-                    # Now you can use the time_difference and other data as needed
-                    processed_data.append({
-                        'timestamp': timestamp,
-                        'items': response,  # Include the response data as it is
-                        # 'time_difference': time_difference.total_seconds(),  # Time difference in seconds
-                        'name': name,
-                        'mac': mac,
-                        'online': online,
-                        'current': current,
-                        'voltage': voltage,
-                        'power': power,
-                        'monthKwh': monthKwh,
-                        'dayKwh': dayKwh
-                    })
-            except JSONDecodeError:
-                # Handle JSON parsing errors
-                return HttpResponseServerError("Error parsing JSON data")
-
-        # You can choose to return a POST request response or render a template
-        if request.method == 'POST':
-            # If it's a POST request, return a JSON response
-            return JsonResponse(processed_data, safe=False)
-        else:
-            # If it's not a POST request, render a template
-            return render(request, 'pages/pluginfo.html', {'processed_data': processed_data})
-
-    except Exception as e:
-        # Handle other exceptions
-        return HttpResponseServerError("An error occurred: {}".format(str(e)))
-
-    finally:
-        # Close the database connection
-        cursor.close()
-        conn.close()
+    # If it's a POST request, return a JSON response
+    if request.method == 'GET':
+        return JsonResponse(res_data, safe=False)  # Set safe=False for non-dict data
 
 
 
