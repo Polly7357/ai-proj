@@ -32,153 +32,126 @@ def test(request):
 def calculate_electricity_cost_view(request):
 
     cases = ['Reality','Smartly']
-    cases = ['Reality','Smartly']
     case_usage={}
+    str_null = '{"name": "John", "age": 30, "city": "New York"}'
 
+    json_data = json.loads(str_null)
     # Check if the request contains JSON data
     if request.method == 'POST':
         try:
             json_data = json.loads(request.body)
-        except json.JSONDecodeError as e:
-            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
-    else:
-        # 假如前端沒送正確Json就使用file
-        json_file_path = "user_data_house_perday.json"
-        if not os.path.exists(json_file_path):
-            return JsonResponse({"error": "File does not exist"}, status=400)
-        elif os.path.getsize(json_file_path) == 0:
-            return JsonResponse({"error": "File is empty"}, status=400)
-        else:
-            with open(json_file_path, "r", encoding="utf-8") as json_file:
-                json_data = json.load(json_file)
 
+            for case in cases:
+                if case == 'Reality':
+                    #json_file_path = "user_data_house_perday.json"
+                    json_data = json_data
 
-    # Check if the request contains JSON data
-    if request.method == 'POST':
-        try:
-            json_data = json.loads(request.body)
-        except json.JSONDecodeError as e:
-            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
-    else:
-        # 假如前端沒送正確Json就使用file
-        json_file_path = "user_data_house_perday.json"
-        if not os.path.exists(json_file_path):
-            return JsonResponse({"error": "File does not exist"}, status=400)
-        elif os.path.getsize(json_file_path) == 0:
-            return JsonResponse({"error": "File is empty"}, status=400)
-        else:
-            with open(json_file_path, "r", encoding="utf-8") as json_file:
-                json_data = json.load(json_file)
+                elif case == 'Smartlyly':
+                    #json_file_path = "suggest_user_data.json"
+                    json_data = json_data
 
+                # try:
+                #     # Check if "user_data.json" file exists      
+                #     if not os.path.exists(json_file_path):
+                #         return JsonResponse({"error": "File does not exist"}, status=400)
+                #     else:
+                #         print(json_file_path,'file exist.')
 
-    # Check if the request contains JSON data
-    if request.method == 'POST':
-        try:
-            json_data = json.loads(request.body)
-        except json.JSONDecodeError as e:
-            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
-    else:
-        # 假如前端沒送正確Json就使用file
-        json_file_path = "user_data_house_perday.json"
-        if not os.path.exists(json_file_path):
-            return JsonResponse({"error": "File does not exist"}, status=400)
-        elif os.path.getsize(json_file_path) == 0:
-            return JsonResponse({"error": "File is empty"}, status=400)
-        else:
-            with open(json_file_path, "r", encoding="utf-8") as json_file:
-                json_data = json.load(json_file)
+                #     # Check if "user_data.json" file is empty
+                #     if os.path.getsize(json_file_path) == 0:
+                #         return JsonResponse({"error": "File is empty"}, status=400)
+                #     # else:
+                #     #     print(json_file_path,'file is not empty.')
 
-    for case in cases:
-        if case == 'Reality':
-            json_file_path = "user_data_house_perday.json"
+                #     # Read JSON data from the "user_data.json" file
+                #     with open(json_file_path, "r", encoding="utf-8") as json_file:
+                #         json_data = json.load(json_file)
+                #     #    print(json_data)
 
-        elif case == 'Smartlyly':
-            json_file_path = "suggest_user_data.json"
+                tables = ["c2_rates", "c3_rates", "summer_c2_rates", "summer_c3_rates"]
+                usage_data={}
+                usage_list={}
+                user_id = json_data['id']
+                cal_time = round(datetime.now().timestamp())
 
-        try:
-            # Check if "user_data.json" file exists      
-            if not os.path.exists(json_file_path):
-                return JsonResponse({"error": "File does not exist"}, status=400)
-            else:
-                print(json_file_path,'file exist.')
-
-            # Check if "user_data.json" file is empty
-            if os.path.getsize(json_file_path) == 0:
-                return JsonResponse({"error": "File is empty"}, status=400)
-            # else:
-            #     print(json_file_path,'file is not empty.')
-
-            # Read JSON data from the "user_data.json" file
-            with open(json_file_path, "r", encoding="utf-8") as json_file:
-                json_data = json.load(json_file)
-            #    print(json_data)
-
-            tables = ["c2_rates", "c3_rates", "summer_c2_rates", "summer_c3_rates"]
-            usage_data={}
-            usage_list={}
-            user_id = json_data['id']
-            cal_time = round(datetime.now().timestamp())
-
-            for table in tables:
-                electricity, electricity_cost, wend_cost = calculate_electricity_cost(json_data, 'db.sqlite3', table)
-                monthly_consumption, monthly_costs = monthly_usage(electricity, electricity_cost, wend_cost)
-                
-                match table:
-                    case 'c2_rates':
-                        pricing = 'TwoTier'
-                    case 'c3_rates':
-                        pricing = 'ThreeTier'
-                    case 'summer_c2_rates':
-                        pricing = 'TwoTierSummer'                    
-                    case 'summer_c3_rates':
-                        pricing = 'ThreeTierSummer'                    
+                for table in tables:
+                    electricity, electricity_cost, wend_cost = calculate_electricity_cost(json_data, 'db.sqlite3', table)
+                    monthly_consumption, monthly_costs = monthly_usage(electricity, electricity_cost, wend_cost)
                     
-                if electricity_cost is not None:
-                    #print(f"\nTable: {table}")
-                    #print(f"單日用電約: {electricity:.2f} kWh; 單日電費約 {electricity_cost:.2f} 元; 週末電費約 {wend_cost:.2f} 元")
-                    #print(f'月估用電約: {monthly_consumption:.2f} 度; 月電費約 {monthly_costs:.2f} 元')
-                    #print(f'使用表燈累進式費率, 月電費約 2469 元')
-                                # Prepare the response data
-                    electricity = round(electricity,2)
-                    electricity_cost = round(electricity_cost,2)
-                    wend_cost = round(wend_cost,2)
-                    monthly_consumption = round(monthly_consumption,2)
-                    monthly_costs =round(monthly_costs,2)
+                    match table:
+                        case 'c2_rates':
+                            pricing = 'TwoTier'
+                        case 'c3_rates':
+                            pricing = 'ThreeTier'
+                        case 'summer_c2_rates':
+                            pricing = 'TwoTierSummer'                    
+                        case 'summer_c3_rates':
+                            pricing = 'ThreeTierSummer'                    
+                        
+                    if electricity_cost is not None:
+                        #print(f"\nTable: {table}")
+                        #print(f"單日用電約: {electricity:.2f} kWh; 單日電費約 {electricity_cost:.2f} 元; 週末電費約 {wend_cost:.2f} 元")
+                        #print(f'月估用電約: {monthly_consumption:.2f} 度; 月電費約 {monthly_costs:.2f} 元')
+                        #print(f'使用表燈累進式費率, 月電費約 2469 元')
+                                    # Prepare the response data
+                        electricity = round(electricity,2)
+                        electricity_cost = round(electricity_cost,2)
+                        wend_cost = round(wend_cost,2)
+                        monthly_consumption = round(monthly_consumption,2)
+                        monthly_costs =round(monthly_costs,2)
 
-                    usage_data[pricing] = {
-                        "DailyCost": electricity_cost,
-                        "WeekendCost": wend_cost,
-                        "MonthlyCost": monthly_costs,
-                    }
-                    #usage_list.append(usage_data)
+                        usage_data[pricing] = {
+                            "DailyCost": electricity_cost,
+                            "WeekendCost": wend_cost,
+                            "MonthlyCost": monthly_costs,
+                        }
+                        #usage_list.append(usage_data)
 
-                else:
-                    #print(f"Unable to calculate electricity cost for {table}.")
-                    return JsonResponse({"error": str(e)}, status=400)
-                
-            #calculte cdf of monthly elec consumption    
-            elec_cdf = elec2cdf (monthly_consumption)    
-            case_usage[case]={
-                "MonthlyElectricity":monthly_consumption,
-                "MonthlyCarbonEmission": elec_cdf,
-                "Priciing":usage_data}
-                
+                    else:
+                        #print(f"Unable to calculate electricity cost for {table}.")
+                        return JsonResponse({"error": str(e)}, status=400)
+                    
+                #calculte cdf of monthly elec consumption    
+                elec_cdf = elec2cdf (monthly_consumption)    
+                case_usage[case]={
+                    "MonthlyElectricity":monthly_consumption,
+                    "MonthlyCarbonEmission": elec_cdf,
+                    "Priciing":usage_data}
+
+            response_data ={
+            "Source": user_id,
+            "EntryTime": cal_time,
+            "DailyElectricity": electricity,
+            # "Monthly-Electricity": monthly_consumption,
+            # "Monthly-Carbon-Emission": elec_cdf,
+            "case": case_usage,
+            }
+
+            return JsonResponse(response_data, status=200)
+
+        except json.JSONDecodeError as e:
+            return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
+    
+    else:
+        return JsonResponse({"error": "Invalid init JSON data in the request"}, status=400)
+    # else:
+    #     # 假如前端沒送正確Json就使用file
+    #     json_file_path = "user_data_house_perday.json"
+    #     if not os.path.exists(json_file_path):
+    #         return JsonResponse({"error": "File does not exist"}, status=400)
+    #     elif os.path.getsize(json_file_path) == 0:
+    #         return JsonResponse({"error": "File is empty"}, status=400)
+    #     else:
+    #         with open(json_file_path, "r", encoding="utf-8") as json_file:
+    #             json_data = json.load(json_file)
+
+            
 
 
-        except Exception as e:
-            print("An error occurred:", str(e))
-            return JsonResponse({"error orrurs": str(e)}, status=400)
+        # except Exception as e:
+        #     print("An error occurred:", str(e))
+        #     return JsonResponse({"error orrurs": str(e)}, status=400)
         
-    response_data ={
-    "Source": user_id,
-    "EntryTime": cal_time,
-    "DailyElectricity": electricity,
-    # "Monthly-Electricity": monthly_consumption,
-    # "Monthly-Carbon-Emission": elec_cdf,
-    "case": case_usage,
-    }
-
-    return JsonResponse(response_data, status=200)
 
 
 

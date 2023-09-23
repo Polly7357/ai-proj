@@ -19,3 +19,4 @@ sqlparse==0.4.4
 tzdata==2023.3
 line-bot-sdk==3.5.0
 django-extensions==3.2.3
+django-cors-headers==4.2.0

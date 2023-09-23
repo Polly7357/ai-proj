@@ -138,7 +138,7 @@ resetButton.addEventListener("click", () => {
 
 
 
-<script>
+{% comment %} <script>
 axios.post('https://your-api-endpoint.com/your-resource', {
     columnName1: 'value1',
     columnName2: 'value2',
@@ -150,7 +150,7 @@ axios.post('https://your-api-endpoint.com/your-resource', {
 .catch(function (error) {
     console.error('請求錯誤:', error);
 });
-</script>
+</script> {% endcomment %}
 </body>
 </html>
 {% block js_script %}{% endblock %}

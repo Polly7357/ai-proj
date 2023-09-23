@@ -247,7 +247,14 @@
 </script>
 
 
+
+
+<!-- index3 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 <script>
+    
     axios.get('http://127.0.0.1:8000/api/power/')
     .then((res)=>{
         console.log(res.data)
@@ -270,13 +277,6 @@
     .catch((error)=>{
 
     })
-</script>
-
-<!-- index3 -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
-<script>
     document.addEventListener('DOMContentLoaded', function () {
         // 创建并渲染长条图表
         const ctx = document.getElementById('carbonBarChart').getContext('2d');
@@ -316,6 +316,7 @@
         function updateChart(type) {
             axios.get('http://127.0.0.1:8000/api/power/')
                 .then((res) => {
+                    
                     let values = [];
                     let labels = [];
 
@@ -396,37 +397,68 @@
         updateChart('initial');
 
 
-        //$(`#packageButton2`).click(function (e){
-            //e.preventDefault();
+        $(`#packageButton2`).click(function (e){
+            e.preventDefault();
 
             // 讀值
-            //let starttime = $(`#startTimeInput`).val();
-            //let endtime = $(`#endTimeInput`).val();
+            let devicename = $('#applianceSelect').find(":selected").val();
+            let starttime = $(`#startTimeInput`).val();
+            let endtime = $(`#endTimeInput`).val();
 
-            //console.log("讀取:");
-            //console.log(starttime, endtime);
+            console.log("讀取:");
+            console.log(devicename,starttime, endtime);
 
             // 定義傳輸地址跟資料
-            //let url = "http://127.0.0.1:8000/api/power/";
-            //const params = new URLSearchParams();
-            //params.append('start', starttime);
-            //params.append('end', endtime);
+            let url = "http://127.0.0.1:8000/api/power/";
 
-           // axios.post(url, params)
-                //.then(function(res){
+
+            /**
+            const params = new URLSearchParams();
+            params.append('namedevice', devicename);
+            params.append('start', starttime);
+            params.append('end', endtime);
+
+            console.log('params:', params);
+
+            axios.post(url, params)
+                .then(function(res){
                     // DOM 操作
                     //$(`#startTimeInput`).val(res.data.param2);
                     //$(`#endTimeInput`).val(res.data.param1);
+                    console.log('成功');
 
-                //})
-                //.catch(function(e){
-                    //console.log(e);
-                //})
+                })
+                .catch(function(e){
+                    console.log(e);
+                })
+            */
 
+            let data = JSON.stringify({
+                id: "MAC address",
+                date: "2023-09-10",
+                usage: [{
+                    device_name: "洗衣機",
+                    start_hour: starttime,
+                    end_hour: endtime,  
+                }]
+            })
 
-        //});
+            axios({
+                method: 'post',
+                url: url,
+                data: data,
+                })
+                .then((res)=>{
+                    console.log(res);
+
+                })
+                .catch((e)=>{
+
+                });
+
+        });
     });
-</script>
 
+</script>
 
 {% endblock %}
