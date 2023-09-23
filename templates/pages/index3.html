@@ -183,7 +183,6 @@
 <!-- index3 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -363,11 +362,36 @@
 
         $(`#packageButton2`).click(function (e){
             e.preventDefault();
-
+            
             // 讀值
-            let devicename = $('#applianceSelect').find(":selected").val();
+            let devicename = $('#applianceSelect').find(":selected").text();
             let starttime = $(`#startTimeInput`).val();
             let endtime = $(`#endTimeInput`).val();
+
+
+            if(endtime < starttime){
+                Swal.fire({
+                    title: '時間設定錯誤!',
+                    text: '起始時間需要小於結束時間',
+                    icon: 'error',
+                    confirmButtonText: '確認'
+                });
+
+                return false;
+            }
+
+
+            if(starttime >= 24 || endtime >= 24){
+                Swal.fire({
+                    title: '時間設定錯誤!',
+                    text: '起始時間或結束時間不得超過 24 小時',
+                    icon: 'error',
+                    confirmButtonText: '確認'
+                });
+
+                return false;
+
+            }
 
             // console.log("讀取:");
             // console.log(devicename,starttime, endtime);
@@ -401,7 +425,7 @@
                 id: "MAC address",
                 date: "2023-09-10",
                 usage: [{
-                    device_name: "洗衣機",
+                    device_name: devicename,
                     start_hour: starttime,
                     end_hour: endtime,  
                 }]
