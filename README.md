@@ -1,12 +1,10 @@
-<a href="http://www.djangoproject.com/"><img src="https://www.djangoproject.com/m/img/badges/djangoproject120x25.gif" border="0" alt="A Django project." title="A Django project." /></a>![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white) ![Python](https://img.shields.io/badge/Python-3.8-blue)
+<a href="http://www.djangoproject.com/"><img src="https://www.djangoproject.com/m/img/badges/djangoproject120x25.gif" border="0" alt="A Django project." title="A Django project." /></a>![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)  ![Python](https://img.shields.io/badge/Python-3.9-blue)  ![Ubuntu](https://img.shields.io/badge/Ubuntu_Server_LTS-22.04-orange)  [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-<div style="text-align:center"><img src="./home_page.jpg" alt="pic" width="500"/>
-</div>
-# ai-proj
+<div style="text-align:center"><img src="./home_page.jpg" alt="pic" width="500"/></div>
 
-**License: MIT**
+# 一碳究竟
 
-  This project is licensed under the terms of the [MIT](https://github.com/Polly7357/ai-proj/blob/master/LICENSE) LICENSE
+This project is licensed under the terms of the [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)]([https://opensource.org/licenses/MIT](https://github.com/Polly7357/ai-proj/blob/master/LICENSE))
 
 **Contact Information**
 ---
@@ -32,16 +30,16 @@ For more details, please refer to our [Contributing Guidelines](link-to-contribu
 **Version 0.1.0 (2023/09/20)**
 
 
+## Content: ##
 ### 1. Electricity Usage Estimation
 
-**Content:**
-+ This section allows users to input information about their household appliances and calculates daily electricity consumption, monthly electricity usage, and estimates electricity costs based on different pricing structures.
+This section allows users to input information about their household appliances and calculates daily electricity consumption, monthly electricity usage, and estimates electricity costs based on different pricing structures.
 
-#### 1.1. Input Household Appliances
-  Users can input details about their household appliances, including power consumption in watts (W) and daily usage hours.
+  #### 1.1. Input Household Appliances
+>Users can input details about their household appliances, including power consumption in watts (W) and daily usage hours.
 
 #### 1.2. Daily and Monthly Electricity Consumption
-  The function calculates the daily and monthly electricity consumption based on the user's input.
+>The function calculates the daily and monthly electricity consumption based on the user's input.
 
 #### 1.3. Time-of-Use Pricing Estimates
 - **Two-Tier Pricing**: Calculate estimated electricity costs based on a two-tier pricing structure.
@@ -51,8 +49,8 @@ For more details, please refer to our [Contributing Guidelines](link-to-contribu
 
  #### 1.4. Progressive Pricing Estimates
 - **Input Bill Expense**: Users can input their electricity bill amount to understand their monthly electricity consumption.
- ```http
- /api/power/accu_usage/?total_expense=
+ ```js
+ /api/power/accu_usage/?total_expense=xxx
 ```
 
 | Parameter | Type     | Description                       |
@@ -60,7 +58,7 @@ For more details, please refer to our [Contributing Guidelines](link-to-contribu
 | `total_expense`      | `string` | **Required**. total_expense of electricity bill |
 
 - **Input desired electricity usage**: Users can input their electricity usage to estimate their electricity costs.
-```http
+```js
  /api/power/accu_cost/?usage=xxx
 ```
 
