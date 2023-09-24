@@ -1,16 +1,16 @@
 <a href="http://www.djangoproject.com/"><img src="https://www.djangoproject.com/m/img/badges/djangoproject120x25.gif" border="0" alt="A Django project." title="A Django project." /></a>![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)  ![Python](https://img.shields.io/badge/Python-3.9-blue)  ![Ubuntu](https://img.shields.io/badge/Ubuntu_Server_LTS-22.04-orange)  [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-# Welcom to the Carbon Quest page! 一碳究竟
-<div style="text-align:center"><img src="./home_page.jpg" alt="pic" width="500"/></div>
+# :atom:Welcom to the Carbon Quest page! 一碳究竟:eyes:
+<p align="center">
+  <img src="./home_page.jpg" alt="pic" width="400" />
+</p>
+
 
 
 
 This project is licensed under the terms of the [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)]([https://opensource.org/licenses/MIT](https://github.com/Polly7357/ai-proj/blob/master/LICENSE))
 
-**Contact Information**
----
 
-  You can reach out to the project maintainer through https://polly7357.github.io/
-
+## Contributing:seedling:
 We welcome contributions to this project. To contribute, follow these guidelines:
 
 1. Fork the project repository.
@@ -18,7 +18,6 @@ We welcome contributions to this project. To contribute, follow these guidelines
 3. Make your changes and commit them.
 4. Submit a pull request, explaining the purpose of your changes.
 
-For more details, please refer to our [Contributing Guidelines](link-to-contributing-guidelines).
 
 **Changelog**
 ---
@@ -30,10 +29,10 @@ For more details, please refer to our [Contributing Guidelines](link-to-contribu
 **Version 0.1.0 (2023/09/20)**
 
 
-## Content: ##
-### 1. Electricity Usage Estimation
+## Key Features: ##
+### 1. Electricity Usage Estimation:zap:
 
-This section allows users to input information about their household appliances and calculates daily electricity consumption, monthly electricity usage, and estimates electricity costs based on different pricing structures.
+   This section allows users to input information about their household appliances and calculates daily electricity consumption, monthly electricity usage, and estimates electricity costs based on different pricing structures.
 
   #### 1.1. Input Household Appliances
 >Users can input details about their household appliances, including power consumption in watts (W) and daily usage hours.
@@ -66,10 +65,10 @@ This section allows users to input information about their household appliances 
 | :-------- | :------- | :-------------------------------- |
 | `usage`      | `string` | **Required**. Desired electricity consumption |
 
-#### 1.5. Energy Saving Recommendations
+#### 1.5. Energy Saving Recommendations:chart_with_upwards_trend:
 Provide energy-saving recommendations based on the user's electricity usage and pricing options. These recommendations can help users evaluate the best pricing structure for their needs.
 
-### 2. Carbon Footprint Estimation
+### 2. Carbon Footprint Estimation:footprints:
 
 **Content:**
 This section allows users to input information about their daily consumption of various goods and services (food, clothing, housing, transportation) to estimate their carbon footprint (CDE - Carbon Dioxide Equivalent).
@@ -100,10 +99,39 @@ This section discusses the real-time collection of AIoT (Artificial Intelligence
 >#### 4.3. Data Storage
 - cloud sorage
 
-### 5. System Environment
+## 5. Installation Manuel:page_with_curl:
+  ### 5.1. Minimum Installation Requirements
+
+Before running this project, please ensure that your computer meets the following minimum installation requirements:
+
+- **Operating System:** Windows 10, macOS Big Sur, or Ubuntu 20.04 LTS (or higher).
+- **Processor:** Intel Core i5 or higher.
+- **Memory (RAM):** 8GB or more.
+- **Storage Space:** At least 20GB of available space.
+- **Python Version:** Python 3.7+.
+- **Other Dependencies:** Please refer to our [requirements.txt](./requirements.txt) file for a list of additional dependencies.
+
+#### Sample Configuration
+
+- **Operating System:** Windows 10
+- **Processor:** Intel Core i7
+- **Memory (RAM):** 16GB
+- **Storage Space:** 256GB SSD
+- **Python Version:** Python 3.8
+
+#### Notes
+
+- Ensure that the required Python version is installed and use `pip` to install all project dependencies.
+- This project requires an internet connection to fetch data.
+
+#### Relevant Links
+
+- [Python Download Page](https://www.python.org/downloads/)
+- [Project Dependencies](./requirements.txt)
 
 
-### 5. Installation
+
+### 5.2 Installation	:computer:
 **Content:**
 >1. Download the entire package by executing the command `git clone git@github.com:Polly7357/ai-proj.git`
 
@@ -115,3 +143,10 @@ This section discusses the real-time collection of AIoT (Artificial Intelligence
 > `python manage.py runserver`
 
 
+
+**Contact Information:envelope_with_arrow:**
+---
+  You can reach out to the project maintainer through https://polly7357.github.io/
+
+### Support the Project:star_struck:
+If you find this project useful, consider supporting my project by donation a STAR:star2:.
