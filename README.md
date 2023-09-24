@@ -1,8 +1,8 @@
 <a href="http://www.djangoproject.com/"><img src="https://www.djangoproject.com/m/img/badges/djangoproject120x25.gif" border="0" alt="A Django project." title="A Django project." /></a>![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)  ![Python](https://img.shields.io/badge/Python-3.9-blue)  ![Ubuntu](https://img.shields.io/badge/Ubuntu_Server_LTS-22.04-orange)  [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-
+# Welcom to the Carbon Quest page! 一碳究竟
 <div style="text-align:center"><img src="./home_page.jpg" alt="pic" width="500"/></div>
 
-# 一碳究竟
+
 
 This project is licensed under the terms of the [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)]([https://opensource.org/licenses/MIT](https://github.com/Polly7357/ai-proj/blob/master/LICENSE))
 
