@@ -35,7 +35,7 @@ For more details, please refer to our [Contributing Guidelines](link-to-contribu
 
 This section allows users to input information about their household appliances and calculates daily electricity consumption, monthly electricity usage, and estimates electricity costs based on different pricing structures.
 
-#### 1.1. Input Household Appliances
+  #### 1.1. Input Household Appliances
 >Users can input details about their household appliances, including power consumption in watts (W) and daily usage hours.
 
 #### 1.2. Daily and Monthly Electricity Consumption
