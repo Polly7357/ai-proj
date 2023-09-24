@@ -133,7 +133,7 @@ def calculate_electricity_cost_view(request):
             return JsonResponse({"error": "Invalid JSON data in the request"}, status=400)
     
     else:
-        return JsonResponse({"error": "Invalid init JSON data in the request"}, status=400)
+        return JsonResponse({"error": "Invalid init JSON data in the request, 請確認傳入資料格式."}, status=400)
     # else:
     #     # 假如前端沒送正確Json就使用file
     #     json_file_path = "user_data_house_perday.json"
@@ -416,12 +416,12 @@ def calculate_cde_View(request):
     }
     '''
 
-
-    parsed_data = json.loads(data)
-
     if request.method == 'POST':
+        parsed_data = json.loads(request.body)
+    else:
+        parsed_data = json.loads(data)
         try:
-            parsed_data = json.loads(request.body)
+           
 
             total_cde_beverage = 0
             total_cde_cde_transport = 0
