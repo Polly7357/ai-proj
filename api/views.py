@@ -481,7 +481,8 @@ def calculate_cde_View(request):
             return JsonResponse(response_data)
         except:
             return JsonResponse({'error':  'check format in the request.'}, status=400)
-    else:
+    elif request.method == 'GET':  # 無傳值的例外處理
+        return JsonResponse({'message': 'This is a GET request. To calculate CDE, send a POST request with JSON data.'})
         parsed_data = json.loads(data)
 
 
