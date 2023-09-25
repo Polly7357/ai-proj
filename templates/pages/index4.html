@@ -7,58 +7,98 @@
 {% endblock %}
 
 {% block content %}
-<div style="display: flex;">
-    <div style="flex: 1;">
-        <hr>
-        <br>device01:
-        <div>
-            <label for="name">設備名稱:</label>
-            <input type="text" id="name" readonly value="">
-        </div>
 
-        <div>
-            <label for="MAC">設備地址:</label>
-            <input type="text" id="MAC" readonly value="">
-        </div>
-        
-        <div>
-            <label for="power_usage01">實時用電資訊:</label>
-            <input type="text" id="power_usage01" readonly value="">
-        </div>
+<div style="height: 20px;"></div>
+<hr>
+<div style="height: 30px;"></div>
+<div class="row">
+    <div class="col-md-4">
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div style="flex: 1; padding: 10px; ">
+                <label for="unitInput" style="font-size: 26px; font-weight: bold; " class="text-primary">設備一號</label>
+                <hr>
+                <div>
+                    <label for="name">裝置設備名稱:</label>
+                    <input type="text" id="name" readonly value="">
+                </div>
+                
+                <div style="height: 10px;"></div>
 
-        <div>
-            <label for="avg_usage01">平均用電資訊:</label>
-            <input type="text" id="avg_usage01" readonly value="">
-        </div>
+                <div>
+                    <label for="MAC">裝置設備地址:</label>
+                    <input type="text" id="MAC" readonly value="" >
+                </div>
+                
+                <div style="height: 10px;"></div>
 
-        <br>  device02:
+                <div>
+                    <label for="power_usage01">即時用電資訊:</label>
+                    <input type="text" id="power_usage01" readonly value="" >
+                </div>
+    
+                <div style="height: 10px;"></div>
 
-        <div>
-            <label for="ThreeTierSummer">設備名稱:</label>
-            <input type="text" id="name2" readonly value="">
-        </div>
+                <div>
+                    <label for="avg_usage01">平均用電資訊:</label>
+                    <input type="text" id="avg_usage01" readonly value="">
+                </div>
+                <div style="height: 20px;"></div>
+                <label for="unitInput" style="font-size: 26px; font-weight: bold;" class="text-primary">設備二號</label>
+                <hr>
+    
+                <div>
+                    <label for="ThreeTierSummer">裝置設備名稱:</label>
+                    <input type="text" id="name2" readonly value="" >
+                </div>
+    
+                <div style="height: 10px;"></div>
 
-        <div>
-            <label for="ThreeTierSummer">設備地址:</label>
-            <input type="text" id="MAC2" readonly value="">
-        </div>
+                <div>
+                    <label for="ThreeTierSummer">裝置設備地址:</label>
+                    <input type="text" id="MAC2" readonly value="">
+                </div>
+    
+                <div style="height: 10px;"></div>
 
-        <div>
-            <label for="ThreeTierSummer">實時用電資訊:</label>
-            <input type="text" id="power_usage02" readonly value="">
-        </div>
-        
-        <div>
-            <label for="TwoTier">平均用電資訊:</label>
-            <input type="text" id="avg_usage02" readonly value="">
+                <div>
+                    <label for="ThreeTierSummer">即時用電資訊:</label>
+                    <input type="text" id="power_usage02" readonly value="">
+                </div>
+                
+                <div style="height: 10px;"></div>
+
+                <div>
+                    <label for="TwoTier">平均用電資訊:</label>
+                    <input type="text" id="avg_usage02" readonly value="">
+                </div>
+            </div>
         </div>
     </div>
+    <div class="col-md-8">
+        <label style="font-size: 26px; font-weight: bold; flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; color : #A78A7F" >智慧電表即時用電資訊</label>
 
-    <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+        <div style="height: 15px;"></div>
+
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center;">
         <canvas id="powerChart" width="400" height="200"></canvas>
-        <button id="powerUsage01Button">Power Usage 01</button>
-        <button id="powerUsage02Button">Power Usage 02</button>
+
+        <div style="height: 10px;"></div>
+        
+        <style>
+
+            .button-container button {
+                margin-right: 40px; /* 右邊間距為20像素 */
+            }
+        </style>
+        <div class="button-container">
+            <button id="powerUsage01Button" class="btn btn-outline-secondary">設備一號按鈕</button>
+            <button id="powerUsage02Button" class="btn btn-outline-secondary">設備二號按鈕</button>
+            <button id="resetButton" class="btn btn-outline-secondary">重置圖表</button>
+        </div>
+        </div>
     </div>
+    
+    
 {% endblock %}
 
 {% block js_script %}
@@ -73,21 +113,19 @@
     const powerChart = new Chart(ctx, {
         type: 'line', // 使用折线图
         data: {
-            labels: [],
+            labels: [], // 橫軸顯示時間單位
             datasets: [
                 {
-                    label: '',
-                    data: initialData,
+                    label: '平均用電',
+                    data: initialData, // 縱軸顯示用電單位
                     borderColor: 'blue',
                     borderWidth: 1,
-                    fill: false
                 },
                 {
-                    label: '',
-                    data: initialData2, // 这里使用相同的数据集，您可以替换为不同的数据集
+                    label: '實際用電',
+                    data: initialData2, // 縱軸顯示用電單位
                     borderColor: '#FF0000',
                     borderWidth: 1,
-                    fill: false
                 }
             ]
         },
@@ -98,10 +136,18 @@
             scales: {
                 x: {
                     type: 'linear',
-                    position: 'bottom'
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: '時間單位' // 縱軸顯示用電單位
+                    }
                 },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: '用電單位' // 縱軸顯示用電單位
+                    }
                 }
             },
             plugins: {
@@ -142,20 +188,41 @@
 
     // 数据点 - Power Usage 01
     const powerUsage01Data = [4.37,4.37,0,4.43,4.43,4.43,4.43,4.43,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.3,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.21,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.35,4.22,4.22,4.22,4.22,4.22,4.22,4.22,4.22,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.13,4.13,4.13,4.13,4.13,4.13,4.13,4.59];
-    
-    // 数据点 - Power Usage 02
-    const powerUsage02Data = [489, 489, 489, 489, 994, 501, 501, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 537, 537, 537, 537, 537, 537, 537, 537, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333];
 
-    // 按钮点击事件处理函数 - Power Usage 01
-    document.getElementById('powerUsage01Button').addEventListener('click', function() {
-        // 清空当前折线图数据
+    // 数据点 - Power Usage 02
+    const powerUsage02Data = [489, 489, 489, 489, 994, 501, 501, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 504, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 537, 537, 537, 537, 537, 537, 537, 537, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333, 1333];
+
+// 定義全局變量 intervalId 用於存儲數據更新的定時器 ID
+let intervalId = null;
+// 定義變數來表示是否允許生成新數據
+let allowDataGeneration = true;
+
+// 重置按鈕事件處理程序
+document.getElementById('resetButton').addEventListener('click', function() {
+    // 停止任何正在運行的數據更新
+    clearInterval(intervalId);
+
+    if (allowDataGeneration) {
+        // 清空圖表數據
         powerChart.data.labels = [];
         powerChart.data.datasets[0].data = [];
         powerChart.data.datasets[1].data = [];
         powerChart.update();
 
+        // 重置數據索引
+        currentIndex = 0;
+    }
+});
+
+// 按钮点击事件处理函数 - Power Usage 01
+document.getElementById('powerUsage01Button').addEventListener('click', function() {
+    // 如果允许生成新数据，执行以下操作
+    if (allowDataGeneration) {
+        // 先重置圖表
+        document.getElementById('resetButton').click();
+
         // 每秒添加一个Power Usage 01 数据点，直到添加完所有数据点
-        const intervalId = setInterval(function() {
+        intervalId = setInterval(function() {
             if (currentIndex < powerUsage01Data.length) {
                 const powerUsage01Value = powerUsage01Data[currentIndex];
 
@@ -168,27 +235,27 @@
 
                 powerChart.update();
 
-                // 如果已添加所有数据点，停止定时器
+                // 如果已添加所有数据点，停止定时器，并禁止生成新数据
                 if (currentIndex === powerUsage01Data.length - 1) {
                     clearInterval(intervalId);
+                    allowDataGeneration = false;
                 }
 
                 currentIndex++;
             }
-        }, 400);
-    });
+        }, 100);
+    }
+});
 
-    // 按钮点击事件处理函数 - Power Usage 02
-    document.getElementById('powerUsage02Button').addEventListener('click', function() {
-        // 清空当前折线图数据
-        powerChart.data.labels = [];
-        powerChart.data.datasets[0].data = [];
-        powerChart.data.datasets[1].data = [];
-        powerChart.update();
+// 按钮点击事件处理函数 - Power Usage 02
+document.getElementById('powerUsage02Button').addEventListener('click', function() {
+    // 如果允许生成新数据，执行以下操作
+    if (allowDataGeneration) {
+        // 先重置圖表
+        document.getElementById('resetButton').click();
 
-        
         // 每秒添加一个Power Usage 02 数据点，直到添加完所有数据点
-        const intervalId = setInterval(function() {
+        intervalId = setInterval(function() {
             if (currentIndex < powerUsage02Data.length) {
                 const powerUsage02Value = powerUsage02Data[currentIndex];
 
@@ -201,15 +268,17 @@
 
                 powerChart.update();
 
-                // 如果已添加所有数据点，停止定时器
+                // 如果已添加所有数据点，停止定时器，并禁止生成新数据
                 if (currentIndex === powerUsage02Data.length - 1) {
                     clearInterval(intervalId);
+                    allowDataGeneration = false;
                 }
 
                 currentIndex++;
             }
-        }, 400);
-    });
+        }, 100);
+    }
+});
 </script>
 <script>
     axios.get('http://127.0.0.1:8000/api/smart_plug/')
