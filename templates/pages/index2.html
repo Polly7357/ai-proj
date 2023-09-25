@@ -488,14 +488,17 @@
       })*/
 
       let data1 = JSON.stringify({
-        "beverage": {
-          "瓶裝水(600ml，PET包裝)": 2,
-          "可樂(寶特瓶裝，600ml)": 20,
-          "奶茶（300ml，鋁箔包裝）": 2,
-          "經典台灣啤酒，330 ml (6罐裝，收縮膜)": 20
+        [itemoption]: {
+          [itemSelect]: unitInput,
+          "可樂(寶特瓶裝，600ml)": "20",
+          "奶茶（300ml，鋁箔包裝）": "2",
+          "經典台灣啤酒，330 ml (6罐裝，收縮膜)": "20"
           },
         "cde_transport": {
           "機器腳踏車": 20
+          },
+        "cde_transport": {
+          "機器腳踏車": 30
           }
        })
        console.log(data1)

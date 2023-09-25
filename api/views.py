@@ -431,7 +431,7 @@ def calculate_cde_View(request):
                 beverage_obj = Beverage.objects.filter(name=item_name).first()
                 if beverage_obj:
                     #print(f"Found matching item in 'cde_transport': {item_name}")
-                    total_cde_beverage += beverage_obj.cde * quantity
+                    total_cde_beverage += beverage_obj.cde * int(quantity)
                 else:
                     print(f"Item not found in 'beverage': {item_name}")
 
@@ -445,7 +445,7 @@ def calculate_cde_View(request):
                 cde_transport_obj = CdeTransport.objects.filter(name__iexact=item_name.replace(" ", "")).first()
                 if cde_transport_obj:
                     #print(f"Found matching item in 'cde_transport': {item_name}")
-                    total_cde_cde_transport += cde_transport_obj.cde * quantity
+                    total_cde_cde_transport += cde_transport_obj.cde * int(quantity)
                 else:
                     print(f"Item not found in 'cde_transport': {item_name}")
                     #all_cde_transport_names = CdeTransport.objects.values_list('name', flat=True)
@@ -456,7 +456,7 @@ def calculate_cde_View(request):
                 lactose_prods_obj = LactoseProds.objects.filter(name=item_name).first()
                 if lactose_prods_obj:
                     #print(f"Found matching item in 'beverage': {item_name}")
-                    total_cde_lactose_prods += lactose_prods_obj.cde * quantity
+                    total_cde_lactose_prods += lactose_prods_obj.cde * int(quantity)
                 else:
                     print(f"Item not found in 'lactose_prods': {item_name}")
 
@@ -465,7 +465,7 @@ def calculate_cde_View(request):
                 energy_obj = Energy.objects.filter(name=item_name).first()
                 if energy_obj:
                     #print(f"Found matching item in 'beverage': {item_name}")
-                    total_cde_energy += energy_obj.cde * quantity
+                    total_cde_energy += energy_obj.cde * int(quantity)
                 else:
                     print(f"Item not found in 'energy': {item_name}")
 
