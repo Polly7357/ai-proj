@@ -392,6 +392,7 @@ from mainsite.models import Beverage, CdeTransport, LactoseProds, Energy
 
 # 計算消費品碳當量
 # api/cde/
+@csrf_exempt
 def calculate_cde_View(request):
 
     # Provided JSON data
@@ -417,12 +418,9 @@ def calculate_cde_View(request):
     '''
 
     if request.method == 'POST':
-        parsed_data = json.loads(request.body)
-    else:
-        parsed_data = json.loads(data)
-        try:
-           
-
+        try: 
+            parsed_data = json.loads(request.body) #判斷 request 格式
+     
             total_cde_beverage = 0
             total_cde_cde_transport = 0
             total_cde_lactose_prods = 0
@@ -482,7 +480,10 @@ def calculate_cde_View(request):
             # Return the response as JSON
             return JsonResponse(response_data)
         except:
-            return JsonResponse({'error':  'check if something in the request.'}, status=400)
+            return JsonResponse({'error':  'check format in the request.'}, status=400)
+    else:
+        parsed_data = json.loads(data)
+
 
 from api.models import *
 

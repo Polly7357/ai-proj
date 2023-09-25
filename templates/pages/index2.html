@@ -63,10 +63,6 @@
                 <option value="beverage">綠茶（250ml，鋁箔包裝）</option>
                 <option value="beverage">綠茶（300ml，鋁箔包裝）</option>
                 <option value="beverage">高山烏龍茶(有烘培-部分發酵)</option>
-                <option value="29">紅殼雞蛋</option>
-                <option value="29">茶葉蛋</option>
-                <option value="29">雞蛋</option>
-                <option value="29">鮮蛋</option>
                 <option value="cde_transport">自用大客車(柴油)</option>
                 <option value="cde_transport">自用大貨車(柴油) </option>
                 <option value="cde_transport">自用小客車(汽油) </option>
@@ -244,7 +240,7 @@
 
 
 <script>
-    axios.get('http://127.0.0.1:8000/api/cde/')
+    /*axios.get('http://127.0.0.1:8000/api/cde/')
     .then((res)=>{
         console.log(res.data)
         $(`#total_cde_beverage`).val(res.data.total_cde_beverage);
@@ -254,7 +250,7 @@
     })
     .catch((error)=>{
 
-    })
+    })*/
 </script>
 
 
@@ -302,9 +298,9 @@
                 carbonBarChart.update();
  
                 // 更新标签对应的输入框
-                //document.getElementById('total_cde_beverage').value = total_cde_beverage;
-                //document.getElementById('total_cde_cde_transport').value = total_cde_cde_transport;
-                document.getElementById('total_cde_energy').value = total_cde_energy;
+                document.getElementById('total_cde_beverage').value = total_cde_beverage;
+                document.getElementById('total_cde_cde_transport').value = total_cde_cde_transport;
+                //document.getElementById('total_cde_energy').value = total_cde_energy;
                 //document.getElementById('total_cde_lactose_prods').value = total_cde_lactose_prods;
             })
             .catch((error) => {
@@ -332,6 +328,7 @@
         const total_cde_cde_transport = res.data.total_cde_cde_transport;
         const total_cde_energy = res.data.total_cde_energy /30;
         const total_cde_lactose_prods = res.data.total_cde_lactose_prods;
+        
 
         // 創建一個新的資料結構，基於更新後的值
         const data_pie = {
@@ -442,5 +439,83 @@
             .style('transform', 'scale(1)')
         });
     };
+
+    $(`#packageButton`).click(function (e){
+      e.preventDefault();
+      
+      // 讀值
+      let itemoption =  $('#itemSelect').find(":selected").val();
+      let itemSelect = $('#itemSelect').find(":selected").text();
+      let unitInput = $(`#unitInput`).val();
+      let newItemText = itemSelect + ": " + unitInput;
+
+      console.log("讀取:");
+      console.log(itemSelect, unitInput, newItemText, itemoption);
+    
+      // 定義傳輸地址跟資料
+      let url = base_url + "api/cde/"; // http://127.0.0.1/api/power
+
+
+      /**
+      const params = new URLSearchParams();
+      params.append('namedevice', devicename);
+      params.append('start', starttime);
+      params.append('end', endtime);
+
+      console.log('params:', params);
+
+      axios.post(url, params)
+          .then(function(res){
+              // DOM 操作
+              //$(`#startTimeInput`).val(res.data.param2);
+              //$(`#endTimeInput`).val(res.data.param1);
+              console.log('成功');
+
+          })
+          .catch(function(e){
+              console.log(e);
+          })
+      */
+
+      /*let data = JSON.stringify({
+          id: "MAC address",
+          date: "2023-09-10",
+          usage: [{
+              device_name: devicename,
+              start_hour: starttime,
+              end_hour: endtime,  
+          }]
+      })*/
+
+      let data1 = JSON.stringify({
+        "beverage": {
+          "瓶裝水(600ml，PET包裝)": 2,
+          "可樂(寶特瓶裝，600ml)": 20,
+          "奶茶（300ml，鋁箔包裝）": 2,
+          "經典台灣啤酒，330 ml (6罐裝，收縮膜)": 20
+          },
+        "cde_transport": {
+          "機器腳踏車": 20
+          }
+       })
+       console.log(data1)
+      axios({
+          method: 'POST',
+          url: url,
+          data: data1,
+          })
+          
+          .then((res)=>{
+            console.log(res.data)
+            $(`#total_cde_beverage`).val(res.data.total_cde_beverage);
+            $(`#total_cde_cde_transport`).val(res.data.total_cde_cde_transport);
+            $(`#total_cde_energy`).val(res.data.total_cde_energy);
+            $(`#total_cde_lactose_prods`).val(res.data.total_cde_lactose_prods);
+          })
+          .catch((e)=>{
+              console.log(e);
+          });
+
+    });
   </script>
 {% endblock %}
