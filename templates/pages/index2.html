@@ -339,10 +339,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     // 在 "重置圓餅圖" 按鈕的點擊事件處理程序內執行以下操作
-    d3.select('.Draw').on('click', function () {
-      // 使用 D3.js 選擇 SVG 元素，然後將其清空以移除之前的圓餅圖
-      d3.select(".chartContainer").selectAll("svg").remove();
-  });
+
     $(`#packageButton`).click(function (e){
       e.preventDefault();
       
@@ -444,7 +441,7 @@
               "能源類": total_cde_energy,
               "乳製品": total_cde_lactose_prods
             };
-
+            d3.select(".chartContainer").selectAll("svg").remove();
             drawPie(data_pie); // 使用更新後的資料調用drawPie函數
           })
           .catch((e)=>{
