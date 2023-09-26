@@ -2,14 +2,18 @@
 
 {% block headmessage %}
     <div style="text-align: left;">
-        生活碳足跡計算
-    </div>
+    生活碳足跡計算
+</div>
 {% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-6">
-        <p> 日期：<input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px"> </p>
+        <div style="display: flex; align-items: center; margin-top: 10px;">
+            <label for="datepicker" style="font-weight: bold; margin-right: 10px;">日期:</label>
+            <input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px;">
+        </div>
+          
 
 
     </div>
@@ -21,7 +25,7 @@
 </div>
 
 <div>
-    <p>生活碳足跡</p>
+ 
     <p id="carbonFootprintDate"></p> <!-- 用于显示日期 -->
     <!-- 在这里添加生活碳足迹计算的内容 -->
 </div>
@@ -30,9 +34,9 @@
 
 <div style="display: flex; justify-content: space-between;">
     <!-- 左方区域 -->
-    <div style="flex: 1;">
-        <label for="applianceSelect">選擇電器:</label>
-        <select id="applianceSelect" name="applianceSelect">
+    <div style="flex: 1; margin-right: 80px;">
+        <label for="applianceSelect" style="font-size: 16px;">選擇電器:</label>
+        <select id="applianceSelect" name="applianceSelect" style="font-size: 18px; width: 250px;">
             <option value="1">電冰箱</option>
             <option value="2">電鍋</option>
             <option value="3">開飲機</option>
@@ -72,109 +76,339 @@
             <option value="37">變頻冷氣</option>
         </select>
         <br>
-        <label for="startTimeInput">開始時間:</label>
-        <input type="text" id="startTimeInput" name="startTimeInput">
+        <label for="startTimeInput" style="font-size: 16px;">開始時間:</label>
+        <input type="text" id="startTimeInput" name="startTimeInput" style="font-size: 16px; width: 200px;">
+        
         <br>
-        <label for="endTimeInput">結束時間:</label>
-        <input type="text" id="endTimeInput" name="endTimeInput">
+        <label for="endTimeInput" style="font-size: 16px;">結束時間:</label>
+        <input type="text" id="endTimeInput" name="endTimeInput" style="font-size: 16px; width: 200px;">
         <br>
-        <button id="addApplianceButton2">新增電器</button>
-        <button id="resetButton2">重設</button>
-        <button id="packageButton2">打包</button>
+
+        <p> </p>
+
+        <button id="addApplianceButton2" style="background-color: #0071E3; color: #fff; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #3366cc; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">新增電器</button>
+        <button id="resetButton2" style="background-color: #999; color: #fff; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #999; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">重設</button>
+        <button id="packageButton2" style="background-color: #BF4800; color: #fff; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #4CAF50; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">打包</button>
+        
         <div id="itemList2"></div>
 
     </div>
 
+
+    <style>
+        .custom-button {
+            background-color: #434343; /* 绿色 */
+            color: #FFF; /* 白色文字 */
+            font-size: 14px; /* 较小的字体大小 */
+            font-weight: normal; /* 正常字体粗细 */
+            font-family: Arial, sans-serif; /* 字体 */
+            border: none; /* 去除边框 */
+            border-radius: 3px; /* 小圆角边框 */
+            padding: 8px 10px; /* 内边距 */
+            cursor: pointer; /* 光标形状 */
+            margin-right: 10px; /* 右侧间距，可以根据需要调整 */
+        }
+    </style>
+    
+    
+
+
     <!-- 右方区域 -->
     <div style="flex: 1;">
-        <p>今日用量</p>
-        <canvas id="carbonBarChart" width="400" height="200"></canvas>
+        <div class="apple-style-title">
+            今日用量
+        </div>
+        
+        <style>
+        .apple-style-title {
+            text-align: left;
+            background-color: #f8f8f8;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 0px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            opacity: 0; /* 将初始透明度设置为0，元素开始时不可见 */
+            animation: fadeIn 1.8s ease-in-out forwards; /* 应用淡入动画 */
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        </style>
+        
+        
+        
+        <canvas id="carbonBarChart" width="580" height="250"></canvas>
         <br>
-        <button id="showChartButton">顯示長條圖</button>
-        <button id="showChartButton2">DailyCost</button>
-        <button id="showChartButton3">MonthlyCost</button>
-        <button id="showChartButton4">WeekendCost</button>
+
+        <style>
+            .custom-button {
+                margin-right: 65px; /* 这里设置按钮右侧的外边距为 20 像素，根据需要进行调整 */
+            }
+        </style>
+        <button id="showChartButton" class="custom-button">顯示長條圖</button>
+        <button id="showChartButton2" class="custom-button">每日費用</button>
+        <button id="showChartButton3" class="custom-button">每月費用</button>
+        <button id="showChartButton4" class="custom-button">每周費用</button>
+        
     </div>
 </div>
 
 
+<hr>
 
 
 
-<div>
-    <label for="DailyElectricity">DailyElectricity:</label>
-    <input type="text" id="DailyElectricity" readonly value="">
+<style>
+    .container1 {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 30px; /* 添加上外边距来使整体往下移动 */
+    }
+
+    .left-column {
+        flex: 0 0 calc(50% - 40px);
+        margin-right: 40px; /* 调整左侧列之间的间距 */
+    }
+
+    .right-column {
+        flex: 0 0 calc(50% - 40px);
+    }
+
+    .label {
+        font-weight: bold;
+        color: #8E8E93;
+    }
+
+
+
+</style>
+
+<div class="container1">
+    <div class="left-column">
+        <div>
+            <label for="DailyElectricity" style="font-weight: bold;">每日用電:</label>
+            <input type="text" id="DailyElectricity" readonly value="">
+        </div>
+        
+
+        <div>
+            <label for="Reality" style="font-weight: bold;">月排碳量:</label>
+            <input type="text" id="MonthlyCarbonEmission" readonly value="">
+        </div>
+        <div>
+            <label for="Reality" style="font-weight: bold;">每月用電:</label>
+            <input type="text" id="MonthlyElectricity" readonly value="">
+        </div>
+
+        <p> </p>
+
+        <span class="label" style="color: #0066cc; opacity: 0;">三段式</span>
+
+<style>
+.label {
+    font-weight: bold;
+}
+
+.label.animation {
+    opacity: 1;
+    animation: fadeIn 1.8s ease-in-out forwards; /* 将动画持续时间延长为2秒 */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+</style>
+
+<script>
+// 使用JavaScript来添加动画类
+document.addEventListener("DOMContentLoaded", function() {
+    const labelElement = document.querySelector(".label");
+    labelElement.classList.add("animation");
+});
+</script>
+
+        <div>
+            <label for="ThreeTier" style="font-weight: bold;">每日費用:</label>
+            <input type="text" id="ThreeTierDailyCost" readonly value="">
+        </div>
+        <div>
+            <label for="ThreeTier" style="font-weight: bold;">每月費用:</label>
+            <input type="text" id="ThreeTierMonthlyCost" readonly value="">
+        </div>
+        <div>
+            <label for="ThreeTier" style="font-weight: bold;">每周費用:</label>
+            <input type="text" id="ThreeTierWeekendCost" readonly value="">
+        </div>
+
+        <p> </p>
+
+        
+        <span class="label-1" style="color: #0066cc; opacity: 0;">三段式夏季</span>
+
+        <style>
+        .label-1 {
+            font-weight: bold;
+        }
+        
+        .label-1 {
+            opacity: 1;
+            animation: fadeInSummer 1.8s ease-in-out forwards;
+        }
+        
+        @keyframes fadeInSummer {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        </style>
+        
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const labelElementSummer = document.querySelector(".label-1");
+            labelElementSummer.classList.add("animation");
+        });
+        </script>
+
+
+
+
+
+
+
+
+
+        
+        <div>
+            <label for="ThreeTierSummer" style="font-weight: bold;">每日費用:</label>
+            <input type="text" id="ThreeTierSummerDailyCost" readonly value="">
+        </div>
+        <div>
+            <label for="ThreeTierSummer" style="font-weight: bold;">每月費用:</label>
+            <input type="text" id="ThreeTierSummerMonthlyCost" readonly value="">
+        </div>
+        <div>
+            <label for="ThreeTierSummer" style="font-weight: bold;">每周費用:</label>
+            <input type="text" id="ThreeTierSummerWeekendCost" readonly value="">
+        </div>
+    </div>
+
+    <div class="right-column">
+        
+
+        <span class="label-2" style="color: #0066cc; opacity: 0;">二段式</span>
+
+        <style>
+        .label-2 {
+            font-weight: bold;
+        }
+        
+        .label-2 {
+            opacity: 1;
+            animation: fadeInSummer 1.8s ease-in-out forwards;
+        }
+        
+        @keyframes fadeInSummer {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        </style>
+        
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const labelElementSummer = document.querySelector(".label-2");
+            labelElementSummer.classList.add("animation");
+        });
+        </script>
+
+
+        <div>
+            <label for="TwoTier" style="font-weight: bold;">每日費用:</label>
+            <input type="text" id="TwoTierDailyCost" readonly value="">
+        </div>
+        <div>
+            <label for="TwoTier" style="font-weight: bold;">每月費用:</label>
+            <input type="text" id="TwoTierMonthlyCost" readonly value="">
+        </div>
+        <div>
+            <label for="TwoTier" style="font-weight: bold;">每周費用:</label>
+            <input type="text" id="TwoTierWeekendCost" readonly value="">
+        </div>
+
+        <p></p>
+
+        
+        <span class="label-3" style="color: #0066cc; opacity: 0;">二段式夏季</span>
+
+        <style>
+        .label-3 {
+            font-weight: bold;
+        }
+        
+        .label-3 {
+            opacity: 1;
+            animation: fadeInSummer 1.8s ease-in-out forwards;
+        }
+        
+        @keyframes fadeInSummer {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        </style>
+        
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const labelElementSummer = document.querySelector(".label-3");
+            labelElementSummer.classList.add("animation");
+        });
+        </script>
+
+
+        <div>
+            <label for="TwoTierSummer" style="font-weight: bold;">每日費用:</label>
+            <input type="text" id="TwoTierSummerDailyCost" readonly value="">
+        </div>
+        <div>
+            <label for="TwoTierSummer" style="font-weight: bold;">每月費用:</label>
+            <input type="text" id="TwoTierSummerMonthlyCost" readonly value="">
+        </div>
+        <div>
+            <label for="TwoTierSummer" style="font-weight: bold;">每周費用:</label>
+            <input type="text" id="TwoTierSummerWeekendCost" readonly value="">
+        </div>
+
+       
+    </div>
 </div>
 
-<div>
-    <label for="Reality">MonthlyCarbonEmission:</label>
-    <input type="text" id="MonthlyCarbonEmission" readonly value="">
-</div>
 
-<div>
-    <label for="Reality">MonthlyElectricity:</label>
-    <input type="text" id="MonthlyElectricity" readonly value="">
-</div>
-<br>ThreeTier
-<div>
-    <label for="ThreeTier">DailyCost:</label>
-    <input type="text" id="ThreeTierDailyCost" readonly value="">
-</div>
+<div style="clear: both;"></div> <!-- 清除浮动 -->
 
-<div>
-    <label for="ThreeTier">MonthlyCost:</label>
-    <input type="text" id="ThreeTierMonthlyCost" readonly value="">
-</div>
 
-<div>
-    <label for="ThreeTier">WeekendCost:</label>
-    <input type="text" id="ThreeTierWeekendCost" readonly value="">
-</div>
-<br>ThreeTierSummer
-<div>
-    <label for="ThreeTierSummer">DailyCost:</label>
-    <input type="text" id="ThreeTierSummerDailyCost" readonly value="">
-</div>
 
-<div>
-    <label for="ThreeTierSummer">MonthlyCost:</label>
-    <input type="text" id="ThreeTierSummerMonthlyCost" readonly value="">
-</div>
-
-<div>
-    <label for="ThreeTierSummer">WeekendCost:</label>
-    <input type="text" id="ThreeTierSummerWeekendCost" readonly value="">
-</div>
-<br>TwoTier
-<div>
-    <label for="TwoTier">DailyCost:</label>
-    <input type="text" id="TwoTierDailyCost" readonly value="">
-</div>
-
-<div>
-    <label for="TwoTier">MonthlyCost:</label>
-    <input type="text" id="TwoTierMonthlyCost" readonly value="">
-</div>
-
-<div>
-    <label for="TwoTier">WeekendCost:</label>
-    <input type="text" id="TwoTierWeekendCost" readonly value="">
-</div>
-<br>TwoTierSummer
-<div>
-    <label for="TwoTierSummer">DailyCost:</label>
-    <input type="text" id="TwoTierSummerDailyCost" readonly value="">
-</div>
-
-<div>
-    <label for="TwoTierSummer">MonthlyCost:</label>
-    <input type="text" id="TwoTierSummerMonthlyCost" readonly value="">
-</div>
-
-<div>
-    <label for="TwoTierSummer">WeekendCost:</label>
-    <input type="text" id="TwoTierSummerWeekendCost" readonly value="">
-</div>
 
 {% endblock %}
 
@@ -294,7 +528,7 @@
                         $(`#MonthlyCarbonEmission`).val(),
                         $(`#MonthlyElectricity`).val(),
                     ];
-                    labels = ['DailyElectricity', 'MonthlyCarbonEmission', 'MonthlyElectricity'];
+                    labels = ['每日電費', '每月碳排放量', '每月電費'];
                     break;
                 case 'show2':
                     values = [
@@ -303,7 +537,7 @@
                         $(`#TwoTierDailyCost`).val(),
                         $(`#TwoTierSummerDailyCost`).val(),
                     ];
-                    labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                    labels = ['三段式', '三段式夏季', '二段式','二段式夏季'];
                     break;
                 case 'show3':
                     values = [
@@ -312,7 +546,7 @@
                         $(`#TwoTierMonthlyCost`).val(),
                         $(`#TwoTierSummerMonthlyCost`).val(),
                     ];
-                    labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                    labels = ['三段式', '三段式夏季', '二段式','二段式夏季'];
                     break;
                 case 'show4':
                     values = [
@@ -321,11 +555,13 @@
                         $(`#TwoTierWeekendCost`).val(),
                         $(`#TwoTierSummerWeekendCost`).val(),
                     ];
-                    labels = ['ThreeTier', 'ThreeTierSummer', 'TwoTier','TwoTierSummer'];
+                    labels = ['三段式', '三段式夏季', '二段式','二段式夏季'];
                     break;
                 default:
                     break;
             }
+
+
 
             // 更新柱状图和标签
             carbonBarChart.data.datasets[0].data = values;

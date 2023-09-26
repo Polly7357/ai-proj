@@ -1,16 +1,108 @@
 {% extends 'bases/base2.html' %}
 {% block headmessage %}
-    <div style="text-align: left;">
-        本月累積碳排量總覽
-    </div>
+<div style="text-align: center; vertical-align: middle; display: table-cell; height: 200px;">
+    <div style="font-size: 36px;">本月累積碳排量總覽</div>
+</div>
+
 {% endblock %}
 {% load static %}
 {% block content %}
-<h1>請輸入近兩個月總計使用的數度:</h1>
-    <label for="usage"></label>
-    <input type="number" id="usage">
-    <button onclick="calculateCost()">點擊計算</button>
-    <div id="result"></div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin: 20px 0;
+    }
+
+    .input-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0;
+        flex: 1 10 2 ; /* 調整flex值，使格子縮小 */
+    }
+
+    .label {
+        flex: 1;
+        text-align: center;
+        font-size: 18px;
+        margin-right: 10px;
+    }
+
+    .input-field {
+        flex: 1;
+        text-align: left;
+        padding: 5px;
+    }
+
+    button {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #result {
+        font-size: 30px;
+        margin-top: 30px;
+    }
+</style>
+
+<body>
+<div style="height: 30px;"></div>
+<h1>(二段式、三段式) (夏季與非夏季) 電價與碳排放計算機</h1>
+<hr>
+<div class="input-container">
+<label class="label" for="twoStage">二段式電費輸入" Yes " , 三段式電費輸入" No "：</label>
+<input class="input-field" type="text" id="twoStageInput" placeholder="Yes/No">
+</div>
+
+<div class="input-container">
+<label class="label" for="summerTime">是否為夏季用電輸入 "Yes / No"：</label>
+<input class="input-field" type="text" id="summerTimeInput" placeholder="Yes/No">
+</div>
+
+<div class="input-container">
+<label class="label" for="highPeakWeekday">平日尖峰用量（三段式_非夏季用電輸入 " 0 " ）：</label>
+<input class="input-field" type="number" id="highPeakWeekdayInput">
+</div>
+
+<div class="input-container">
+<label class="label" for="offPeakWeekday">平日離峰用量：</label>
+<input class="input-field" type="number" id="offPeakWeekdayInput">
+</div>
+
+<div class="input-container">
+<label class="label" for="offPeakWeekend">假日離峰用量：</label>
+<input class="input-field" type="number" id="offPeakWeekendInput">
+</div>
+
+<div class="input-container">
+<label class="label" for="semiPeakWeekday">半尖峰用量（二段式用電輸入 " 0 " ）：</label>
+<input class="input-field" type="number" id="semiPeakWeekdayInput">
+</div>
+
+<div class="input-container">
+<button onclick="calculateTotalChargeAndEmission()">計算</button>
+
+</div>
+
+<p id="result"></p>
 
     
 {% endblock %}
@@ -19,76 +111,58 @@
 
 
 <script>
-    function calculateCost() {
-        const usageInput = document.getElementById("usage");
-        const usage = parseFloat(usageInput.value);
+    function CalculateParameter(highPeakWeekday, offPeakWeekday, offPeakWeekend, semiPeakWeekday, summerTime, twoStage) {
+const basicCharge = 75;
+const extraChargeRate = 0.99;
+const carbonCoefficient = 0.502;
 
-        if (!isNaN(usage)) {
-            const result = calculateElectricityCost(usage);
-            const resultElement = document.getElementById("result");
+let highPeakWeekdayRate, offPeakWeekdayRate, offPeakWeekendRate, semiPeakWeekdayRate;
 
-            if (!isNaN(result.cost_non_summer) && !isNaN(result.cost_summer)) {
-                resultElement.innerHTML = `
-                    <p>非夏季電費:約 ${result.cost_non_summer.toFixed(2)} 元</p>
-                    <p>夏季電費:約 ${result.cost_summer.toFixed(2)} 元</p>
-                `;
-            } else {
-                alert("Error: Invalid calculation result.");
-            }
-        } else {
-            alert("Please enter a valid number for Total Electricity Usage.");
-        }
-    }
+if (twoStage) {
+    highPeakWeekdayRate = summerTime ? 4.71 : 4.48;
+    offPeakWeekdayRate = summerTime ? 1.85 : 1.78;
+    offPeakWeekendRate = summerTime ? 1.85 : 1.78;
+    semiPeakWeekdayRate = 0;
+} else {
+    highPeakWeekdayRate = summerTime ? 6.49 : 4.48;
+    offPeakWeekdayRate = summerTime ? 1.85 : 1.78;
+    offPeakWeekendRate = summerTime ? 1.85 : 1.78;
+    semiPeakWeekdayRate = summerTime ? 4.26 : 4.06;
+}
 
-    function calculateElectricityCost(usage) {
-        // Define non-summer and summer rate tables (same as before)
-        const rateTableNonSummer = [
-            [120, 1.63],
-            [210, 2.10],
-            [220, 2.89],
-            [150, 3.94],
-            [300, 4.74],
-            [3000, 6.03]
-        ];
+const totalUsage = highPeakWeekday + offPeakWeekday + offPeakWeekend + semiPeakWeekday;
 
-        const rateTableSummer = [
-            [120, 1.63],
-            [210, 2.38],
-            [220, 3.52],
-            [150, 4.80],
-            [300, 5.83],
-            [3000, 7.69]
-        ];
+let extraCharge = 0;
 
-        // Calculate cost based on the provided usage
-        const costNonSummer = calculateCostForUsage(usage, rateTableNonSummer);
-        const costSummer = calculateCostForUsage(usage, rateTableSummer);
+if (totalUsage > 2000) {
+    extraCharge = (totalUsage - 2000) * extraChargeRate;
+}
 
-        return {
-            cost_non_summer: costNonSummer,
-            cost_summer: costSummer
-        };
-    }
+const totalCharge = basicCharge + (highPeakWeekday * highPeakWeekdayRate +
+    offPeakWeekday * offPeakWeekdayRate +
+    offPeakWeekend * offPeakWeekendRate +
+    semiPeakWeekday * semiPeakWeekdayRate +
+    extraCharge);
 
-    function calculateCostForUsage(usage, rateTable) {
-        let remainingUsage = usage;
-        let cost = 0;
+const carbonEmission = totalUsage * carbonCoefficient;
 
-        for (const [limit, rate] of rateTable) {
-            if (remainingUsage <= 0) {
-                break;
-            }
+return [totalCharge, carbonEmission];
+}
+    function calculateTotalChargeAndEmission() {
+        const twoStageInput = document.getElementById("twoStageInput").value.trim().toLowerCase();
+        const summerTimeInput = document.getElementById("summerTimeInput").value.trim().toLowerCase();
+        const highPeakWeekdayInput = parseFloat(document.getElementById("highPeakWeekdayInput").value);
+        const offPeakWeekdayInput = parseFloat(document.getElementById("offPeakWeekdayInput").value);
+        const offPeakWeekendInput = parseFloat(document.getElementById("offPeakWeekendInput").value);
+        const semiPeakWeekdayInput = parseFloat(document.getElementById("semiPeakWeekdayInput").value);
 
-            if (remainingUsage >= limit) {
-                cost += limit * rate;
-                remainingUsage -= limit;
-            } else {
-                cost += remainingUsage * rate;
-                remainingUsage = 0;
-            }
-        }
+        const twoStage = twoStageInput === "yes";
+        const summerTime = summerTimeInput === "yes";
 
-        return cost;
+        const [totalCharge, carbonEmission] = CalculateParameter(highPeakWeekdayInput, offPeakWeekdayInput, offPeakWeekendInput, semiPeakWeekdayInput, summerTime, twoStage);
+
+        const resultElement = document.getElementById("result");
+        resultElement.innerHTML = `總計電費: ${totalCharge.toFixed(2)} 元, 碳排放: ${carbonEmission.toFixed(2)} CO2e`;
     }
 </script>
 {% endblock %}
