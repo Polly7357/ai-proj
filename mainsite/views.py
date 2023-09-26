@@ -92,3 +92,6 @@ def index6_post(request):
     #posts = Post.objects.all()
     #now = datetime.now()
     return render(request, 'pages/index6.html', locals())
+
+def arjsui(request):
+    return render(request, 'pages/arjsui.html', locals())

@@ -153,7 +153,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"      # http://polly.deepthinkwaves.com/static/
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/') # added0907告知哪個位置的哪個folder是static_root
-STATICFILES_DIRS = ['static/css','static/img','static/js']                           # added0907
+STATICFILES_DIRS = ['static/css','static/img','static/js','static/assets']                           # added0907
 
 
 # Default primary key field type

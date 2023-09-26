@@ -50,6 +50,7 @@ urlpatterns = [                         #陣列型式,每筆資料中間要用',
     path('index6/', index6_post),
     path('post/<str:slug>', showpost),
     path('api/smart_plug/', showPlugInfoView),
+    path('ar2/', arjsui),
 ]
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
