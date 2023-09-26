@@ -1,15 +1,17 @@
 {% extends 'bases/base.html' %}
 
 {% block headmessage %}
-    <div style="text-align: left;">
-    生活碳足跡計算
+<div style="text-align: center;">
+    <p> </p>
+    <p> </p>
+    <div style="text-align: left;">生活碳足跡計算</div>
 </div>
 {% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-md-6">
-        <div style="display: flex; align-items: center; margin-top: 10px;">
+        <div style="display: flex; align-items: center; margin-top: 20px;">
             <label for="datepicker" style="font-weight: bold; margin-right: 10px;">日期:</label>
             <input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px;">
         </div>
@@ -30,13 +32,13 @@
     <!-- 在这里添加生活碳足迹计算的内容 -->
 </div>
 
-<hr>
+<hr >
 
 <div style="display: flex; justify-content: space-between;">
     <!-- 左方区域 -->
     <div style="flex: 1; margin-right: 80px;">
         <label for="applianceSelect" style="font-size: 16px;">選擇電器:</label>
-        <select id="applianceSelect" name="applianceSelect" style="font-size: 18px; width: 250px;">
+        <select id="applianceSelect" name="applianceSelect" style="font-size: 18px; width: 250px;background-color:  #F0FFFF;">
             <option value="1">電冰箱</option>
             <option value="2">電鍋</option>
             <option value="3">開飲機</option>
@@ -86,9 +88,9 @@
 
         <p> </p>
 
-        <button id="addApplianceButton2" style="background-color: #0071E3; color: #fff; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #3366cc; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">新增電器</button>
-        <button id="resetButton2" style="background-color: #999; color: #fff; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #999; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">重設</button>
-        <button id="packageButton2" style="background-color: #BF4800; color: #fff; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #4CAF50; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">打包</button>
+        <button id="addApplianceButton2" style="background-color: #0071E3; color: #FFF; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #3366cc; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">新增電器</button>
+        <button id="resetButton2" style="background-color: #999; color: #FFF; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #999; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">重設</button>
+        <button id="packageButton2" style="background-color: #BF4800; color: #FFF; font-size: 16px; font-weight: bold; font-family: Arial, sans-serif; border: 1px solid #4CAF50; border-radius: 5px; box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); cursor: pointer; width: 100px; height: 30px;">打包</button>
         
         <div id="itemList2"></div>
 
@@ -131,7 +133,7 @@
     <style>
         .custom-button {
             background-color: #434343; /* 绿色 */
-            color: #FFF; /* 白色文字 */
+            color: #F0FFFF; /* 白色文字 */
             font-size: 14px; /* 较小的字体大小 */
             font-weight: normal; /* 正常字体粗细 */
             font-family: Arial, sans-serif; /* 字体 */
@@ -149,7 +151,7 @@
     <!-- 右方区域 -->
     <div style="flex: 1;">
         <div class="apple-style-title">
-            今日用量
+            預估費用
         </div>
         
         <style>
@@ -514,11 +516,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const data = {
             labels: ['DailyElectricity', 'MonthlyCarbonEmission', 'MonthlyElectricity'], // 电器名称将在后续添加
             datasets: [{
-                label: '碳排放量',
+                label: '費用',
                 data: [], // 实际数据将在后续添加
                 backgroundColor: ['#FF5733', '#33FF57', '#5733FF',"#8008"], // 长条的颜色
             }],
         };
+
+       
 
         const carbonBarChart = new Chart(ctx, {
             type: 'bar',
@@ -528,6 +532,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     y: {
                         beginAtZero: true
                     }
+                },
+                plugins: {
+                    legend: {
+                        display: false, // 隐藏图例
+                    },
+                    datalabels: {
+                        display: false, // 隐藏数据标签
+                    },
                 }
             }
         });
