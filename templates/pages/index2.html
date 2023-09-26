@@ -8,44 +8,38 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-6">
-        <p> 日期：<input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px"> </p>
-
-
-    </div>
-    
-    </div>
-    <!--<div class="col-md-3">
-        <button class="btn btn-primary">完成</button>
-    </div>-->
+  <div class="col-md-2" >
+      <p style="font-size: 16px; font-family: 'Indie Flower', cursive;"> <br>日期<input type="text" id="datepicker" class="form-control" value="2023/9/14" style="width: 200px; height: 30px;font-size: 30px; font-family: 'Indie Flower', cursive;"> </p>
+  </div>
 </div>
 
 <div>
-    <p>生活碳足跡</p>
-    <p id="carbonFootprintDate"></p> <!-- 用于显示日期 -->
-    <!-- 在这里添加生活碳足迹计算的内容 -->
-</div>
+
 <hr>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div>
-            <label for="itemSelect">選擇品項:</label>
-            <select id="itemSelect" name="itemSelect">
-                <option value="lactose_prods">優格</option>
-                <option value="lactose_prods">優酪乳</option>
-                <option value="lactose_prods">凝乳塊(未發酵)</option>
-                <option value="lactose_prods">焦糖烤布丁</option>
-                <option value="lactose_prods">鮮乳</option>
-                <option value="lactose_prods">麥芽調味乳</option>
-
-            </select>
+          <label for="itemSelect" style="font-size: 18px; color : #A78A7F; font-weight: bold;">選擇品項:</label>
+          <style>
+            .custom-bg-green {
+                background-color: #D6F4CD; /* 淡绿色的背景颜色 */
+                /* 可以根据需要自定义其他样式 */
+            }
+        </style>
+          <select id="itemSelect" name="itemSelect" class="form-select form-select-sm custom-bg-green">
+              <option value="lactose_prods">優格</option>
+              <option value="lactose_prods">優酪乳</option>
+              <option value="lactose_prods">凝乳塊(未發酵)</option>
+              <option value="lactose_prods">焦糖烤布丁</option>
+              <option value="lactose_prods">鮮乳</option>
+              <option value="lactose_prods">麥芽調味乳</option>
+          </select>
             <br>
             <label for="unitInput">輸入單位:</label>
-            <input type="text" id="unitInput" name="unitInput">
-            <br>
-            <br>
-            <label for="itemSelect2">選擇品項:</label>
-            <select id="itemSelect2" name="itemSelect2">
+            <input type="text" id="unitInput" name="unitInput" >
+            <br><br>
+          <label for="itemSelect2" style="font-size: 18px; color : #A78A7F; font-weight: bold;">選擇品項:</label>
+            <select id="itemSelect2" name="itemSelect2" class="form-select form-select-sm custom-bg-green">
               <option value="beverage">經典台灣啤酒，330 ml (6罐裝，收縮膜)</option>
               <option value="beverage">金牌台灣啤酒，330 ml (6罐裝，收縮膜)</option>
               <option value="beverage">58度特級高粱酒，600ml</option>
@@ -74,13 +68,12 @@
               <option value="beverage">高山烏龍茶(有烘培-部分發酵)</option>
             </select>
             <br>
-            <label for="unitInput2">輸入單位:</label>
+          <label for="unitInput2" >輸入單位:</label>
             <input type="text" id="unitInput2" name="unitInput2">
-            <br>
-            <br>
+            <br><br>
 
-            <label for="itemSelect3">選擇品項:</label>
-            <select id="itemSelect3" name="itemSelect3">
+          <label for="itemSelect3" style="font-size: 18px ; color : #A78A7F; font-weight: bold;">選擇品項:</label>
+            <select id="itemSelect3" name="itemSelect3" class="form-select form-select-sm custom-bg-green">
               <option value="cde_transport">自用大客車(柴油)</option>
               <option value="cde_transport">自用大貨車(柴油) </option>
               <option value="cde_transport">自用小客車(汽油) </option>
@@ -99,10 +92,9 @@
             <br>
             <label for="unitInput3">輸入單位:</label>
             <input type="text" id="unitInput3" name="unitInput3">
-            <br>
-            <br>
-            <label for="itemSelect4">選擇品項:</label>
-            <select id="itemSelect4" name="itemSelect4">
+            <br><br>
+          <label for="itemSelect4" style="font-size: 18px; color : #A78A7F; font-weight: bold;">選擇品項:</label>
+            <select id="itemSelect4" name="itemSelect4" class="form-select form-select-sm custom-bg-green">
               <option value="energy">台灣自來水 (2011)</option>
               <option value="energy">天然氣(未燃燒，2018)</option>
               <option value="energy">柴油(於公路運輸移動源使用，2016)</option>
@@ -125,47 +117,46 @@
 
             <br>
             <label for="unitInput4">輸入單位:</label>
-            <input type="text" id="unitInput4" name="unitInput4">
-            <br>
-            <br>
-            <button id="addItemButton">新增項目</button>
-            <button id="resetButton">重設</button>
-            <button id="packageButton">打包</button>
+            <input type="text" id="unitInput4" name="unitInput4" >
+            <br><br>
+            {% comment %} <button id="addItemButton">新增項目</button>
+            <button id="resetButton">重設</button> {% endcomment %}
+            <div class="d-flex justify-content-center">
+            <button id="packageButton" class="btn btn-primary">計算</button>
+            </div>
             <div id="itemList"></div>
         </div>
     </div>
-
     
-    <div class="col-md-6">
-        <p>今日碳排放量</p>
-        <br>
-        
-<div class="chartContainer" ></div>
-<div>
-  <button type="button" class="btn btn-primary Draw">重置圓餅圖</button>
-</div>
-    </div>
 
-    <br>
-<div>
-    <label for="total_cde_beverage">total_cde_beverage:</label>
-    <input type="text" id="total_cde_beverage" readonly value="">
-</div>
-        
-<div>
-    <label for="total_cde_cde_transport">total_cde_cde_transport:</label>
-    <input type="text" id="total_cde_cde_transport" readonly value="">
-</div>
-        
-<div>
-    <label for="total_cde_energy">total_cde_energy:</label>
-    <input type="text" id="total_cde_energy" readonly value="">
-</div>
+    <div class="col-md-8 text-center">
+      <div style="height: 10px;"></div>
+      <div>
+        <label for="total_cde_beverage" style = "font-size: 20px;color:#8F8909;font-weight: bold;">飲料類碳排量:</label>
+        <input type="text" id="total_cde_beverage" readonly value="">
 
-<div>
-    <label for="total_cde_lactose_prods">otal_cde_lactose_prods:</label>
-    <input type="text" id="total_cde_lactose_prods" readonly value="">
-</div>
+        <label for="total_cde_cde_transport" style = "font-size: 20px;color:#8F8909;font-weight: bold;">運輸類碳排量:</label>
+        <input type="text" id="total_cde_cde_transport" readonly value="">
+      </div>
+            
+      <div style="height: 20px;"></div>
+
+      <div>
+        <label for="total_cde_energy"style = "font-size: 20px;color:#8F8909;font-weight: bold;">能源類碳排量:</label>
+        <input type="text" id="total_cde_energy" readonly value="">
+
+        <label for="total_cde_lactose_prods" style = "font-size: 20px;color:#8F8909;font-weight: bold;">乳製品碳排量:</label>
+        <input type="text" id="total_cde_lactose_prods" readonly value="">
+      </div>
+      <hr>
+      <p style="font-size: 36px; font-family: 'Indie Flower', cursive;  color : #A78A7F">每日碳排放量</p>
+        
+      <div class="chartContainer" ></div>
+      <div>
+        <button type="button" class="btn btn-primary Draw">重置圓餅圖</button>
+      </div>
+
+
 
 
 
@@ -448,10 +439,10 @@
             const total_cde_lactose_prods = res.data.total_cde_lactose_prods;
                     // 創建一個新的資料結構，基於更新後的值
             const data_pie = {
-              "飲料": total_cde_beverage,
-              "CDE運輸": total_cde_cde_transport,
-              "能源（調整後）": total_cde_energy,
-              "乳糖產品": total_cde_lactose_prods
+              "飲料類": total_cde_beverage,
+              "運輸類": total_cde_cde_transport,
+              "能源類": total_cde_energy,
+              "乳製品": total_cde_lactose_prods
             };
 
             drawPie(data_pie); // 使用更新後的資料調用drawPie函數
@@ -473,8 +464,8 @@
       }));
 
       // svg圖形區大小、邊界
-      const svgWidth = parseInt(d3.select(".chartContainer").style("width"))*1.5,
-        svgHeight = svgWidth * 0.8,
+      const svgWidth = parseInt(d3.select(".chartContainer").style("width"))*1.1,
+        svgHeight = svgWidth * 0.9,
         margin = 10;
 
       // 先設定 svg 大小
